@@ -116,7 +116,7 @@ export function Navbar() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex md:items-center md:gap-4">
-                    <Button variant="ghost" className="transition-colors duration-300 text-slate-900 hover:text-slate-900" asChild>
+                    <Button variant="secondary" asChild>
                         <Link href="/login">Log in</Link>
                     </Button>
                     <Button asChild>
