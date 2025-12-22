@@ -80,7 +80,7 @@ export default function RootLayout({
         className={`${inter.variable} antialiased bg-background text-foreground font-sans`}
       >
         <Navbar />
-        <main className="min-h-screen flex-1 flex flex-col">
+        <main className="min-h-screen flex-1 flex flex-col pt-16">
           {children}
         </main>
         <Footer />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Heart } from "lucide-react";
@@ -15,20 +15,46 @@ const NAV_ITEMS = [
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+    const lastScrollY = useRef(0);
     const pathname = usePathname();
 
-    // Mock checking if user is on auth pages to hide nav or change style?
-    // For now, we show it everywhere.
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // Show navbar when at top or scrolling up, hide when scrolling down
+            if (currentScrollY < 10) {
+                setIsVisible(true);
+            } else if (currentScrollY < lastScrollY.current) {
+                // Scrolling up
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY.current && currentScrollY > 10) {
+                // Scrolling down
+                setIsVisible(false);
+            }
+
+            lastScrollY.current = currentScrollY;
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <nav className={cn(
+            "fixed top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b shadow-sm transition-all duration-500 ease-in-out",
+            isVisible
+                ? "translate-y-0"
+                : "-translate-y-full"
+        )}>
             <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Link href="/" className="flex items-center gap-2 transition-colors duration-300 text-primary">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-300 bg-primary text-primary-foreground">
                         <Heart className="h-5 w-5 fill-current" />
                     </div>
-                    <span className="text-xl font-bold tracking-tight text-primary">Care.xyz</span>
+                    <span className="text-xl font-bold tracking-tight transition-colors duration-300 text-primary">Care.xyz</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -38,8 +64,10 @@ export function Navbar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "text-base font-semibold transition-colors hover:text-primary",
-                                pathname === item.href ? "text-foreground" : "text-foreground/80"
+                                "text-base font-semibold transition-all duration-300 hover:text-primary",
+                                pathname === item.href
+                                    ? "text-foreground"
+                                    : "text-foreground/80"
                             )}
                         >
                             {item.label}
@@ -49,7 +77,7 @@ export function Navbar() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex md:items-center md:gap-4">
-                    <Button variant="ghost" asChild>
+                    <Button variant="ghost" className="transition-colors duration-300 text-foreground hover:text-foreground" asChild>
                         <Link href="/login">Log in</Link>
                     </Button>
                     <Button asChild>
@@ -59,7 +87,7 @@ export function Navbar() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="flex items-center justify-center rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:hidden"
+                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:hidden text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <span className="sr-only">Toggle menu</span>
@@ -69,7 +97,7 @@ export function Navbar() {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="border-b md:hidden animate-in slide-in-from-top-1">
+                <div className="border-b md:hidden animate-in slide-in-from-top-1 bg-background">
                     <div className="space-y-1 p-4">
                         {NAV_ITEMS.map((item) => (
                             <Link
