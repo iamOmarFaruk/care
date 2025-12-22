@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { mockStore } from "@/lib/store";
+import { MotionDiv, fadeInUp, scaleIn, staggerContainer } from "@/components/ui/motion";
+
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -48,7 +50,12 @@ export default function RegisterPage() {
 
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
-            <div className="w-full max-w-lg space-y-8 rounded-xl border bg-card p-8 shadow-lg">
+            <MotionDiv
+                variants={scaleIn}
+                initial="initial"
+                animate="animate"
+                className="w-full max-w-lg space-y-8 rounded-xl border bg-card p-8 shadow-lg"
+            >
                 <div className="text-center">
                     <h1 className="text-2xl font-bold tracking-tight text-foreground">Create an account</h1>
                     <p className="mt-2 text-sm text-muted-foreground">
@@ -56,46 +63,55 @@ export default function RegisterPage() {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Full Name</Label>
-                            <Input id="name" name="name" placeholder="John Doe" required />
+                <MotionDiv
+                    variants={staggerContainer(0.1, 0.2)}
+                    initial="initial"
+                    animate="animate"
+                >
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <MotionDiv variants={fadeInUp} className="space-y-2">
+                                <Label htmlFor="name">Full Name</Label>
+                                <Input id="name" name="name" placeholder="John Doe" required />
+                            </MotionDiv>
+                            <MotionDiv variants={fadeInUp} className="space-y-2">
+                                <Label htmlFor="contact">Contact No</Label>
+                                <Input id="contact" name="contact" placeholder="017..." required />
+                            </MotionDiv>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="contact">Contact No</Label>
-                            <Input id="contact" name="contact" placeholder="017..." required />
-                        </div>
-                    </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="nid">NID Number</Label>
-                        <Input id="nid" name="nid" placeholder="National ID required" required />
-                    </div>
+                        <MotionDiv variants={fadeInUp} className="space-y-2">
+                            <Label htmlFor="nid">NID Number</Label>
+                            <Input id="nid" name="nid" placeholder="National ID required" required />
+                        </MotionDiv>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="email">Email address</Label>
-                        <Input id="email" name="email" type="email" placeholder="name@example.com" required />
-                    </div>
+                        <MotionDiv variants={fadeInUp} className="space-y-2">
+                            <Label htmlFor="email">Email address</Label>
+                            <Input id="email" name="email" type="email" placeholder="name@example.com" required />
+                        </MotionDiv>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input id="password" name="password" type="password" required placeholder="Min 6 chars, 1 Upper, 1 Lower" />
-                    </div>
+                        <MotionDiv variants={fadeInUp} className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" name="password" type="password" required placeholder="Min 6 chars, 1 Upper, 1 Lower" />
+                        </MotionDiv>
 
-                    <Button type="submit" className="w-full mt-4" disabled={loading}>
-                        {loading ? "Creating account..." : "Sign up"}
-                    </Button>
-                </form>
+                        <MotionDiv variants={fadeInUp}>
+                            <Button type="submit" className="w-full mt-4" disabled={loading}>
+                                {loading ? "Creating account..." : "Sign up"}
+                            </Button>
+                        </MotionDiv>
+                    </form>
+                </MotionDiv>
 
-                <p className="text-center text-sm text-muted-foreground">
+                <MotionDiv variants={fadeInUp} className="text-center text-sm text-muted-foreground">
                     Already have an account?{" "}
                     <Link href="/login" className="font-medium text-primary hover:underline">
                         Sign in
                     </Link>
-                </p>
-            </div>
+                </MotionDiv>
+            </MotionDiv>
         </div>
+
     );
 }
 

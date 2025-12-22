@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { MotionDiv, MotionH1, MotionP, fadeInUp, staggerContainer } from "@/components/ui/motion";
 
 export function Hero() {
     return (
@@ -14,25 +17,44 @@ export function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
             </div>
 
-            <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+            <MotionDiv
+                variants={staggerContainer(0.2, 0.1)}
+                initial="initial"
+                animate="animate"
+                className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8"
+            >
                 <div className="mx-auto max-w-3xl text-center">
-                    <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-white lg:text-6xl fade-in-up">
+                    <MotionH1
+                        variants={fadeInUp}
+                        className="scroll-m-20 text-4xl font-extrabold tracking-tight text-white lg:text-6xl"
+                    >
                         Reliable Care for <span className="text-primary">Your Loved Ones</span>
-                    </h1>
-                    <p className="mt-6 text-xl text-gray-200 fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    </MotionH1>
+
+                    <MotionP
+                        variants={fadeInUp}
+                        className="mt-6 text-xl text-gray-200"
+                    >
                         Professional babysitting, accessible elderly support, and specialized care services.
                         We make caregiving easy, secure, and accessible for everyone.
-                    </p>
-                    <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row fade-in-up" style={{ animationDelay: '0.4s' }}>
+                    </MotionP>
+
+                    <MotionDiv
+                        variants={fadeInUp}
+                        className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+                    >
                         <Button size="lg" className="min-w-[200px] text-lg" asChild>
                             <Link href="/register">Find a Caregiver</Link>
                         </Button>
                         <Button size="lg" variant="secondary" className="min-w-[200px] text-lg" asChild>
                             <Link href="/#services">Explore Services</Link>
                         </Button>
-                    </div>
+                    </MotionDiv>
 
-                    <div className="mt-12 flex items-center justify-center gap-8 text-white/80 fade-in-up" style={{ animationDelay: '0.6s' }}>
+                    <MotionDiv
+                        variants={fadeInUp}
+                        className="mt-12 flex items-center justify-center gap-8 text-white/80"
+                    >
                         <div className="flex flex-col items-center">
                             <span className="text-3xl font-bold">500+</span>
                             <span className="text-sm uppercase tracking-wide">Caregivers</span>
@@ -45,12 +67,13 @@ export function Hero() {
                             <span className="text-3xl font-bold">4.9</span>
                             <span className="text-sm uppercase tracking-wide">Rating</span>
                         </div>
-                    </div>
+                    </MotionDiv>
                 </div>
-            </div>
+            </MotionDiv>
         </section>
     );
 }
+
 
 /*
  * ┌── o m a r ──┐

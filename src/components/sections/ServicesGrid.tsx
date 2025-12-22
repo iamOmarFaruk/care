@@ -1,25 +1,42 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SERVICES } from "@/lib/mock-data";
+import { MotionDiv, MotionH2, MotionP, fadeInUp, staggerContainer } from "@/components/ui/motion";
 
 export function ServicesGrid() {
     return (
         <section id="services" className="bg-muted/50 py-16 md:py-24">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <MotionDiv
+                variants={staggerContainer(0.2)}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-100px" }}
+                className="container mx-auto px-4 sm:px-6 lg:px-8"
+            >
                 <div className="mb-12 text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                    <MotionH2
+                        variants={fadeInUp}
+                        className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+                    >
                         Our Services
-                    </h2>
-                    <p className="mt-4 text-lg text-muted-foreground">
+                    </MotionH2>
+                    <MotionP
+                        variants={fadeInUp}
+                        className="mt-4 text-lg text-muted-foreground"
+                    >
                         Comprehensive care solutions tailored to your family&apos;s needs.
-                    </p>
+                    </MotionP>
                 </div>
 
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                     {SERVICES.map((service) => (
-                        <div
+                        <MotionDiv
                             key={service.id}
+                            variants={fadeInUp}
+                            whileHover={{ y: -8, transition: { duration: 0.3 } }}
                             className="group relative overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-lg"
                         >
                             {/* Image */}
@@ -64,13 +81,14 @@ export function ServicesGrid() {
                                     </Link>
                                 </Button>
                             </div>
-                        </div>
+                        </MotionDiv>
                     ))}
                 </div>
-            </div>
+            </MotionDiv>
         </section>
     );
 }
+
 
 /*
  * ┌── o m a r ──┐

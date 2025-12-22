@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { SERVICES } from "@/lib/mock-data";
 import { mockStore } from "@/lib/store";
+import { MotionDiv, fadeInUp, scaleIn, staggerContainer } from "@/components/ui/motion";
+
 
 const DIVISIONS = ["Dhaka", "Chittagong", "Sylhet", "Rajshahi", "Khulna"];
 const DISTRICTS = {
@@ -66,77 +68,96 @@ export default function BookingPage() {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-12">
-            <div className="mb-8 text-center">
+            <MotionDiv
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8 text-center"
+            >
                 <h1 className="text-3xl font-bold tracking-tight">Complete Your Booking</h1>
                 <p className="text-muted-foreground">You are booking: <span className="font-semibold text-primary">{service.title}</span></p>
-            </div>
+            </MotionDiv>
 
-            <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
+            <MotionDiv
+                variants={scaleIn}
+                initial="initial"
+                animate="animate"
+                className="rounded-xl border bg-card p-6 shadow-sm md:p-8"
+            >
                 <form onSubmit={handleBooking} className="space-y-6">
 
-                    {/* Duration */}
-                    <div className="space-y-2">
-                        <Label htmlFor="duration">Service Duration (Hours)</Label>
-                        <Input
-                            type="number"
-                            id="duration"
-                            min={1}
-                            value={duration}
-                            onChange={(e) => setDuration(parseInt(e.target.value) || 0)}
-                            required
-                        />
-                        <p className="text-sm text-muted-foreground">Rate: ৳{service.pricePerHr}/hr</p>
-                    </div>
-
-                    {/* Location Section */}
-                    <div className="space-y-4 rounded-lg bg-muted/30 p-4">
-                        <h3 className="font-medium">Service Location</h3>
-                        <div className="grid gap-4 sm:grid-cols-2">
-                            <div className="space-y-2">
-                                <Label>Division</Label>
-                                <Select
-                                    value={division}
-                                    onChange={(e) => setDivision(e.target.value)}
-                                >
-                                    {DIVISIONS.map(d => <option key={d} value={d}>{d}</option>)}
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label>District</Label>
-                                <Select
-                                    value={district}
-                                    onChange={(e) => setDistrict(e.target.value)}
-                                >
-                                    {/* @ts-ignore */}
-                                    {DISTRICTS[division]?.map(d => <option key={d} value={d}>{d}</option>)}
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="address">Full Address / Area</Label>
+                    <MotionDiv
+                        variants={staggerContainer(0.1, 0.2)}
+                        initial="initial"
+                        animate="animate"
+                        className="space-y-6"
+                    >
+                        {/* Duration */}
+                        <MotionDiv variants={fadeInUp} className="space-y-2">
+                            <Label htmlFor="duration">Service Duration (Hours)</Label>
                             <Input
-                                id="address"
-                                placeholder="House #12, Road #5, Block B"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
+                                type="number"
+                                id="duration"
+                                min={1}
+                                value={duration}
+                                onChange={(e) => setDuration(parseInt(e.target.value) || 0)}
                                 required
                             />
-                        </div>
-                    </div>
+                            <p className="text-sm text-muted-foreground">Rate: ৳{service.pricePerHr}/hr</p>
+                        </MotionDiv>
 
-                    {/* Summary */}
-                    <div className="flex items-center justify-between rounded-lg border bg-secondary/20 p-4">
-                        <span className="font-medium">Total Cost:</span>
-                        <span className="text-2xl font-bold text-primary">৳{totalCost}</span>
-                    </div>
+                        {/* Location Section */}
+                        <MotionDiv variants={fadeInUp} className="space-y-4 rounded-lg bg-muted/30 p-4">
+                            <h3 className="font-medium">Service Location</h3>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <div className="space-y-2">
+                                    <Label>Division</Label>
+                                    <Select
+                                        value={division}
+                                        onChange={(e) => setDivision(e.target.value)}
+                                    >
+                                        {DIVISIONS.map(d => <option key={d} value={d}>{d}</option>)}
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>District</Label>
+                                    <Select
+                                        value={district}
+                                        onChange={(e) => setDistrict(e.target.value)}
+                                    >
+                                        {/* @ts-ignore */}
+                                        {DISTRICTS[division]?.map(d => <option key={d} value={d}>{d}</option>)}
+                                    </Select>
+                                </div>
+                            </div>
 
-                    <Button type="submit" size="lg" className="w-full" disabled={loading}>
-                        {loading ? "Confirming..." : "Confirm Booking"}
-                    </Button>
+                            <div className="space-y-2">
+                                <Label htmlFor="address">Full Address / Area</Label>
+                                <Input
+                                    id="address"
+                                    placeholder="House #12, Road #5, Block B"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </MotionDiv>
+
+                        {/* Summary */}
+                        <MotionDiv variants={fadeInUp} className="flex items-center justify-between rounded-lg border bg-secondary/20 p-4">
+                            <span className="font-medium">Total Cost:</span>
+                            <span className="text-2xl font-bold text-primary">৳{totalCost}</span>
+                        </MotionDiv>
+
+                        <MotionDiv variants={fadeInUp}>
+                            <Button type="submit" size="lg" className="w-full" disabled={loading}>
+                                {loading ? "Confirming..." : "Confirm Booking"}
+                            </Button>
+                        </MotionDiv>
+                    </MotionDiv>
                 </form>
-            </div>
+            </MotionDiv>
         </div>
+
     );
 }
 
