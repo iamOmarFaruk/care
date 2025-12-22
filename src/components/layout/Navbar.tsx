@@ -174,12 +174,12 @@ export function Navbar() {
                             ))}
                             <motion.div
                                 variants={fadeInUp}
-                                className="mt-4 flex flex-col gap-2 border-t border-slate-200/40 pt-4"
+                                className="mt-4 flex flex-row gap-3 border-t border-slate-200/40 pt-4"
                             >
-                                <Button variant="outline" asChild className="w-full justify-start transition-all duration-200 hover:translate-x-1">
+                                <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
                                     <Link href="/login" onClick={() => setIsOpen(false)}>Log in</Link>
                                 </Button>
-                                <Button asChild className="w-full justify-start transition-all duration-200 hover:translate-x-1">
+                                <Button size="sm" asChild className="transition-all duration-200 hover:scale-105">
                                     <Link href="/register" onClick={() => setIsOpen(false)}>Get Started</Link>
                                 </Button>
                             </motion.div>
