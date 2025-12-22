@@ -112,8 +112,8 @@ export function Navbar() {
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
                                 className={cn(
-                                    "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:translate-x-1",
-                                    pathname === item.href ? "bg-accent/50 text-foreground" : "text-foreground/80"
+                                    "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-white hover:text-[#0d9488] hover:translate-x-1",
+                                    pathname === item.href ? "text-foreground" : "text-foreground/80"
                                 )}
                                 style={{
                                     transitionDelay: isOpen ? `${index * 50}ms` : '0ms',
