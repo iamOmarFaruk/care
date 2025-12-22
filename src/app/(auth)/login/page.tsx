@@ -47,8 +47,13 @@ export default function LoginPage() {
                 animate="animate"
                 className="hidden lg:flex lg:w-1/2 relative overflow-hidden"
             >
-                {/* Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0d9488] via-[#14b8a6] to-[#2dd4bf]" />
+                {/* Background Image */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: "url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=2070')" }}
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0d9488]/90 via-[#14b8a6]/85 to-[#2dd4bf]/80" />
 
                 {/* Decorative Elements */}
                 <div className="absolute inset-0 overflow-hidden">
@@ -131,8 +136,8 @@ export default function LoginPage() {
 
                             <form onSubmit={handleSubmit} className="space-y-5">
                                 {/* Email Field */}
-                                <MotionDiv variants={fadeInUp} className="space-y-2">
-                                    <Label htmlFor="email" className="text-slate-700 font-medium">
+                                <MotionDiv variants={fadeInUp} className="space-y-3">
+                                    <Label htmlFor="email" className="text-slate-700 font-medium block mb-2">
                                         Email address
                                     </Label>
                                     <div className="relative">
@@ -153,8 +158,8 @@ export default function LoginPage() {
                                 </MotionDiv>
 
                                 {/* Password Field */}
-                                <MotionDiv variants={fadeInUp} className="space-y-2">
-                                    <div className="flex items-center justify-between">
+                                <MotionDiv variants={fadeInUp} className="space-y-3">
+                                    <div className="flex items-center justify-between mb-2">
                                         <Label htmlFor="password" className="text-slate-700 font-medium">
                                             Password
                                         </Label>
