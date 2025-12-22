@@ -74,7 +74,7 @@ export function Navbar() {
     return (
         <nav className={cn(
             "fixed top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-500 ease-in-out",
-            isVisible
+            (isVisible || isOpen)
                 ? "translate-y-0"
                 : "-translate-y-full"
         )}>
@@ -125,7 +125,7 @@ export function Navbar() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal-600 md:hidden text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal-600 md:hidden text-teal-600 hover:bg-teal-50 hover:text-teal-700"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <span className="sr-only">Toggle menu</span>
