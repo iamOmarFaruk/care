@@ -1,26 +1,106 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+@theme {
+  --font-sans: var(--font-inter);
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/*
+  Theme: Trust & Serenity (Teal/Clean)
+  Primary: Teal-600 #0D9488
+  Secondary: Slate-100 #F1F5F9
+  Accent: Amber-500 #F59E0B
+*/
+:root {
+  --background: #FFFFFF;
+  --foreground: #0F172A; /* Slate 900 */
+
+  --primary: #0D9488; /* Teal 600 */
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #F1F5F9; /* Slate 100 */
+  --secondary-foreground: #0F172A; /* Slate 900 */
+
+  --accent: #F59E0B; /* Amber 500 */
+  --accent-foreground: #FFFFFF;
+
+  --muted: #F8FAFC; /* Slate 50 */
+  --muted-foreground: #64748B; /* Slate 500 */
+
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+
+  --border: #E2E8F0; /* Slate 200 */
+  --input: #E2E8F0;
+  --ring: #0D9488;
+  
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* 
+       Optimized Dark Mode for Trust & Serenity 
+       Background: Deep Slate, Primary: Lighter Teal
+    */
+    --background: #020617; /* Slate 950 */
+    --foreground: #F8FAFC; /* Slate 50 */
+
+    --primary: #14B8A6; /* Teal 500 - brighter for dark mode */
+    --primary-foreground: #020617;
+
+    --secondary: #1E293B; /* Slate 800 */
+    --secondary-foreground: #F8FAFC;
+
+    --accent: #FBBF24; /* Amber 400 */
+    --accent-foreground: #020617;
+
+    --muted: #0F172A; /* Slate 900 */
+    --muted-foreground: #94A3B8; /* Slate 400 */
+
+    --card: #0F172A; /* Slate 900 */
+    --card-foreground: #F8FAFC;
+
+    --border: #1E293B; /* Slate 800 */
+    --input: #1E293B;
+    --ring: #14B8A6;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* 
+ * ┌── o m a r ──┐
+ * │ gh@iamOmarFaruk
+ * │ omarfaruk.dev
+ * │ Created: 2025-12-22
+ * │ Updated: 2025-12-22
+ * └─ care ───┘
+ */
