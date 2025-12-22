@@ -43,7 +43,7 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 z-50 w-full bg-background border-b shadow-sm transition-all duration-500 ease-in-out",
+            "fixed top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-border/40 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-500 ease-in-out",
             isVisible
                 ? "translate-y-0"
                 : "-translate-y-full"
@@ -91,38 +91,50 @@ export function Navbar() {
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <span className="sr-only">Toggle menu</span>
-                    {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    <span className="transition-transform duration-200">
+                        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </span>
                 </button>
             </div>
 
-            {/* Mobile Menu */}
-            {isOpen && (
-                <div className="border-b md:hidden animate-in slide-in-from-top-1 bg-background">
+            {/* Mobile Menu with soft animation */}
+            <div className={cn(
+                "md:hidden overflow-hidden transition-all duration-300 ease-out",
+                isOpen
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0"
+            )}>
+                <div className="border-t border-border/40 bg-background/95 backdrop-blur-sm">
                     <div className="space-y-1 p-4">
-                        {NAV_ITEMS.map((item) => (
+                        {NAV_ITEMS.map((item, index) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
                                 className={cn(
-                                    "block select-none rounded-md px-3 py-2 text-lg font-semibold transition-colors hover:bg-accent hover:text-accent-foreground",
-                                    pathname === item.href ? "bg-accent text-foreground" : "text-foreground/80"
+                                    "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:translate-x-1",
+                                    pathname === item.href ? "bg-accent/50 text-foreground" : "text-foreground/80"
                                 )}
+                                style={{
+                                    transitionDelay: isOpen ? `${index * 50}ms` : '0ms',
+                                    transform: isOpen ? 'translateX(0)' : 'translateX(-8px)',
+                                    opacity: isOpen ? 1 : 0
+                                }}
                             >
                                 {item.label}
                             </Link>
                         ))}
-                        <div className="mt-4 flex flex-col gap-2 border-t pt-4">
-                            <Button variant="outline" asChild className="w-full justify-start">
+                        <div className="mt-4 flex flex-col gap-2 border-t border-border/40 pt-4">
+                            <Button variant="outline" asChild className="w-full justify-start transition-all duration-200 hover:translate-x-1">
                                 <Link href="/login" onClick={() => setIsOpen(false)}>Log in</Link>
                             </Button>
-                            <Button asChild className="w-full justify-start">
+                            <Button asChild className="w-full justify-start transition-all duration-200 hover:translate-x-1">
                                 <Link href="/register" onClick={() => setIsOpen(false)}>Get Started</Link>
                             </Button>
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
         </nav>
     );
 }
