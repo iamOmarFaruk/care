@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,6 +18,44 @@ export function Navbar() {
     const [isVisible, setIsVisible] = useState(true);
     const lastScrollY = useRef(0);
     const pathname = usePathname();
+    const router = useRouter();
+
+    // Smooth scroll handler for hash links
+    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        // Check if it's a hash link
+        if (href.includes('#')) {
+            const hash = href.split('#')[1];
+            const basePath = href.split('#')[0] || '/';
+
+            // If we're on the same page, scroll to the element
+            if (pathname === basePath || (pathname === '/' && basePath === '/')) {
+                e.preventDefault();
+                const element = document.getElementById(hash);
+                if (element) {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Update URL without reload
+                    window.history.pushState(null, '', href);
+                }
+            } else {
+                // Navigate to the page first, then scroll
+                e.preventDefault();
+                router.push(href);
+                // After navigation, scroll to element
+                setTimeout(() => {
+                    const element = document.getElementById(hash);
+                    if (element) {
+                        element.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 100);
+            }
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -63,6 +101,7 @@ export function Navbar() {
                         <Link
                             key={item.href}
                             href={item.href}
+                            onClick={(e) => handleSmoothScroll(e, item.href)}
                             className={cn(
                                 "text-base font-semibold transition-all duration-300 hover:text-primary",
                                 pathname === item.href
@@ -110,7 +149,10 @@ export function Navbar() {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                onClick={() => setIsOpen(false)}
+                                onClick={(e) => {
+                                    handleSmoothScroll(e, item.href);
+                                    setIsOpen(false);
+                                }}
                                 className={cn(
                                     "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-white hover:text-[#0d9488] hover:translate-x-1",
                                     pathname === item.href ? "text-foreground" : "text-foreground/80"
