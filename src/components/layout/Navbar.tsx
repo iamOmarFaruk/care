@@ -81,18 +81,18 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 z-50 w-full bg-background/95 backdrop-blur-sm border-b border-border/40 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-500 ease-in-out",
+            "fixed top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-500 ease-in-out",
             isVisible
                 ? "translate-y-0"
                 : "-translate-y-full"
         )}>
             <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 transition-colors duration-300 text-primary">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-300 bg-primary text-primary-foreground">
+                <Link href="/" className="flex items-center gap-2 transition-colors duration-300 text-teal-600">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-300 bg-teal-600 text-white">
                         <Heart className="h-5 w-5 fill-current" />
                     </div>
-                    <span className="text-xl font-bold tracking-tight transition-colors duration-300 text-primary">Care.xyz</span>
+                    <span className="text-xl font-bold tracking-tight transition-colors duration-300 text-teal-600">Care.xyz</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -103,10 +103,10 @@ export function Navbar() {
                             href={item.href}
                             onClick={(e) => handleSmoothScroll(e, item.href)}
                             className={cn(
-                                "text-base font-semibold transition-all duration-300 hover:text-primary",
+                                "text-base font-semibold transition-all duration-300 hover:text-teal-600",
                                 pathname === item.href
-                                    ? "text-foreground"
-                                    : "text-foreground/80"
+                                    ? "text-slate-900"
+                                    : "text-slate-700"
                             )}
                         >
                             {item.label}
@@ -116,7 +116,7 @@ export function Navbar() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex md:items-center md:gap-4">
-                    <Button variant="ghost" className="transition-colors duration-300 text-foreground hover:text-foreground" asChild>
+                    <Button variant="ghost" className="transition-colors duration-300 text-slate-900 hover:text-slate-900" asChild>
                         <Link href="/login">Log in</Link>
                     </Button>
                     <Button asChild>
@@ -126,7 +126,7 @@ export function Navbar() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:hidden text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal-600 md:hidden text-slate-500 hover:bg-slate-100 hover:text-slate-900"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <span className="sr-only">Toggle menu</span>
@@ -143,7 +143,7 @@ export function Navbar() {
                     ? "max-h-96 opacity-100"
                     : "max-h-0 opacity-0"
             )}>
-                <div className="border-t border-border/40 bg-background/95 backdrop-blur-sm">
+                <div className="border-t border-slate-200/40 bg-white/95 backdrop-blur-sm">
                     <div className="space-y-1 p-4">
                         {NAV_ITEMS.map((item, index) => (
                             <Link
@@ -154,8 +154,8 @@ export function Navbar() {
                                     setIsOpen(false);
                                 }}
                                 className={cn(
-                                    "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-white hover:text-[#0d9488] hover:translate-x-1",
-                                    pathname === item.href ? "text-foreground" : "text-foreground/80"
+                                    "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-white hover:text-teal-600 hover:translate-x-1",
+                                    pathname === item.href ? "text-slate-900" : "text-slate-700"
                                 )}
                                 style={{
                                     transitionDelay: isOpen ? `${index * 50}ms` : '0ms',
@@ -166,7 +166,7 @@ export function Navbar() {
                                 {item.label}
                             </Link>
                         ))}
-                        <div className="mt-4 flex flex-col gap-2 border-t border-border/40 pt-4">
+                        <div className="mt-4 flex flex-col gap-2 border-t border-slate-200/40 pt-4">
                             <Button variant="outline" asChild className="w-full justify-start transition-all duration-200 hover:translate-x-1">
                                 <Link href="/login" onClick={() => setIsOpen(false)}>Log in</Link>
                             </Button>

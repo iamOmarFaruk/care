@@ -5,22 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-md hover:shadow-lg transition-transform hover:scale-105",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
-                default: "bg-gradient-to-r from-primary to-primary-dark text-primary-foreground",
-                destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-                outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-                secondary: "bg-gradient-to-r from-secondary to-secondary-dark text-secondary-foreground shadow-sm hover:bg-secondary/80",
-                ghost: "hover:bg-accent hover:text-accent-foreground",
-                link: "text-primary underline-offset-4 hover:underline",
+                default: "bg-gradient-to-r from-teal-700 to-teal-800 text-white shadow-lg hover:from-teal-800 hover:to-teal-900 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]",
+                destructive: "bg-red-600 text-white shadow-sm hover:bg-red-700",
+                outline: "border-2 border-white/80 bg-transparent text-white shadow-md hover:bg-white/20 hover:border-white hover:shadow-lg active:scale-[0.98]",
+                secondary: "bg-slate-100 text-slate-900 shadow-md hover:bg-slate-200 hover:shadow-lg active:scale-[0.98]",
+                ghost: "hover:bg-slate-100 hover:text-slate-900",
+                link: "text-teal-600 underline-offset-4 hover:underline",
             },
             size: {
-                default: "h-9 px-4 py-2",
-                sm: "h-8 rounded-full px-3 text-xs",
-                lg: "h-10 rounded-full px-8",
-                icon: "h-9 w-9",
+                default: "h-10 px-6 py-2.5",
+                sm: "h-9 rounded-full px-4 py-2 text-xs",
+                lg: "h-12 rounded-full px-10 py-3.5",
+                icon: "h-10 w-10",
             },
         },
         defaultVariants: {
