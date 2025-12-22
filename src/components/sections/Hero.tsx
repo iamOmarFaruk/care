@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export function Hero() {
     return (
-        <section className="relative flex min-h-[600px] w-full items-center justify-center overflow-hidden bg-slate-900 py-12 md:py-24 lg:py-32 xl:py-48 pt-24">
+        <section className="relative flex min-h-[600px] w-full items-center justify-center overflow-hidden bg-slate-900 py-12 md:py-24 lg:py-32 xl:py-48 pt-24 -mt-16">
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 z-0">
                 <img

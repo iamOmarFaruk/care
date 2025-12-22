@@ -43,7 +43,7 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b shadow-sm transition-all duration-500 ease-in-out",
+            "fixed top-0 z-50 w-full bg-background border-b shadow-sm transition-all duration-500 ease-in-out",
             isVisible
                 ? "translate-y-0"
                 : "-translate-y-full"
