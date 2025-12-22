@@ -6,17 +6,11 @@ export default {
         "./app/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
-        extend: {
-            colors: {
-                primary: "#0d9488", // Teal
-                "primary-dark": "#115e59", // Darker teal
-                secondary: "#d97706", // Dark golden amber
-                "secondary-dark": "#92400e", // Darker amber
-            },
-        },
+        extend: {},
     },
     plugins: [],
 };
+
 
 /*
  * ┌── o m a r ──┐

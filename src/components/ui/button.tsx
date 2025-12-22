@@ -5,16 +5,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0d9488] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
-                default: "bg-gradient-to-r from-teal-700 to-teal-800 text-white shadow-lg hover:from-teal-800 hover:to-teal-900 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]",
+                default: "bg-[#0d9488] text-white shadow-lg hover:bg-[#115e59] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]",
                 destructive: "bg-red-600 text-white shadow-sm hover:bg-red-700",
-                outline: "border-2 border-white/80 bg-transparent text-white shadow-md hover:bg-white/20 hover:border-white hover:shadow-lg active:scale-[0.98]",
-                secondary: "bg-slate-100 text-slate-900 shadow-md hover:bg-slate-200 hover:shadow-lg active:scale-[0.98]",
+                outline: "border-2 border-[#0d9488] bg-transparent text-[#0d9488] shadow-md hover:bg-[#0d9488]/10 hover:shadow-lg active:scale-[0.98]",
+                secondary: "bg-[#d97706] text-white shadow-md hover:bg-[#92400e] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]",
                 ghost: "hover:bg-slate-100 hover:text-slate-900",
-                link: "text-teal-600 underline-offset-4 hover:underline",
+                link: "text-[#0d9488] underline-offset-4 hover:underline",
             },
             size: {
                 default: "h-10 px-6 py-2.5",

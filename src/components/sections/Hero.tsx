@@ -27,7 +27,7 @@ export function Hero() {
                         <Button size="lg" className="min-w-[200px] text-lg" asChild>
                             <Link href="/register">Find a Caregiver</Link>
                         </Button>
-                        <Button size="lg" variant="outline" className="min-w-[200px] bg-transparent text-lg text-white hover:bg-white/10 hover:text-white" asChild>
+                        <Button size="lg" variant="secondary" className="min-w-[200px] text-lg" asChild>
                             <Link href="/#services">Explore Services</Link>
                         </Button>
                     </div>

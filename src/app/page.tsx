@@ -32,7 +32,7 @@ export default function Home() {
               support for sick family members, we connect you with verified and compassionate professionals.
             </p>
             <div className="pt-4">
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="secondary">
                 <Link href="/about">Learn More About Us</Link>
               </Button>
             </div>
