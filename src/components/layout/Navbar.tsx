@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Heart } from "lucide-react";
+import { Menu, X, Heart, LogOut, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
+import { mockStore, User } from "@/lib/store";
 
 const NAV_ITEMS = [
     { label: "Home", href: "/", sectionId: null },
@@ -20,9 +21,23 @@ export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [activeSection, setActiveSection] = useState<string | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const lastScrollY = useRef(0);
     const pathname = usePathname();
     const router = useRouter();
+
+    // Check user authentication state
+    useEffect(() => {
+        const currentUser = mockStore.getUser();
+        setUser(currentUser);
+    }, [pathname]);
+
+    const handleLogout = () => {
+        mockStore.logout();
+        setUser(null);
+        setIsOpen(false);
+        router.push('/');
+    };
 
     // Track active section based on scroll position
     useEffect(() => {
@@ -181,12 +196,32 @@ export function Navbar() {
 
                 {/* Desktop Actions */}
                 <div className="hidden md:flex md:items-center md:gap-4">
-                    <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95">
-                        <Link href="/login">Log in</Link>
-                    </Button>
-                    <Button asChild className="transition-transform hover:scale-105 active:scale-95">
-                        <Link href="/register">Get Started</Link>
-                    </Button>
+                    {user ? (
+                        <>
+                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95">
+                                <Link href="/my-bookings" className="flex items-center gap-2">
+                                    <LayoutDashboard className="w-4 h-4" />
+                                    Dashboard
+                                </Link>
+                            </Button>
+                            <Button
+                                onClick={handleLogout}
+                                className="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                            >
+                                <LogOut className="w-4 h-4" />
+                                Logout
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95">
+                                <Link href="/login">Log in</Link>
+                            </Button>
+                            <Button asChild className="transition-transform hover:scale-105 active:scale-95">
+                                <Link href="/register">Get Started</Link>
+                            </Button>
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -244,12 +279,33 @@ export function Navbar() {
                                 variants={fadeInUp}
                                 className="mt-3 flex flex-row gap-3 border-t border-slate-200/40 pt-3"
                             >
-                                <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
-                                    <Link href="/login" onClick={() => setIsOpen(false)}>Log in</Link>
-                                </Button>
-                                <Button size="sm" asChild className="transition-all duration-200 hover:scale-105">
-                                    <Link href="/register" onClick={() => setIsOpen(false)}>Get Started</Link>
-                                </Button>
+                                {user ? (
+                                    <>
+                                        <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
+                                            <Link href="/my-bookings" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                                <LayoutDashboard className="w-3 h-3" />
+                                                Dashboard
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={handleLogout}
+                                            className="transition-all duration-200 hover:scale-105 flex items-center gap-1"
+                                        >
+                                            <LogOut className="w-3 h-3" />
+                                            Logout
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
+                                            <Link href="/login" onClick={() => setIsOpen(false)}>Log in</Link>
+                                        </Button>
+                                        <Button size="sm" asChild className="transition-all duration-200 hover:scale-105">
+                                            <Link href="/register" onClick={() => setIsOpen(false)}>Get Started</Link>
+                                        </Button>
+                                    </>
+                                )}
                             </motion.div>
                         </motion.div>
                     </motion.div>

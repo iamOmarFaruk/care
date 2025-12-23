@@ -7,13 +7,25 @@ import { Footer } from "./Footer";
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    // Check if current route is admin or auth (login/register)
-    const isAdminRoute = pathname?.startsWith("/admin");
+    // Check if current route is admin control panel
+    const isAdminRoute = pathname?.startsWith("/control-panel");
     const isAuthRoute = pathname?.startsWith("/login") || pathname?.startsWith("/register");
 
-    // Don't show Navbar and Footer on admin or auth pages
-    if (isAdminRoute || isAuthRoute) {
+    // Don't show Navbar and Footer on admin pages
+    if (isAdminRoute) {
         return <>{children}</>;
+    }
+
+    // Show Navbar on auth pages but without footer
+    if (isAuthRoute) {
+        return (
+            <>
+                <Navbar />
+                <main className="min-h-screen flex-1 flex flex-col pt-16">
+                    {children}
+                </main>
+            </>
+        );
     }
 
     return (

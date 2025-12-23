@@ -27,14 +27,14 @@ interface AdminSidebarProps {
 }
 
 const menuItems = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
-    { href: "/admin/users", label: "Users", icon: Users },
-    { href: "/admin/slider", label: "Slider", icon: Image },
-    { href: "/admin/about", label: "About", icon: Info },
-    { href: "/admin/services", label: "Services", icon: Briefcase },
-    { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
-    { href: "/admin/footer", label: "Footer", icon: FileText },
+    { href: "/control-panel", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/control-panel/orders", label: "Orders", icon: ShoppingBag },
+    { href: "/control-panel/users", label: "Users", icon: Users },
+    { href: "/control-panel/slider", label: "Slider", icon: Image },
+    { href: "/control-panel/about", label: "About", icon: Info },
+    { href: "/control-panel/services", label: "Services", icon: Briefcase },
+    { href: "/control-panel/testimonials", label: "Testimonials", icon: MessageSquareQuote },
+    { href: "/control-panel/footer", label: "Footer", icon: FileText },
 ];
 
 export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
@@ -49,7 +49,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
         >
             {/* Logo */}
             <div className="h-16 flex items-center justify-between px-4 border-b border-slate-700/50">
-                <Link href="/admin" className="flex items-center gap-3">
+                <Link href="/control-panel" className="flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-lg shadow-teal-500/20">
                         <Heart className="h-5 w-5 fill-current" />
                     </div>
@@ -108,7 +108,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
                 {menuItems.map((item) => {
                     const isActive =
                         pathname === item.href ||
-                        (item.href !== "/admin" && pathname.startsWith(item.href));
+                        (item.href !== "/control-panel" && pathname.startsWith(item.href));
                     const Icon = item.icon;
 
                     const linkContent = (

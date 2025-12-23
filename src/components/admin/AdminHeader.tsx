@@ -55,7 +55,7 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
     const handleLogout = () => {
         adminStore.adminLogout();
         toast.success("Logged out successfully");
-        router.push("/login");
+        router.push("/control-panel/login");
     };
 
     return (
@@ -141,7 +141,7 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
 
                                 <div className="p-2 border-t border-slate-100 bg-slate-50/50">
                                     <Link
-                                        href="/admin/orders"
+                                        href="/control-panel/orders"
                                         onClick={() => setIsNotifOpen(false)}
                                         className="flex items-center justify-center w-full py-2 text-sm font-medium text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-lg transition-colors"
                                     >
@@ -234,6 +234,6 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2024-12-24
- * │ Updated: 2024-12-24
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

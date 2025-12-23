@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 
-import { adminStore } from "@/lib/admin-data";
 import { mockStore } from "@/lib/store";
 
 export default function LoginPage() {
@@ -29,18 +28,7 @@ export default function LoginPage() {
         // Simulate API delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        // Check for admin credentials
-        if (email === "admin" && password === "admin") {
-            const adminUser = adminStore.adminLogin(email, password);
-            if (adminUser) {
-                toast.success("Welcome back, Admin!");
-                router.push("/admin");
-                setLoading(false);
-                return;
-            }
-        }
-
-        // Normal user login
+        // User login only (no admin access from this page)
         if (email && password) {
             mockStore.login(email);
             toast.success("Successfully logged in!");
