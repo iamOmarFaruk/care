@@ -79,59 +79,21 @@ export default function AdminLayout({
             </AnimatePresence>
 
             {/* Main Content */}
-            <motion.div
-                initial={false}
-                animate={{ marginLeft: isCollapsed ? 72 : 260 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="min-h-screen lg:ml-[260px]"
-                style={{ marginLeft: 0 }} // Reset for mobile
-            >
-                <div
-                    className="hidden lg:block"
-                    style={{ marginLeft: isCollapsed ? 72 : 260, transition: "margin-left 0.3s ease-in-out" }}
-                >
-                    {/* This empty div is just for spacing on desktop */}
-                </div>
-                <div className={`lg:ml-0`} style={{ marginLeft: 0 }}>
-                    <div
-                        className="transition-[margin-left] duration-300 ease-in-out"
-                        style={{
-                            marginLeft:
-                                typeof window !== "undefined" && window.innerWidth >= 1024
-                                    ? isCollapsed
-                                        ? 72
-                                        : 260
-                                    : 0,
-                        }}
-                    >
-                        <style jsx>{`
-              @media (min-width: 1024px) {
-                div {
-                  margin-left: ${isCollapsed ? "72px" : "260px"};
+            <style jsx global>{`
+                @media (min-width: 1024px) {
+                    .admin-main-content {
+                        margin-left: ${isCollapsed ? "72px" : "260px"};
+                        transition: margin-left 0.3s ease-in-out;
+                    }
                 }
-              }
             `}</style>
-                    </div>
-                </div>
-
-                <div
-                    className="min-h-screen flex flex-col transition-[margin-left] duration-300"
-                    id="admin-main-content"
-                >
-                    <style jsx global>{`
-            @media (min-width: 1024px) {
-              #admin-main-content {
-                margin-left: ${isCollapsed ? "72px" : "260px"} !important;
-              }
-            }
-          `}</style>
-                    <AdminHeader
-                        onMenuClick={() => setIsMobileOpen(true)}
-                        user={user}
-                    />
-                    <main className="flex-1 p-4 lg:p-6">{children}</main>
-                </div>
-            </motion.div>
+            <div className="admin-main-content min-h-screen flex flex-col bg-slate-100/50">
+                <AdminHeader
+                    onMenuClick={() => setIsMobileOpen(true)}
+                    user={user}
+                />
+                <main className="flex-1 p-6 lg:p-8">{children}</main>
+            </div>
         </div>
     );
 }
@@ -141,6 +103,6 @@ export default function AdminLayout({
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2024-12-24
- * │ Updated: 2024-12-24
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

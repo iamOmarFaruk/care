@@ -16,6 +16,8 @@ import {
     ShoppingBag,
     ChevronLeft,
     Heart,
+    Globe,
+    ExternalLink,
 } from "lucide-react";
 import { Tooltip } from "@/components/ui/Tooltip";
 
@@ -26,13 +28,13 @@ interface AdminSidebarProps {
 
 const menuItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
+    { href: "/admin/users", label: "Users", icon: Users },
     { href: "/admin/slider", label: "Slider", icon: Image },
     { href: "/admin/about", label: "About", icon: Info },
     { href: "/admin/services", label: "Services", icon: Briefcase },
     { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
     { href: "/admin/footer", label: "Footer", icon: FileText },
-    { href: "/admin/users", label: "Users", icon: Users },
-    { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
 ];
 
 export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
@@ -80,6 +82,29 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
 
             {/* Navigation */}
             <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+                <Link
+                    href="/"
+                    target="_blank"
+                    className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-700/50 mb-2"
+                    )}
+                >
+                    <Globe className="w-5 h-5 flex-shrink-0" />
+                    {!isCollapsed && (
+                        <motion.span
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            className="font-medium text-sm"
+                        >
+                            Visit Site
+                        </motion.span>
+                    )}
+                    {!isCollapsed && <ExternalLink className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />}
+                </Link>
+
+                <div className="h-px bg-slate-700/50 mx-2 mb-4" />
+
                 {menuItems.map((item) => {
                     const isActive =
                         pathname === item.href ||
@@ -154,6 +179,6 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2024-12-24
- * │ Updated: 2024-12-24
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */
