@@ -67,13 +67,13 @@ export default function BookingPage() {
     };
 
     return (
-        <div className="container mx-auto max-w-2xl px-4 py-12">
+        <div className="container mx-auto max-w-2xl px-4 py-6 md:py-12">
             <MotionDiv
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-8 text-center"
             >
-                <h1 className="text-3xl font-bold tracking-tight">Complete Your Booking</h1>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Complete Your Booking</h1>
                 <p className="text-muted-foreground">You are booking: <span className="font-semibold text-primary">{service.title}</span></p>
             </MotionDiv>
 
@@ -81,7 +81,7 @@ export default function BookingPage() {
                 variants={scaleIn}
                 initial="initial"
                 animate="animate"
-                className="rounded-xl border bg-card p-6 shadow-sm md:p-8"
+                className="rounded-xl border bg-card p-4 shadow-sm md:p-8"
             >
                 <form onSubmit={handleBooking} className="space-y-6">
 
@@ -89,7 +89,7 @@ export default function BookingPage() {
                         variants={staggerContainer(0.1, 0.2)}
                         initial="initial"
                         animate="animate"
-                        className="space-y-6"
+                        className="space-y-4 md:space-y-6"
                     >
                         {/* Duration */}
                         <MotionDiv variants={fadeInUp} className="space-y-2">
@@ -106,9 +106,9 @@ export default function BookingPage() {
                         </MotionDiv>
 
                         {/* Location Section */}
-                        <MotionDiv variants={fadeInUp} className="space-y-4 rounded-lg bg-muted/30 p-4">
+                        <MotionDiv variants={fadeInUp} className="space-y-3 md:space-y-4 rounded-lg bg-muted/30 p-3 md:p-4">
                             <h3 className="font-medium">Service Location</h3>
-                            <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="grid gap-3 md:gap-4 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <Label>Division</Label>
                                     <Select
@@ -143,9 +143,9 @@ export default function BookingPage() {
                         </MotionDiv>
 
                         {/* Summary */}
-                        <MotionDiv variants={fadeInUp} className="flex items-center justify-between rounded-lg border bg-secondary/20 p-4">
-                            <span className="font-medium">Total Cost:</span>
-                            <span className="text-2xl font-bold text-primary">৳{totalCost}</span>
+                        <MotionDiv variants={fadeInUp} className="flex items-center justify-between rounded-lg border bg-secondary/20 p-3 md:p-4">
+                            <span className="font-medium text-sm md:text-base">Total Cost:</span>
+                            <span className="text-xl md:text-2xl font-bold text-primary">৳{totalCost}</span>
                         </MotionDiv>
 
                         <MotionDiv variants={fadeInUp}>
@@ -166,6 +166,6 @@ export default function BookingPage() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

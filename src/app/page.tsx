@@ -14,13 +14,13 @@ export default function Home() {
       <Hero />
 
       {/* About Section */}
-      <section id="about" className="py-16 md:py-24 overflow-hidden">
+      <section id="about" className="py-10 md:py-24 overflow-hidden">
         <MotionDiv
           variants={staggerContainer(0.3)}
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: "-100px" }}
-          className="container mx-auto grid gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8"
+          className="container mx-auto grid gap-8 md:gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center lg:px-8"
         >
           <MotionDiv
             variants={fadeInLeft}
@@ -33,14 +33,14 @@ export default function Home() {
             />
           </MotionDiv>
           <MotionDiv variants={fadeInRight} className="space-y-6">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
               Trusted Care for Your Family
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-sm md:text-lg text-muted-foreground">
               At Care.xyz, our mission is to make caregiving easy, secure, and accessible for everyone.
               We understand the challenges of finding reliable help for your loved ones.
             </p>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-sm md:text-lg text-muted-foreground">
               Whether you need a nanny for your children, a companion for your elderly parents, or specialized
               support for sick family members, we connect you with verified and compassionate professionals.
             </p>
@@ -57,7 +57,7 @@ export default function Home() {
 
       {/* Testimonials */}
 
-      <section id="testimonial" className="bg-slate-50 py-16 md:py-24 dark:bg-slate-900/50">
+      <section id="testimonial" className="bg-slate-50 py-10 md:py-24 dark:bg-slate-900/50">
         <MotionDiv
           variants={staggerContainer(0.2)}
           initial="initial"
@@ -65,10 +65,10 @@ export default function Home() {
           viewport={{ once: true, margin: "-100px" }}
           className="container mx-auto px-4 sm:px-6 lg:px-8"
         >
-          <div className="mb-12 text-center">
+          <div className="mb-8 md:mb-12 text-center">
             <MotionH2
               variants={fadeInUp}
-              className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+              className="text-2xl md:text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
             >
               Trusted by Families
             </MotionH2>
@@ -86,6 +86,6 @@ export default function Home() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-23
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

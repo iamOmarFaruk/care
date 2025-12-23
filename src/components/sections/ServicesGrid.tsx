@@ -8,7 +8,7 @@ import { MotionDiv, MotionH2, MotionP, fadeInUp, staggerContainer } from "@/comp
 
 export function ServicesGrid() {
     return (
-        <section id="services" className="bg-muted/50 py-16 md:py-24">
+        <section id="services" className="bg-muted/50 py-10 md:py-24">
             <MotionDiv
                 variants={staggerContainer(0.2)}
                 initial="initial"
@@ -16,16 +16,16 @@ export function ServicesGrid() {
                 viewport={{ once: true, margin: "-100px" }}
                 className="container mx-auto px-4 sm:px-6 lg:px-8"
             >
-                <div className="mb-12 text-center">
+                <div className="mb-8 md:mb-12 text-center">
                     <MotionH2
                         variants={fadeInUp}
-                        className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+                        className="text-2xl md:text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
                     >
                         Our Services
                     </MotionH2>
                     <MotionP
                         variants={fadeInUp}
-                        className="mt-4 text-lg text-muted-foreground"
+                        className="mt-3 md:mt-4 text-sm md:text-lg text-muted-foreground"
                     >
                         Comprehensive care solutions tailored to your family&apos;s needs.
                     </MotionP>
@@ -49,7 +49,7 @@ export function ServicesGrid() {
                             </div>
 
                             {/* Content */}
-                            <div className="p-6">
+                            <div className="p-4 md:p-6">
                                 <div className="mb-4 flex items-center justify-between">
                                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 transition-colors">
                                         <service.icon className="h-6 w-6 text-primary transition-colors" />
@@ -99,6 +99,6 @@ export function ServicesGrid() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-23
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

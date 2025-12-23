@@ -12,13 +12,13 @@ const XIcon = ({ className }: { className?: string }) => (
 
 export function Footer() {
     return (
-        <footer className="bg-gradient-to-t from-teal-50/80 via-white to-white py-16">
+        <footer className="bg-gradient-to-t from-teal-50/80 via-white to-white py-8 md:py-16">
             <MotionDiv
                 variants={staggerContainer(0.1)}
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true }}
-                className="container mx-auto px-4 flex flex-col items-center justify-center text-center gap-8"
+                className="container mx-auto px-4 flex flex-col items-center justify-center text-center gap-5 md:gap-8"
             >
                 {/* Logo Section */}
                 <MotionDiv variants={fadeInUp} className="flex flex-col items-center gap-4">
@@ -31,9 +31,9 @@ export function Footer() {
                 </MotionDiv>
 
                 {/* Navigation Links */}
-                <MotionDiv variants={fadeInUp} className="hidden sm:block">
+                <MotionDiv variants={fadeInUp}>
                     <nav>
-                        <ul className="flex flex-wrap justify-center gap-6 sm:gap-8 text-sm font-medium text-muted-foreground">
+                        <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-xs sm:text-sm font-medium text-muted-foreground">
                             <li><Link href="/#about" className="hover:text-teal-600 transition-colors">About Us</Link></li>
                             <li><Link href="/#services" className="hover:text-teal-600 transition-colors">Services</Link></li>
                             <li><Link href="/contact" className="hover:text-teal-600 transition-colors">Contact</Link></li>
@@ -44,7 +44,7 @@ export function Footer() {
                 </MotionDiv>
 
                 {/* Social Icons */}
-                <MotionDiv variants={fadeInUp} className="flex gap-6">
+                <MotionDiv variants={fadeInUp} className="flex gap-5 md:gap-6">
                     <a href="#" className="text-muted-foreground hover:text-teal-600 hover:scale-110 transition-all">
                         <span className="sr-only">Facebook</span>
                         <Facebook className="h-5 w-5" />
@@ -64,7 +64,7 @@ export function Footer() {
                 </MotionDiv>
 
                 {/* Copyright */}
-                <MotionDiv variants={fadeInUp} className="pt-4">
+                <MotionDiv variants={fadeInUp} className="pt-2 md:pt-4">
                     <p className="text-xs text-muted-foreground/60">
                         © {new Date().getFullYear()} Care.xyz. All rights reserved.
                     </p>

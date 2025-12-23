@@ -50,27 +50,27 @@ export default function LoginPage() {
                 >
                     <div className="w-full max-w-md">
                         {/* Form Card */}
-                        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-8 lg:p-10 border border-slate-100">
+                        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-5 md:p-8 lg:p-10 border border-slate-100">
                             <MotionDiv
                                 variants={staggerContainer(0.1, 0.1)}
                                 initial="initial"
                                 animate="animate"
-                                className="space-y-6"
+                                className="space-y-4 md:space-y-6"
                             >
                                 {/* Header */}
                                 <MotionDiv variants={fadeInUp} className="text-center space-y-2">
-                                    <h1 className="text-2xl lg:text-3xl font-bold text-slate-800">
+                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
                                         Welcome back
                                     </h1>
-                                    <p className="text-slate-500 text-sm lg:text-base">
+                                    <p className="text-slate-500 text-xs md:text-sm lg:text-base">
                                         Sign in to continue to your account
                                     </p>
                                 </MotionDiv>
 
-                                <form onSubmit={handleSubmit} className="space-y-5">
+                                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                                     {/* Email Field */}
-                                    <MotionDiv variants={fadeInUp} className="space-y-3">
-                                        <Label htmlFor="email" className="text-slate-700 font-medium block mb-2">
+                                    <MotionDiv variants={fadeInUp} className="space-y-2">
+                                        <Label htmlFor="email" className="text-slate-700 font-medium block mb-1.5 text-sm">
                                             Email address
                                         </Label>
                                         <div className="relative">
@@ -91,9 +91,9 @@ export default function LoginPage() {
                                     </MotionDiv>
 
                                     {/* Password Field */}
-                                    <MotionDiv variants={fadeInUp} className="space-y-3">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <Label htmlFor="password" className="text-slate-700 font-medium">
+                                    <MotionDiv variants={fadeInUp} className="space-y-2">
+                                        <div className="flex items-center justify-between mb-1.5">
+                                            <Label htmlFor="password" className="text-slate-700 font-medium text-sm">
                                                 Password
                                             </Label>
                                             <Link
@@ -209,6 +209,6 @@ export default function LoginPage() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

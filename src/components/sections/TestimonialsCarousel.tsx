@@ -21,7 +21,7 @@ export default function TestimonialsCarousel({ testimonials = TESTIMONIALS }: Te
                 {doubledTestimonials.map((testimonial, index) => (
                     <div
                         key={`${testimonial.id}-${index}`}
-                        className="flex-shrink-0 w-[320px] md:w-[380px] rounded-2xl bg-background p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]"
+                        className="flex-shrink-0 w-[280px] md:w-[380px] rounded-2xl bg-background p-4 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]"
                     >
                         {/* Quote Icon */}
                         <div className="mb-4">
@@ -33,11 +33,11 @@ export default function TestimonialsCarousel({ testimonials = TESTIMONIALS }: Te
                                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                             </svg>
                         </div>
-                        <p className="mb-6 text-muted-foreground leading-relaxed">
+                        <p className="mb-4 md:mb-6 text-sm md:text-base text-muted-foreground leading-relaxed">
                             &ldquo;{testimonial.content}&rdquo;
                         </p>
-                        <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                            <div className="h-12 w-12 overflow-hidden rounded-full ring-2 ring-primary/20">
+                        <div className="flex items-center gap-3 md:gap-4 pt-3 md:pt-4 border-t border-slate-100 dark:border-slate-800">
+                            <div className="h-10 w-10 md:h-12 md:w-12 overflow-hidden rounded-full ring-2 ring-primary/20">
                                 <img
                                     src={testimonial.avatar}
                                     alt={testimonial.name}
@@ -45,8 +45,8 @@ export default function TestimonialsCarousel({ testimonials = TESTIMONIALS }: Te
                                 />
                             </div>
                             <div>
-                                <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                                <p className="text-sm text-primary font-medium">{testimonial.role}</p>
+                                <h4 className="font-semibold text-foreground text-sm md:text-base">{testimonial.name}</h4>
+                                <p className="text-xs md:text-sm text-primary font-medium">{testimonial.role}</p>
                             </div>
                         </div>
                     </div>
@@ -78,6 +78,6 @@ export default function TestimonialsCarousel({ testimonials = TESTIMONIALS }: Te
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-23
- * │ Updated: 2025-12-23
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

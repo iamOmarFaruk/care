@@ -56,28 +56,28 @@ export default function RegisterPage() {
                 >
                     <div className="w-full max-w-md">
                         {/* Form Card */}
-                        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-8 lg:p-10 border border-slate-100">
+                        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-5 md:p-8 lg:p-10 border border-slate-100">
                             <MotionDiv
                                 variants={staggerContainer(0.08, 0.1)}
                                 initial="initial"
                                 animate="animate"
-                                className="space-y-5"
+                                className="space-y-4 md:space-y-5"
                             >
                                 {/* Header */}
                                 <MotionDiv variants={fadeInUp} className="text-center space-y-2">
-                                    <h1 className="text-2xl lg:text-3xl font-bold text-slate-800">
+                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
                                         Create an account
                                     </h1>
-                                    <p className="text-slate-500 text-sm lg:text-base">
+                                    <p className="text-slate-500 text-xs md:text-sm lg:text-base">
                                         Join Care.xyz to find trusted care services
                                     </p>
                                 </MotionDiv>
 
-                                <form onSubmit={handleSubmit} className="space-y-5">
+                                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                                     {/* Name & Contact Row */}
-                                    <div className="grid gap-4 md:grid-cols-2">
-                                        <MotionDiv variants={fadeInUp} className="space-y-3">
-                                            <Label htmlFor="name" className="text-slate-700 font-medium block mb-2">Full Name</Label>
+                                    <div className="grid gap-3 md:gap-4 md:grid-cols-2">
+                                        <MotionDiv variants={fadeInUp} className="space-y-2">
+                                            <Label htmlFor="name" className="text-slate-700 font-medium block mb-1.5 text-sm">Full Name</Label>
                                             <div className="relative">
                                                 <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'name' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
                                                     <User className="w-4 h-4" />
@@ -93,8 +93,8 @@ export default function RegisterPage() {
                                                 />
                                             </div>
                                         </MotionDiv>
-                                        <MotionDiv variants={fadeInUp} className="space-y-3">
-                                            <Label htmlFor="contact" className="text-slate-700 font-medium block mb-2">Contact No</Label>
+                                        <MotionDiv variants={fadeInUp} className="space-y-2">
+                                            <Label htmlFor="contact" className="text-slate-700 font-medium block mb-1.5 text-sm">Contact No</Label>
                                             <div className="relative">
                                                 <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'contact' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
                                                     <Phone className="w-4 h-4" />
@@ -113,8 +113,8 @@ export default function RegisterPage() {
                                     </div>
 
                                     {/* NID */}
-                                    <MotionDiv variants={fadeInUp} className="space-y-3">
-                                        <Label htmlFor="nid" className="text-slate-700 font-medium block mb-2">NID Number</Label>
+                                    <MotionDiv variants={fadeInUp} className="space-y-2">
+                                        <Label htmlFor="nid" className="text-slate-700 font-medium block mb-1.5 text-sm">NID Number</Label>
                                         <div className="relative">
                                             <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'nid' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
                                                 <CreditCard className="w-5 h-5" />
@@ -132,8 +132,8 @@ export default function RegisterPage() {
                                     </MotionDiv>
 
                                     {/* Email */}
-                                    <MotionDiv variants={fadeInUp} className="space-y-3">
-                                        <Label htmlFor="email" className="text-slate-700 font-medium block mb-2">Email address</Label>
+                                    <MotionDiv variants={fadeInUp} className="space-y-2">
+                                        <Label htmlFor="email" className="text-slate-700 font-medium block mb-1.5 text-sm">Email address</Label>
                                         <div className="relative">
                                             <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
                                                 <Mail className="w-5 h-5" />
@@ -152,8 +152,8 @@ export default function RegisterPage() {
                                     </MotionDiv>
 
                                     {/* Password */}
-                                    <MotionDiv variants={fadeInUp} className="space-y-3">
-                                        <Label htmlFor="password" className="text-slate-700 font-medium block mb-2">Password</Label>
+                                    <MotionDiv variants={fadeInUp} className="space-y-2">
+                                        <Label htmlFor="password" className="text-slate-700 font-medium block mb-1.5 text-sm">Password</Label>
                                         <div className="relative">
                                             <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'password' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
                                                 <Lock className="w-5 h-5" />
@@ -231,6 +231,6 @@ export default function RegisterPage() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

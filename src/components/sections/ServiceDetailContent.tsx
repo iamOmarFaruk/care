@@ -16,12 +16,12 @@ interface Service {
 
 export default function ServiceDetailContent({ service }: { service: Service }) {
     return (
-        <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="container mx-auto px-4 py-6 md:py-12 sm:px-6 lg:px-8 overflow-hidden">
             {/* Back Button */}
             <MotionDiv
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="mb-8"
+                className="mb-4 md:mb-8"
             >
                 <Button variant="ghost" asChild className="pl-0 hover:pl-2 transition-all">
                     <Link href="/#services">
@@ -30,7 +30,7 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
                 </Button>
             </MotionDiv>
 
-            <div className="grid gap-12 lg:grid-cols-2">
+            <div className="grid gap-6 md:gap-12 lg:grid-cols-2">
                 {/* Image Column */}
                 <MotionDiv
                     variants={fadeInLeft}
@@ -61,22 +61,22 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
                                 Verified Pros
                             </span>
                         </div>
-                        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+                        <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                             {service.title}
                         </h1>
-                        <p className="mt-4 text-xl text-muted-foreground">
+                        <p className="mt-3 md:mt-4 text-base md:text-xl text-muted-foreground">
                             {service.description}
                         </p>
                     </MotionDiv>
 
                     <MotionDiv
                         variants={fadeInUp}
-                        className="space-y-4 rounded-xl border bg-card p-6 shadow-sm"
+                        className="space-y-3 md:space-y-4 rounded-xl border bg-card p-4 md:p-6 shadow-sm"
                     >
-                        <h3 className="font-semibold text-foreground">Service Features</h3>
-                        <ul className="grid gap-3 sm:grid-cols-2">
+                        <h3 className="font-semibold text-foreground text-sm md:text-base">Service Features</h3>
+                        <ul className="grid gap-2 md:gap-3 sm:grid-cols-2">
                             {service.features.map((feature, idx) => (
-                                <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                                <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
                                     <CheckCircle className="h-5 w-5 text-primary" />
                                     {feature}
                                 </li>
@@ -86,12 +86,12 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
 
                     <MotionDiv
                         variants={fadeInUp}
-                        className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between rounded-xl bg-slate-50 p-6 dark:bg-slate-900"
+                        className="flex flex-col gap-4 md:gap-6 sm:flex-row sm:items-center sm:justify-between rounded-xl bg-slate-50 p-4 md:p-6 dark:bg-slate-900"
                     >
                         <div>
                             <p className="text-sm font-medium text-muted-foreground">Starting from</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-3xl font-bold text-primary">৳{service.pricePerHr}</span>
+                                <span className="text-2xl md:text-3xl font-bold text-primary">৳{service.pricePerHr}</span>
                                 <span className="text-muted-foreground">/hour</span>
                             </div>
                         </div>
@@ -112,6 +112,6 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-23
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

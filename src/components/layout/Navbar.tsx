@@ -219,7 +219,7 @@ export function Navbar() {
                             variants={staggerContainer(0.05, 0.1)}
                             initial="initial"
                             animate="animate"
-                            className="space-y-1 p-4"
+                            className="space-y-1 p-3"
                         >
                             {NAV_ITEMS.map((item) => (
                                 <motion.div key={item.href} variants={fadeInUp}>
@@ -230,7 +230,7 @@ export function Navbar() {
                                             setIsOpen(false);
                                         }}
                                         className={cn(
-                                            "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-slate-50 hover:text-teal-600 hover:translate-x-1",
+                                            "block select-none rounded-md px-3 py-2 text-base font-semibold transition-all duration-200 hover:bg-slate-50 hover:text-teal-600 hover:translate-x-1",
                                             isNavItemActive(item)
                                                 ? "text-teal-600 bg-teal-50/50"
                                                 : "text-slate-700"
@@ -242,7 +242,7 @@ export function Navbar() {
                             ))}
                             <motion.div
                                 variants={fadeInUp}
-                                className="mt-4 flex flex-row gap-3 border-t border-slate-200/40 pt-4"
+                                className="mt-3 flex flex-row gap-3 border-t border-slate-200/40 pt-3"
                             >
                                 <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
                                     <Link href="/login" onClick={() => setIsOpen(false)}>Log in</Link>

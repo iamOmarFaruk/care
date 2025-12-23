@@ -49,7 +49,7 @@ export function Hero() {
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
-        <section className="relative min-h-[600px] w-full overflow-hidden bg-slate-900 -mt-16">
+        <section className="relative min-h-[480px] md:min-h-[600px] w-full overflow-hidden bg-slate-900 -mt-16">
             <Swiper
                 modules={[Autoplay, EffectFade, Pagination]}
                 effect="fade"
@@ -66,11 +66,11 @@ export function Hero() {
                 loop={true}
                 speed={1000}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                className="h-full min-h-[600px] md:min-h-[700px]"
+                className="h-full min-h-[480px] md:min-h-[700px]"
             >
                 {heroSlides.map((slide, index) => (
                     <SwiperSlide key={slide.id}>
-                        <div className="relative flex min-h-[600px] md:min-h-[700px] w-full items-center justify-center py-12 md:py-24 lg:py-32 xl:py-48 pt-24">
+                        <div className="relative flex min-h-[480px] md:min-h-[700px] w-full items-center justify-center py-8 md:py-24 lg:py-32 xl:py-48 pt-20 md:pt-24">
                             {/* Background Image with Overlay */}
                             <div className="absolute inset-0 z-0">
                                 <img
@@ -92,45 +92,45 @@ export function Hero() {
                                 <div className="mx-auto max-w-4xl text-center">
                                     <MotionH1
                                         variants={fadeInUp}
-                                        className="scroll-m-20 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white whitespace-nowrap"
+                                        className="scroll-m-20 text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white lg:whitespace-nowrap"
                                     >
                                         Reliable Care for <span className="text-primary">{slide.highlight}</span>
                                     </MotionH1>
 
                                     <MotionP
                                         variants={fadeInUp}
-                                        className="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto"
+                                        className="mt-4 md:mt-6 text-sm md:text-lg text-gray-200 max-w-2xl mx-auto px-2"
                                     >
                                         {slide.description}
                                     </MotionP>
 
                                     <MotionDiv
                                         variants={fadeInUp}
-                                        className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+                                        className="mt-6 md:mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
                                     >
-                                        <Button size="lg" className="min-w-[200px] text-lg" asChild>
+                                        <Button size="default" className="min-w-[160px] md:min-w-[200px] text-sm md:text-lg" asChild>
                                             <Link href={slide.ctaLink}>{slide.ctaText}</Link>
                                         </Button>
-                                        <Button size="lg" variant="secondary" className="min-w-[200px] text-lg" asChild>
+                                        <Button size="default" variant="secondary" className="min-w-[160px] md:min-w-[200px] text-sm md:text-lg" asChild>
                                             <Link href="/#services">Explore Services</Link>
                                         </Button>
                                     </MotionDiv>
 
                                     <MotionDiv
                                         variants={fadeInUp}
-                                        className="mt-12 flex items-center justify-center gap-8 text-white/80"
+                                        className="mt-8 md:mt-12 flex items-center justify-center gap-6 md:gap-8 text-white/80"
                                     >
                                         <div className="flex flex-col items-center">
-                                            <span className="text-3xl font-bold">{slide.stats.caregivers}</span>
-                                            <span className="text-sm uppercase tracking-wide">Caregivers</span>
+                                            <span className="text-xl md:text-3xl font-bold">{slide.stats.caregivers}</span>
+                                            <span className="text-xs md:text-sm uppercase tracking-wide">Caregivers</span>
                                         </div>
                                         <div className="flex flex-col items-center">
-                                            <span className="text-3xl font-bold">{slide.stats.families}</span>
-                                            <span className="text-sm uppercase tracking-wide">Families</span>
+                                            <span className="text-xl md:text-3xl font-bold">{slide.stats.families}</span>
+                                            <span className="text-xs md:text-sm uppercase tracking-wide">Families</span>
                                         </div>
                                         <div className="flex flex-col items-center">
-                                            <span className="text-3xl font-bold">{slide.stats.rating}</span>
-                                            <span className="text-sm uppercase tracking-wide">Rating</span>
+                                            <span className="text-xl md:text-3xl font-bold">{slide.stats.rating}</span>
+                                            <span className="text-xs md:text-sm uppercase tracking-wide">Rating</span>
                                         </div>
                                     </MotionDiv>
                                 </div>
