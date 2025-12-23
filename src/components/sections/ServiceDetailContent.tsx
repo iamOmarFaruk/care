@@ -112,6 +112,6 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
- * └─ [care] ───┘
+ * │ Updated: 2025-12-23
+ * └─ care ───┘
  */
