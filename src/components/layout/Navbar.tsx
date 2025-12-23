@@ -10,18 +10,80 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 
 const NAV_ITEMS = [
-    { label: "Home", href: "/" },
-    { label: "Services", href: "/#services" },
-    { label: "About Us", href: "/#about" },
-    { label: "Testimonials", href: "/#testimonial" },
+    { label: "Home", href: "/", sectionId: null },
+    { label: "Services", href: "/#services", sectionId: "services" },
+    { label: "About Us", href: "/#about", sectionId: "about" },
+    { label: "Testimonials", href: "/#testimonial", sectionId: "testimonial" },
 ];
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+    const [activeSection, setActiveSection] = useState<string | null>(null);
     const lastScrollY = useRef(0);
     const pathname = usePathname();
     const router = useRouter();
+
+    // Track active section based on scroll position
+    useEffect(() => {
+        if (pathname !== '/') {
+            setActiveSection(null);
+            return;
+        }
+
+        const sectionIds = NAV_ITEMS
+            .filter(item => item.sectionId)
+            .map(item => item.sectionId as string);
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observerCallback = (entries: IntersectionObserverEntry[]) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        sectionIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                observer.observe(element);
+            }
+        });
+
+        // Check if at top of page (Home)
+        const handleScroll = () => {
+            if (window.scrollY < 100) {
+                setActiveSection(null);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // Check initial position
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [pathname]);
+
+    // Helper to check if a nav item is active
+    const isNavItemActive = (item: typeof NAV_ITEMS[0]) => {
+        if (pathname !== '/') {
+            return pathname === item.href;
+        }
+        if (item.sectionId === null) {
+            return activeSection === null;
+        }
+        return activeSection === item.sectionId;
+    };
 
     // Smooth scroll handler for hash links
     const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -100,14 +162,17 @@ export function Navbar() {
                             onClick={(e) => handleSmoothScroll(e, item.href)}
                             className={cn(
                                 "relative text-base font-semibold transition-all duration-300 hover:text-teal-600 group",
-                                pathname === item.href
-                                    ? "text-slate-900"
+                                isNavItemActive(item)
+                                    ? "text-teal-600"
                                     : "text-slate-700"
                             )}
                         >
                             {item.label}
                             <motion.span
-                                className="absolute -bottom-1 left-0 h-0.5 w-0 bg-teal-600 transition-all group-hover:w-full"
+                                className={cn(
+                                    "absolute -bottom-1 left-0 h-0.5 bg-teal-600 transition-all",
+                                    isNavItemActive(item) ? "w-full" : "w-0 group-hover:w-full"
+                                )}
                                 initial={false}
                             />
                         </Link>
@@ -166,7 +231,9 @@ export function Navbar() {
                                         }}
                                         className={cn(
                                             "block select-none rounded-md px-3 py-2.5 text-lg font-semibold transition-all duration-200 hover:bg-slate-50 hover:text-teal-600 hover:translate-x-1",
-                                            pathname === item.href ? "text-slate-900" : "text-slate-700"
+                                            isNavItemActive(item)
+                                                ? "text-teal-600 bg-teal-50/50"
+                                                : "text-slate-700"
                                         )}
                                     >
                                         {item.label}
@@ -197,6 +264,6 @@ export function Navbar() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */
