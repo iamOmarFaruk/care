@@ -55,7 +55,7 @@ export default function Home() {
       <ServicesGrid />
 
       {/* Testimonials */}
-      <section className="bg-slate-50 py-16 md:py-24 dark:bg-slate-900/50">
+      <section id="testimonial" className="bg-slate-50 py-16 md:py-24 dark:bg-slate-900/50">
         <MotionDiv
           variants={staggerContainer(0.2)}
           initial="initial"
@@ -71,7 +71,13 @@ export default function Home() {
               Trusted by Families
             </MotionH2>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
+          <MotionDiv
+            variants={staggerContainer(0.1, 0.2)}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid gap-8 md:grid-cols-3"
+          >
             {TESTIMONIALS.map((testimonial) => (
               <MotionDiv
                 key={testimonial.id}
@@ -95,7 +101,7 @@ export default function Home() {
                 </div>
               </MotionDiv>
             ))}
-          </div>
+          </MotionDiv>
         </MotionDiv>
       </section>
     </div>
