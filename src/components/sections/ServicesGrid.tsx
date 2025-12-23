@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SERVICES } from "@/lib/mock-data";
 import { MotionDiv, MotionH2, MotionP, fadeInUp, staggerContainer } from "@/components/ui/motion";
@@ -69,7 +69,7 @@ export function ServicesGrid() {
                                 <ul className="mb-6 space-y-2 text-sm text-muted-foreground">
                                     {service.features.slice(0, 3).map((feature, idx) => (
                                         <li key={idx} className="flex items-center gap-2">
-                                            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                                            <Check className="h-4 w-4 text-primary" />
                                             {feature}
                                         </li>
                                     ))}
