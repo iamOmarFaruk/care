@@ -37,7 +37,7 @@ export function ServicesGrid() {
                             key={service.id}
                             variants={fadeInUp}
                             whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                            className="group relative overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-lg"
+                            className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-background shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
                         >
                             {/* Image */}
                             <div className="aspect-video w-full overflow-hidden">
@@ -51,10 +51,10 @@ export function ServicesGrid() {
                             {/* Content */}
                             <div className="p-6">
                                 <div className="mb-4 flex items-center justify-between">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
                                         <service.icon className="h-6 w-6" />
                                     </div>
-                                    <span className="text-sm font-semibold text-primary">
+                                    <span className="rounded-full bg-secondary/50 px-3 py-1 text-xs font-bold text-secondary-foreground">
                                         starts from ৳{service.pricePerHr}/hr
                                     </span>
                                 </div>
@@ -75,7 +75,7 @@ export function ServicesGrid() {
                                     ))}
                                 </ul>
 
-                                <Button asChild className="w-full">
+                                <Button asChild className="mt-auto w-full rounded-xl py-6 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
                                     <Link href={`/services/${service.id}`}>
                                         View Details <ArrowRight className="ml-2 h-4 w-4" />
                                     </Link>
@@ -95,6 +95,6 @@ export function ServicesGrid() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-23
  * └─ care ───┘
  */

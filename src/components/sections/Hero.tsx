@@ -10,8 +10,8 @@ export function Hero() {
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 z-0">
                 <img
-                    src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2670&auto=format&fit=crop"
-                    alt="Caring nurse holding seniors hand"
+                    src="https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=2670&auto=format&fit=crop"
+                    alt="Healthcare professional caring for senior"
                     className="h-full w-full object-cover opacity-40"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
@@ -80,6 +80,6 @@ export function Hero() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-23
  * └─ care ───┘
  */

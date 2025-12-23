@@ -7,7 +7,7 @@ export const SERVICES = [
         description: "Reliable and loving nannies to take care of your children while you are away. We ensure safety and engagement.",
         icon: Baby,
         pricePerHr: 500,
-        image: "https://images.unsplash.com/photo-1544126566-47a3e792c3d7?q=80&w=2670&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1595231712421-933df5771f28?q=80&w=2670&auto=format&fit=crop",
         features: [
             "Certified Nannies",
             "Educational Activities",
@@ -21,7 +21,7 @@ export const SERVICES = [
         description: "Compassionate caregivers to assist your elderly parents with daily activities, medication, and companionship.",
         icon: HeartHandshake,
         pricePerHr: 600,
-        image: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?q=80&w=2668&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1573107145544-71281bcfa612?q=80&w=2668&auto=format&fit=crop",
         features: [
             "Medication Reminders",
             "Mobility Assistance",
@@ -35,7 +35,7 @@ export const SERVICES = [
         description: "Professional care for individuals with special needs, ensuring comfort, dignity, and proper medical attention.",
         icon: Stethoscope,
         pricePerHr: 700,
-        image: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?q=80&w=2670&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1508847154043-be5407fcaa5a?q=80&w=2670&auto=format&fit=crop",
         features: [
             "Specialized Training",
             "Therapy Support",
@@ -74,6 +74,6 @@ export const TESTIMONIALS = [
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-23
  * └─ care ───┘
  */

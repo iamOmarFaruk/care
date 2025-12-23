@@ -26,9 +26,9 @@ export default function Home() {
             className="relative aspect-video overflow-hidden rounded-2xl"
           >
             <img
-              src="https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=2670&auto=format&fit=crop"
-              alt="Happy family outdoors"
-              className="h-full w-full object-cover"
+              src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2670&auto=format&fit=crop"
+              alt="Happy elderly person with caregiver"
+              className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
             />
           </MotionDiv>
           <MotionDiv variants={fadeInRight} className="space-y-6">
@@ -77,7 +77,7 @@ export default function Home() {
                 key={testimonial.id}
                 variants={fadeInUp}
                 whileHover={{ y: -5 }}
-                className="rounded-xl border bg-card p-6 shadow-sm"
+                className="rounded-2xl bg-background p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]"
               >
                 <p className="mb-6 text-muted-foreground italic">&ldquo;{testimonial.content}&rdquo;</p>
                 <div className="flex items-center gap-4">
