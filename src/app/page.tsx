@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { TESTIMONIALS } from "@/lib/mock-data";
 import Link from "next/link";
 import { MotionDiv, MotionH2, MotionP, fadeInUp, fadeInLeft, fadeInRight, staggerContainer } from "@/components/ui/motion";
+import TestimonialsCarousel from "@/components/sections/TestimonialsCarousel";
 
 export default function Home() {
   return (
@@ -55,6 +56,7 @@ export default function Home() {
       <ServicesGrid />
 
       {/* Testimonials */}
+
       <section id="testimonial" className="bg-slate-50 py-16 md:py-24 dark:bg-slate-900/50">
         <MotionDiv
           variants={staggerContainer(0.2)}
@@ -71,37 +73,7 @@ export default function Home() {
               Trusted by Families
             </MotionH2>
           </div>
-          <MotionDiv
-            variants={staggerContainer(0.1, 0.2)}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid gap-8 md:grid-cols-3"
-          >
-            {TESTIMONIALS.map((testimonial) => (
-              <MotionDiv
-                key={testimonial.id}
-                variants={fadeInUp}
-                whileHover={{ y: -5 }}
-                className="rounded-2xl bg-background p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]"
-              >
-                <p className="mb-6 text-muted-foreground italic">&ldquo;{testimonial.content}&rdquo;</p>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 overflow-hidden rounded-full">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-primary">{testimonial.role}</p>
-                  </div>
-                </div>
-              </MotionDiv>
-            ))}
-          </MotionDiv>
+          <TestimonialsCarousel />
         </MotionDiv>
       </section>
     </div>

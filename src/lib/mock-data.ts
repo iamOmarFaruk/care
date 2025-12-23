@@ -66,6 +66,55 @@ export const TESTIMONIALS = [
         role: "Business Owner",
         content: "Professional service and transparent pricing. I booked specialized care for my brother, and the experience was seamless.",
         avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=2574&auto=format&fit=crop"
+    },
+    {
+        id: 4,
+        name: "Ayesha Khan",
+        role: "Mother of 3",
+        content: "Finding a reliable nanny was stressful until Care.xyz matched us with someone caring and punctual. Our kids love her!",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2600&auto=format&fit=crop"
+    },
+    {
+        id: 5,
+        name: "Mohammad Ali",
+        role: "Son",
+        content: "My dad needed daily assistance. The caregiver is compassionate and always on time. Peace of mind for our family.",
+        avatar: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=2600&auto=format&fit=crop"
+    },
+    {
+        id: 6,
+        name: "Sara Rahman",
+        role: "Grandmother",
+        content: "The companion visits twice a week, keeping me active and happy. They truly care about my wellbeing.",
+        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=2600&auto=format&fit=crop"
+    },
+    {
+        id: 7,
+        name: "Imran Siddiqui",
+        role: "Entrepreneur",
+        content: "Our startup needed occasional childcare for employees. Care.xyz provided flexible, trustworthy options.",
+        avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=2600&auto=format&fit=crop"
+    },
+    {
+        id: 8,
+        name: "Lina Patel",
+        role: "Nurse",
+        content: "Balancing night shifts is tough, but the night nanny from Care.xyz lets me rest without worries.",
+        avatar: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=2600&auto=format&fit=crop"
+    },
+    {
+        id: 9,
+        name: "Rahul Sharma",
+        role: "Student",
+        content: "My parents needed help with my younger sister during exams. The caregiver was patient and helped with tutoring.",
+        avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=2600&auto=format&fit=crop"
+    },
+    {
+        id: 10,
+        name: "Nadia Hussain",
+        role: "Retiree",
+        content: "Having a companion for daily walks has improved my health and mood. Highly recommend Care.xyz!",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2600&auto=format&fit=crop"
     }
 ];
 
