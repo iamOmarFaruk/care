@@ -33,7 +33,7 @@ export default function Home() {
           </MotionDiv>
           <MotionDiv variants={fadeInRight} className="space-y-6">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
-              Empowering Families with Trusted Care
+              Trusted Care for Your Family
             </h2>
             <p className="text-lg text-muted-foreground">
               At Care.xyz, our mission is to make caregiving easy, secure, and accessible for everyone.
