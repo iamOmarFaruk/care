@@ -23,11 +23,11 @@ export default function Home() {
         >
           <MotionDiv
             variants={fadeInLeft}
-            className="relative aspect-square overflow-hidden rounded-2xl lg:aspect-auto lg:h-[600px]"
+            className="relative aspect-video overflow-hidden rounded-2xl"
           >
             <img
-              src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2670&auto=format&fit=crop"
-              alt="Happy family"
+              src="https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=2670&auto=format&fit=crop"
+              alt="Happy family outdoors"
               className="h-full w-full object-cover"
             />
           </MotionDiv>
@@ -108,6 +108,6 @@ export default function Home() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-23
  * └─ care ───┘
  */
