@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 
+import { adminStore } from "@/lib/admin-data";
 import { mockStore } from "@/lib/store";
 
 export default function LoginPage() {
@@ -28,6 +29,18 @@ export default function LoginPage() {
         // Simulate API delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
+        // Check for admin credentials
+        if (email === "admin" && password === "admin") {
+            const adminUser = adminStore.adminLogin(email, password);
+            if (adminUser) {
+                toast.success("Welcome back, Admin!");
+                router.push("/admin");
+                setLoading(false);
+                return;
+            }
+        }
+
+        // Normal user login
         if (email && password) {
             mockStore.login(email);
             toast.success("Successfully logged in!");
@@ -71,7 +84,7 @@ export default function LoginPage() {
                                     {/* Email Field */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
                                         <Label htmlFor="email" className="text-slate-700 font-medium block mb-1.5 text-sm">
-                                            Email address
+                                            Email or Username
                                         </Label>
                                         <div className="relative">
                                             <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
@@ -80,8 +93,8 @@ export default function LoginPage() {
                                             <Input
                                                 id="email"
                                                 name="email"
-                                                type="email"
-                                                placeholder="name@example.com"
+                                                type="text"
+                                                placeholder="name@example.com or username"
                                                 required
                                                 onFocus={() => setFocusedField('email')}
                                                 onBlur={() => setFocusedField(null)}
