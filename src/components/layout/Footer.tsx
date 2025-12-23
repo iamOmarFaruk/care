@@ -34,8 +34,8 @@ export function Footer() {
                 <MotionDiv variants={fadeInUp} className="hidden sm:block">
                     <nav>
                         <ul className="flex flex-wrap justify-center gap-6 sm:gap-8 text-sm font-medium text-muted-foreground">
-                            <li><Link href="/about" className="hover:text-teal-600 transition-colors">About Us</Link></li>
-                            <li><Link href="/services" className="hover:text-teal-600 transition-colors">Services</Link></li>
+                            <li><Link href="/#about" className="hover:text-teal-600 transition-colors">About Us</Link></li>
+                            <li><Link href="/#services" className="hover:text-teal-600 transition-colors">Services</Link></li>
                             <li><Link href="/contact" className="hover:text-teal-600 transition-colors">Contact</Link></li>
                             <li><Link href="/privacy" className="hover:text-teal-600 transition-colors">Privacy</Link></li>
                             <li><Link href="/terms" className="hover:text-teal-600 transition-colors">Terms</Link></li>
@@ -79,6 +79,6 @@ export function Footer() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
- * └─ [care] ───┘
+ * │ Updated: 2025-12-24
+ * └─ care ───┘
  */

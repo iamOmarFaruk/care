@@ -11,8 +11,8 @@ import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 
 const NAV_ITEMS = [
     { label: "Home", href: "/", sectionId: null },
-    { label: "Services", href: "/#services", sectionId: "services" },
     { label: "About Us", href: "/#about", sectionId: "about" },
+    { label: "Services", href: "/#services", sectionId: "services" },
     { label: "Testimonials", href: "/#testimonial", sectionId: "testimonial" },
 ];
 
