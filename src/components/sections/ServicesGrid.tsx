@@ -51,12 +51,16 @@ export function ServicesGrid() {
                             {/* Content */}
                             <div className="p-6">
                                 <div className="mb-4 flex items-center justify-between">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
-                                        <service.icon className="h-6 w-6" />
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 transition-colors">
+                                        <service.icon className="h-6 w-6 text-primary transition-colors" />
                                     </div>
-                                    <span className="rounded-full bg-secondary/50 px-3 py-1 text-xs font-bold text-secondary-foreground">
-                                        starts from ৳{service.pricePerHr}/hr
-                                    </span>
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Starts from</span>
+                                        <span className="text-xl font-bold text-[#0d9488]">
+                                            ৳{service.pricePerHr}
+                                            <span className="text-sm font-medium text-[#0d9488]">/hr</span>
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <h3 className="mb-2 text-xl font-bold text-card-foreground">
