@@ -95,11 +95,6 @@ export default function Home() {
                 ))}
               </ul>
             )}
-            <div className="pt-4">
-              <Button asChild size="lg" variant="secondary">
-                <Link href="/about">Learn More About Us</Link>
-              </Button>
-            </div>
           </MotionDiv>
         </MotionDiv>
       </section>
