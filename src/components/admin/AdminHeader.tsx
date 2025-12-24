@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { adminStore, AdminUser, OrderItem } from "@/lib/admin-data";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import {
     Menu,
     Bell,
@@ -26,6 +27,7 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
     const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
     const [isNotifOpen, setIsNotifOpen] = React.useState(false);
     const [pendingOrders, setPendingOrders] = React.useState<OrderItem[]>([]);
+    const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
 
     // Refs for click outside
     const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -53,9 +55,15 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const handleLogout = () => {
+    const handleLogoutClick = () => {
+        setIsDropdownOpen(false);
+        setShowLogoutConfirm(true);
+    };
+
+    const handleLogoutConfirm = () => {
         adminStore.adminLogout();
         toast.success("Logged out successfully");
+        setShowLogoutConfirm(false);
         router.push("/control-panel/login");
     };
 
@@ -217,7 +225,7 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
 
                                 <div className="border-t border-slate-100 dark:border-slate-700 pt-1">
                                     <button
-                                        onClick={handleLogout}
+                                        onClick={handleLogoutClick}
                                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                                     >
                                         <LogOut className="w-4 h-4" />
@@ -229,6 +237,16 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
                     </AnimatePresence>
                 </div>
             </div>
+
+            <ConfirmDialog
+                isOpen={showLogoutConfirm}
+                onClose={() => setShowLogoutConfirm(false)}
+                onConfirm={handleLogoutConfirm}
+                title="Confirm Logout"
+                message="Are you sure you want to log out of the admin panel?"
+                confirmText="Logout"
+                variant="danger"
+            />
         </header>
     );
 }

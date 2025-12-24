@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Heart, LogOut, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
@@ -25,6 +26,7 @@ export function Navbar() {
     const [activeSection, setActiveSection] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [isAdminUser, setIsAdminUser] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const lastScrollY = useRef(0);
     const pathname = usePathname();
     const router = useRouter();
@@ -37,10 +39,15 @@ export function Navbar() {
         setIsAdminUser(adminStore.isAdmin());
     }, [pathname]);
 
-    const handleLogout = () => {
+    const handleLogoutClick = () => {
+        setShowLogoutConfirm(true);
+    };
+
+    const handleLogoutConfirm = () => {
         mockStore.logout();
         setUser(null);
         setIsOpen(false);
+        setShowLogoutConfirm(false);
         router.push('/');
     };
 
@@ -211,7 +218,7 @@ export function Navbar() {
                                 </Link>
                             </Button>
                             <Button
-                                onClick={handleLogout}
+                                onClick={handleLogoutClick}
                                 className="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
                             >
                                 <LogOut className="w-4 h-4" />
@@ -295,7 +302,7 @@ export function Navbar() {
                                         </Button>
                                         <Button
                                             size="sm"
-                                            onClick={handleLogout}
+                                            onClick={handleLogoutClick}
                                             className="transition-all duration-200 hover:scale-105 flex items-center gap-1"
                                         >
                                             <LogOut className="w-3 h-3" />
@@ -315,9 +322,20 @@ export function Navbar() {
                             </motion.div>
                         </motion.div>
                     </motion.div>
-                )}
+                )
+                }
             </AnimatePresence>
-        </nav>
+
+            <ConfirmDialog
+                isOpen={showLogoutConfirm}
+                onClose={() => setShowLogoutConfirm(false)}
+                onConfirm={handleLogoutConfirm}
+                title="Confirm Logout"
+                message="Are you sure you want to log out of your account?"
+                confirmText="Logout"
+                variant="danger"
+            />
+        </nav >
     );
 }
 
