@@ -69,12 +69,25 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
             initial={false}
             animate={{ width: isCollapsed ? 72 : 260 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col z-40 shadow-xl"
+            className="fixed left-0 top-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col z-40 shadow-xl border-r border-slate-700/50"
         >
+            {/* Toggle Button - Absolute Positioned */}
+            <button
+                onClick={onToggle}
+                className="absolute -right-3 top-20 bg-slate-800 border border-slate-600 text-slate-400 hover:text-white rounded-full p-1 shadow-lg hover:shadow-xl transition-all z-50 overflow-hidden"
+            >
+                <motion.div
+                    animate={{ rotate: isCollapsed ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <ChevronLeft className="w-4 h-4" />
+                </motion.div>
+            </button>
+
             {/* Logo */}
-            <div className="h-16 flex items-center justify-between px-4 border-b border-slate-700/50">
-                <Link href="/control-panel" className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-lg shadow-teal-500/20">
+            <div className="h-16 flex items-center px-4 border-b border-slate-700/50">
+                <Link href="/control-panel" className="flex items-center gap-3 w-full">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-lg shadow-teal-500/20 flex-shrink-0">
                         <Heart className="h-5 w-5 fill-current" />
                     </div>
                     <AnimatePresence>
@@ -84,56 +97,57 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -10 }}
                                 transition={{ duration: 0.2 }}
-                                className="text-lg font-bold tracking-tight"
+                                className="text-lg font-bold tracking-tight whitespace-nowrap overflow-hidden"
                             >
                                 Care.xyz
                             </motion.span>
                         )}
                     </AnimatePresence>
                 </Link>
-                <button
-                    onClick={onToggle}
-                    className="p-1.5 rounded-lg hover:bg-slate-700/50 transition-colors"
-                >
-                    <motion.div
-                        animate={{ rotate: isCollapsed ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <ChevronLeft className="w-5 h-5" />
-                    </motion.div>
-                </button>
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto scrollbar-hide">
+            <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto scrollbar-hide overflow-x-hidden">
                 <div className="space-y-1">
-                    <Link
-                        href="/"
-                        target="_blank"
-                        className={cn(
-                            "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-700/50 mb-2"
-                        )}
-                    >
-                        <Globe className="w-5 h-5 flex-shrink-0" />
-                        {!isCollapsed && (
+                    {isCollapsed ? (
+                        <Tooltip content="Visit Site" position="right">
+                            <Link
+                                href="/"
+                                target="_blank"
+                                className={cn(
+                                    "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-700/50 mb-2 justify-start"
+                                )}
+                            >
+                                <Globe className="w-5 h-5 flex-shrink-0" />
+                            </Link>
+                        </Tooltip>
+                    ) : (
+                        <Link
+                            href="/"
+                            target="_blank"
+                            className={cn(
+                                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-700/50 mb-2"
+                            )}
+                        >
+                            <Globe className="w-5 h-5 flex-shrink-0" />
                             <motion.span
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -10 }}
-                                className="font-medium text-sm"
+                                className="font-medium text-sm whitespace-nowrap"
                             >
                                 Visit Site
                             </motion.span>
-                        )}
-                        {!isCollapsed && <ExternalLink className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />}
-                    </Link>
+                            <ExternalLink className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                    )}
                 </div>
 
                 {menuGroups.map((group, groupIndex) => (
                     <div key={group.label} className="space-y-1">
                         {!isCollapsed && (
                             <div className="px-3 mb-2">
-                                <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">
                                     {group.label}
                                 </h3>
                             </div>
@@ -166,13 +180,13 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 exit={{ opacity: 0, x: -10 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="font-medium text-sm"
+                                                className="font-medium text-sm whitespace-nowrap"
                                             >
                                                 {item.label}
                                             </motion.span>
                                         )}
                                     </AnimatePresence>
-                                    {isActive && (
+                                    {isActive && !isCollapsed && (
                                         <motion.div
                                             layoutId="activeIndicator"
                                             className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white"
@@ -202,7 +216,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="text-xs text-slate-500 text-left space-y-0.5"
+                            className="text-xs text-slate-500 text-left space-y-0.5 whitespace-nowrap overflow-hidden"
                         >
                             <p>
                                 NextAdmin by{' '}
