@@ -32,6 +32,7 @@ import { mockStore, Booking } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useAuth } from "@/context/auth-context";
+import { toast } from "sonner";
 
 // Dashboard User type (compatible with existing components)
 interface DashboardUser {
@@ -486,13 +487,39 @@ export default function DashboardPage() {
         };
         setDashboardUser(user);
 
-        // Load bookings (keep using mockStore for now for booking data)
-        refreshBookings(user.email);
+        setDashboardUser(user);
+
+
+        // Fetch bookings from API
+        fetchBookings();
     }, [firebaseUser, profile, authLoading, router]);
 
-    const refreshBookings = (email: string) => {
-        const userBookings = mockStore.getBookings(email);
-        setBookings(userBookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
+    const fetchBookings = async () => {
+        try {
+            const token = await firebaseUser?.getIdToken();
+            const res = await fetch("/api/bookings", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) throw new Error("Failed to fetch bookings");
+
+            const data = await res.json();
+
+            // Transform API data to match Booking type (capitalizing status)
+            const transformedBookings: Booking[] = data.map((b: any) => ({
+                ...b,
+                status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+                createdAt: b.createdAt || new Date().toISOString()
+            }));
+
+            setBookings(transformedBookings);
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+            // Fallback to mock if API fails? No, better to show empty or error.
+            // keeping empty array is fine.
+        }
     };
 
     const handleUpdateProfile = (data: Partial<DashboardUser>) => {
@@ -506,10 +533,30 @@ export default function DashboardPage() {
         setCancelBookingId(id);
     };
 
-    const confirmCancelBooking = () => {
+    const confirmCancelBooking = async () => {
         if (cancelBookingId) {
-            mockStore.cancelBooking(cancelBookingId);
-            if (dashboardUser) refreshBookings(dashboardUser.email);
+            try {
+                const token = await firebaseUser?.getIdToken();
+                const res = await fetch("/api/bookings", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        id: cancelBookingId,
+                        action: "cancel"
+                    })
+                });
+
+                if (!res.ok) throw new Error("Failed to cancel booking");
+
+                toast.success("Booking cancelled successfully");
+                fetchBookings(); // Refresh list
+            } catch (error) {
+                console.error("Error cancelling booking:", error);
+                toast.error("Failed to cancel booking");
+            }
             setCancelBookingId(null);
         }
     };

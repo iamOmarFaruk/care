@@ -7,7 +7,8 @@ import {
     Calendar as CalendarIcon,
     Clock,
     MapPin,
-    ArrowRight
+    ArrowRight,
+    CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,6 +45,8 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     // Payment State
     const [clientSecret, setClientSecret] = useState<string | null>(null);
     const [showPayment, setShowPayment] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+
 
     // Fetch service from Firebase
     useEffect(() => {
@@ -171,12 +174,59 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
             }
 
             toast.success("Booking confirmed successfully!");
-            router.push("/dashboard");
+            // Show success screen instead of redirecting immediately
+            setShowSuccess(true);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (error: any) {
             console.error("Booking finalized failed:", error);
             toast.error("Payment successful but booking failed. Please contact support.");
         }
     };
+
+    if (showSuccess) {
+        return (
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-[60vh] flex flex-col items-center justify-center text-center">
+                <MotionDiv
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-slate-100 dark:border-slate-700 max-w-lg w-full"
+                >
+                    <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-4">Booking Confirmed!</h2>
+                    <p className="text-slate-500 dark:text-slate-400 mb-8">
+                        Your payment was successful and your booking has been placed. You can track the status in your dashboard.
+                    </p>
+
+                    <div className="space-y-4">
+                        <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl text-left space-y-2">
+                            <div className="flex justify-between">
+                                <span className="text-slate-500 dark:text-slate-400">Service</span>
+                                <span className="font-medium text-slate-800 dark:text-slate-200">{service?.title}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-slate-500 dark:text-slate-400">Date & Time</span>
+                                <span className="font-medium text-slate-800 dark:text-slate-200">{date} at {time}</span>
+                            </div>
+                            <div className="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 mt-2">
+                                <span className="text-slate-500 dark:text-slate-400">Total Paid</span>
+                                <span className="font-bold text-teal-600 dark:text-teal-400">৳{totalCost}</span>
+                            </div>
+                        </div>
+
+                        <Button
+                            onClick={() => router.push("/dashboard")}
+                            className="w-full h-12 text-base bg-teal-600 hover:bg-teal-700 text-white"
+                        >
+                            Go to Dashboard
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                    </div>
+                </MotionDiv>
+            </div>
+        );
+    }
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
