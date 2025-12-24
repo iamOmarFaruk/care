@@ -52,7 +52,7 @@ export default function OrdersPage() {
 
     return (
         <div className="min-h-screen pt-20 pb-12 bg-slate-50 dark:bg-slate-900">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <MotionDiv
                     variants={staggerContainer(0.05, 0.05)}
                     initial="initial"
@@ -87,8 +87,8 @@ export default function OrdersPage() {
                                     key={status}
                                     onClick={() => setFilter(status)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium capitalize whitespace-nowrap transition-colors ${filter === status
-                                            ? "bg-teal-600 text-white"
-                                            : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
+                                        ? "bg-teal-600 text-white"
+                                        : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                                         }`}
                                 >
                                     {status}
@@ -124,9 +124,9 @@ export default function OrdersPage() {
                                                         <p className="text-xs text-slate-400">Order ID: #{booking.id}</p>
                                                     </div>
                                                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${booking.status === 'Confirmed' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' :
-                                                            booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' :
-                                                                booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' :
-                                                                    'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
+                                                        booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' :
+                                                            booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' :
+                                                                'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
                                                         }`}>
                                                         {booking.status}
                                                     </span>

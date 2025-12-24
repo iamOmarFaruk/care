@@ -74,7 +74,7 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
 
     return (
         <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <MotionDiv
                     variants={fadeInUp}
                     initial="initial"
@@ -97,9 +97,9 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                         <p className="text-sm text-slate-500 dark:text-slate-400">Order ID: #{booking.id}</p>
                                     </div>
                                     <span className={`px-4 py-1.5 rounded-full text-sm font-medium border ${booking.status === 'Confirmed' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' :
-                                            booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' :
-                                                booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' :
-                                                    'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
+                                        booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' :
+                                            booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' :
+                                                'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
                                         }`}>
                                         {booking.status}
                                     </span>
@@ -110,10 +110,10 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                                     {steps.map((step, idx) => (
                                         <div key={idx} className="relative flex items-start gap-4">
                                             <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center border-2 ${step.status === 'completed'
-                                                    ? 'bg-teal-50 border-teal-500 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400'
-                                                    : step.status === 'current'
-                                                        ? 'bg-white border-teal-500 text-teal-600 dark:bg-slate-800 dark:border-teal-400'
-                                                        : 'bg-slate-50 border-slate-200 text-slate-300 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-600'
+                                                ? 'bg-teal-50 border-teal-500 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400'
+                                                : step.status === 'current'
+                                                    ? 'bg-white border-teal-500 text-teal-600 dark:bg-slate-800 dark:border-teal-400'
+                                                    : 'bg-slate-50 border-slate-200 text-slate-300 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-600'
                                                 }`}>
                                                 {step.status === 'completed' ? (
                                                     <CheckCircle2 className="w-4 h-4" />
