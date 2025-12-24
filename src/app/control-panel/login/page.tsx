@@ -8,9 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
-import { Shield, Lock, ArrowRight, User } from "lucide-react";
+import { Shield, Lock, ArrowRight, Mail } from "lucide-react";
 
-import { adminStore } from "@/lib/admin-data";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { adminStore, AdminUser } from "@/lib/admin-data";
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -22,19 +25,63 @@ export default function AdminLoginPage() {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const username = formData.get("username") as string;
+        const email = formData.get("username") as string;
         const password = formData.get("password") as string;
 
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        try {
+            // Sign in with Firebase Authentication
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const firebaseUser = userCredential.user;
 
-        // Admin credentials only
-        const adminUser = adminStore.adminLogin(username, password);
-        if (adminUser) {
+            // Fetch user data from Firestore to check role
+            const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+
+            if (!userDoc.exists()) {
+                toast.error("User profile not found.");
+                await auth.signOut();
+                setLoading(false);
+                return;
+            }
+
+            const userData = userDoc.data();
+            const role = userData?.role;
+
+            // Check if user is admin or super_admin
+            if (role !== "admin" && role !== "super_admin") {
+                toast.error("Access denied. Admin privileges required.");
+                await auth.signOut();
+                setLoading(false);
+                return;
+            }
+
+            // Create admin session for local storage (for layout checks)
+            const adminUser: AdminUser = {
+                id: firebaseUser.uid,
+                username: userData?.username || email.split("@")[0],
+                email: firebaseUser.email || email,
+                role: role as "super_admin" | "admin",
+                name: userData?.name || "Admin",
+                avatar: userData?.avatar,
+                status: userData?.status || "active",
+                createdAt: userData?.createdAt || new Date().toISOString(),
+                phone: userData?.phone,
+            };
+
+            // Store admin session in localStorage
+            if (typeof window !== "undefined") {
+                localStorage.setItem("care_admin_session", JSON.stringify(adminUser));
+            }
+
             toast.success("Welcome back, Admin!");
             router.push("/control-panel");
-        } else {
-            toast.error("Invalid admin credentials.");
+        } catch (error: unknown) {
+            console.error("Login error:", error);
+            const errorMessage = error instanceof Error ? error.message : "Invalid admin credentials.";
+            if (errorMessage.includes("user-not-found") || errorMessage.includes("wrong-password") || errorMessage.includes("invalid-credential")) {
+                toast.error("Invalid email or password.");
+            } else {
+                toast.error(errorMessage);
+            }
         }
 
         setLoading(false);
@@ -84,20 +131,20 @@ export default function AdminLoginPage() {
                                 </MotionDiv>
 
                                 <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
-                                    {/* Username Field */}
+                                    {/* Email Field */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
                                         <Label htmlFor="username" className="text-slate-300 font-medium block mb-1.5 text-sm">
-                                            Username
+                                            Email
                                         </Label>
                                         <div className="relative">
                                             <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'username' ? 'text-teal-400' : 'text-slate-500'}`}>
-                                                <User className="w-5 h-5" />
+                                                <Mail className="w-5 h-5" />
                                             </div>
                                             <Input
                                                 id="username"
                                                 name="username"
-                                                type="text"
-                                                placeholder="admin"
+                                                type="email"
+                                                placeholder="admin@care.xyz"
                                                 required
                                                 onFocus={() => setFocusedField('username')}
                                                 onBlur={() => setFocusedField(null)}

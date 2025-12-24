@@ -1,11 +1,35 @@
 import { Booking, SliderContent, AboutContent, FooterContent, Testimonial } from "@/types";
 import { AdminUser, ServiceItem } from "@/lib/admin-data";
 import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
+
+// Promise that resolves when Firebase Auth is initialized
+let authInitialized = false;
+let authInitPromise: Promise<User | null> | null = null;
+
+function waitForAuth(): Promise<User | null> {
+    if (authInitialized) {
+        return Promise.resolve(auth.currentUser);
+    }
+
+    if (!authInitPromise) {
+        authInitPromise = new Promise((resolve) => {
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                authInitialized = true;
+                unsubscribe();
+                resolve(user);
+            });
+        });
+    }
+
+    return authInitPromise;
+}
 
 // Helper for getting Firebase ID token
 async function getAuthToken(): Promise<string | null> {
     try {
-        const user = auth.currentUser;
+        // Wait for auth to be initialized
+        const user = await waitForAuth();
         if (!user) return null;
         return await user.getIdToken();
     } catch (error) {

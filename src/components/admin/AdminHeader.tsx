@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { adminStore, AdminUser, OrderItem } from "@/lib/admin-data";
+import { auth } from "@/lib/firebase";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -60,7 +61,14 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
         setShowLogoutConfirm(true);
     };
 
-    const handleLogoutConfirm = () => {
+    const handleLogoutConfirm = async () => {
+        try {
+            // Sign out from Firebase Auth
+            await auth.signOut();
+        } catch (error) {
+            console.error("Firebase signout error:", error);
+        }
+        // Clear local admin session
         adminStore.adminLogout();
         toast.success("Logged out successfully");
         setShowLogoutConfirm(false);
