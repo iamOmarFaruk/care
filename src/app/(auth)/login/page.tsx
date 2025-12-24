@@ -32,7 +32,7 @@ export default function LoginPage() {
         if (email && password) {
             mockStore.login(email);
             toast.success("Successfully logged in!");
-            router.push("/");
+            router.push("/dashboard");
         } else {
             toast.error("Please fill in all fields.");
         }

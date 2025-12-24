@@ -14,6 +14,7 @@ export type Booking = {
     location: string;
     totalCost: number;
     status: BookingStatus;
+    userEmail: string;
     createdAt: string;
 }
 
@@ -55,10 +56,15 @@ export const mockStore = {
         return newBooking;
     },
 
-    getBookings: (): Booking[] => {
+    getBookings: (userEmail?: string): Booking[] => {
         if (typeof window === 'undefined') return [];
         const stored = localStorage.getItem(STORAGE_KEY_BOOKINGS);
-        return stored ? JSON.parse(stored) : [];
+        const allBookings: Booking[] = stored ? JSON.parse(stored) : [];
+
+        if (userEmail) {
+            return allBookings.filter(b => b.userEmail === userEmail);
+        }
+        return allBookings;
     }
 }
 

@@ -212,7 +212,7 @@ export function Navbar() {
                     {user ? (
                         <>
                             <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
-                                <Link href={isAdminUser ? "/control-panel" : "/my-bookings"} className="flex items-center gap-2">
+                                <Link href={isAdminUser ? "/control-panel" : "/dashboard"} className="flex items-center gap-2">
                                     <LayoutDashboard className="w-4 h-4" />
                                     Dashboard
                                 </Link>
@@ -295,7 +295,7 @@ export function Navbar() {
                                 {user ? (
                                     <>
                                         <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
-                                            <Link href={isAdminUser ? "/control-panel" : "/my-bookings"} onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                            <Link href={isAdminUser ? "/control-panel" : "/dashboard"} onClick={() => setIsOpen(false)} className="flex items-center gap-1">
                                                 <LayoutDashboard className="w-3 h-3" />
                                                 Dashboard
                                             </Link>
