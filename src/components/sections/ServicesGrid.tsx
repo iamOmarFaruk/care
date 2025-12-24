@@ -37,7 +37,7 @@ export function ServicesGrid() {
                             key={service.id}
                             variants={fadeInUp}
                             whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                            className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-background shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
+                            className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-background shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.05)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_50px_rgba(255,255,255,0.1)]"
                         >
                             {/* Image */}
                             <div className="aspect-video w-full overflow-hidden">
