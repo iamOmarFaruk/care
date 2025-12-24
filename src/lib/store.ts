@@ -1,6 +1,12 @@
 export type User = {
     name: string;
     email: string;
+    phone?: string;
+    address?: string;
+    nid?: string;
+    photo?: string;
+    bio?: string;
+    role?: 'user' | 'admin';
 }
 
 export type BookingStatus = 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled';
@@ -25,7 +31,22 @@ const STORAGE_KEY_BOOKINGS = 'care_bookings';
 export const mockStore = {
     login: (email: string, name: string = "Demo User") => {
         if (typeof window === 'undefined') return;
-        const user: User = { email, name };
+        const user: User = {
+            email,
+            name,
+            phone: "+880 1712 345678",
+            address: "123 Care Street, Dhaka",
+            nid: "1234567890",
+            photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+            bio: "I am a regular customer looking for elderly care services."
+        };
+        // Check if we have a stored user first
+        const stored = localStorage.getItem(STORAGE_KEY_USER);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed.email === email) return parsed;
+        }
+
         localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
         return user;
     },
@@ -39,6 +60,16 @@ export const mockStore = {
         if (typeof window === 'undefined') return null;
         const stored = localStorage.getItem(STORAGE_KEY_USER);
         return stored ? JSON.parse(stored) : null;
+    },
+
+    updateUser: (updates: Partial<User>) => {
+        if (typeof window === 'undefined') return null;
+        const currentUser = mockStore.getUser();
+        if (!currentUser) return null;
+
+        const updatedUser = { ...currentUser, ...updates };
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(updatedUser));
+        return updatedUser;
     },
 
     createBooking: (booking: Omit<Booking, 'id' | 'createdAt' | 'status'>) => {
@@ -65,6 +96,15 @@ export const mockStore = {
             return allBookings.filter(b => b.userEmail === userEmail);
         }
         return allBookings;
+    },
+
+    cancelBooking: (bookingId: string) => {
+        if (typeof window === 'undefined') return;
+        const bookings = mockStore.getBookings();
+        const updatedBookings = bookings.map(b =>
+            b.id === bookingId ? { ...b, status: 'Cancelled' as BookingStatus } : b
+        );
+        localStorage.setItem(STORAGE_KEY_BOOKINGS, JSON.stringify(updatedBookings));
     }
 }
 
