@@ -29,6 +29,45 @@
   --border: 214 32% 91%;
   --input: 214 32% 91%;
   --ring: 174 84% 29%;
+
+  /* Card */
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+}
+
+.dark {
+  /* Primary: Teal - slightly brighter for dark mode */
+  --primary: 174 84% 35%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary: Amber */
+  --secondary: 38 92% 50%;
+  --secondary-foreground: 0 0% 100%;
+
+  /* Background & Foreground */
+  --background: 222 47% 6%;
+  --foreground: 210 40% 98%;
+
+  /* Muted */
+  --muted: 217 33% 15%;
+  --muted-foreground: 215 20% 65%;
+
+  /* Accent */
+  --accent: 217 33% 15%;
+  --accent-foreground: 210 40% 98%;
+
+  /* Destructive */
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Border, Input, Ring */
+  --border: 217 33% 20%;
+  --input: 217 33% 20%;
+  --ring: 174 84% 35%;
+
+  /* Card */
+  --card: 222 47% 9%;
+  --card-foreground: 210 40% 98%;
 }
 
 body {
@@ -39,6 +78,18 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Global cursor pointer for clickable elements */
+button,
+a,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+.cursor-pointer {
+  cursor: pointer;
 }
 
 /* Custom Scrollbar for premium feel */

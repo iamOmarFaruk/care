@@ -5,10 +5,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Heart, LogOut, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { mockStore, User } from "@/lib/store";
+import { adminStore } from "@/lib/admin-data";
 
 const NAV_ITEMS = [
     { label: "Home", href: "/", sectionId: null },
@@ -22,6 +24,7 @@ export function Navbar() {
     const [isVisible, setIsVisible] = useState(true);
     const [activeSection, setActiveSection] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
+    const [isAdminUser, setIsAdminUser] = useState(false);
     const lastScrollY = useRef(0);
     const pathname = usePathname();
     const router = useRouter();
@@ -30,6 +33,8 @@ export function Navbar() {
     useEffect(() => {
         const currentUser = mockStore.getUser();
         setUser(currentUser);
+        // Check if admin is logged in
+        setIsAdminUser(adminStore.isAdmin());
     }, [pathname]);
 
     const handleLogout = () => {
@@ -151,7 +156,7 @@ export function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-slate-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-500 ease-in-out",
+            "fixed top-0 z-50 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200/40 dark:border-slate-700/40 shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-all duration-500 ease-in-out",
             (isVisible || isOpen)
                 ? "translate-y-0"
                 : "-translate-y-full"
@@ -176,10 +181,10 @@ export function Navbar() {
                             href={item.href}
                             onClick={(e) => handleSmoothScroll(e, item.href)}
                             className={cn(
-                                "relative text-base font-semibold transition-all duration-300 hover:text-teal-600 group",
+                                "relative text-base font-semibold transition-all duration-300 hover:text-teal-600 dark:hover:text-teal-400 group cursor-pointer",
                                 isNavItemActive(item)
-                                    ? "text-teal-600"
-                                    : "text-slate-700"
+                                    ? "text-teal-600 dark:text-teal-400"
+                                    : "text-slate-700 dark:text-slate-200"
                             )}
                         >
                             {item.label}
@@ -195,18 +200,19 @@ export function Navbar() {
                 </div>
 
                 {/* Desktop Actions */}
-                <div className="hidden md:flex md:items-center md:gap-4">
+                <div className="hidden md:flex md:items-center md:gap-3">
+                    <ThemeToggle />
                     {user ? (
                         <>
-                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95">
-                                <Link href="/my-bookings" className="flex items-center gap-2">
+                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
+                                <Link href={isAdminUser ? "/control-panel" : "/my-bookings"} className="flex items-center gap-2">
                                     <LayoutDashboard className="w-4 h-4" />
                                     Dashboard
                                 </Link>
                             </Button>
                             <Button
                                 onClick={handleLogout}
-                                className="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                                className="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
                             >
                                 <LogOut className="w-4 h-4" />
                                 Logout
@@ -214,10 +220,10 @@ export function Navbar() {
                         </>
                     ) : (
                         <>
-                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95">
+                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
                                 <Link href="/login">Log in</Link>
                             </Button>
-                            <Button asChild className="transition-transform hover:scale-105 active:scale-95">
+                            <Button asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
                                 <Link href="/register">Get Started</Link>
                             </Button>
                         </>
@@ -226,7 +232,7 @@ export function Navbar() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal-600 md:hidden text-teal-600 hover:bg-teal-50 hover:text-teal-700"
+                    className="flex items-center justify-center rounded-md p-2 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-teal-600 md:hidden text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-700 cursor-pointer"
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <span className="sr-only">Toggle menu</span>
@@ -248,7 +254,7 @@ export function Navbar() {
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="md:hidden overflow-hidden border-t border-slate-200/40 bg-white/95 backdrop-blur-sm"
+                        className="md:hidden overflow-hidden border-t border-slate-200/40 dark:border-slate-700/40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm"
                     >
                         <motion.div
                             variants={staggerContainer(0.05, 0.1)}
@@ -265,10 +271,10 @@ export function Navbar() {
                                             setIsOpen(false);
                                         }}
                                         className={cn(
-                                            "block select-none rounded-md px-3 py-2 text-base font-semibold transition-all duration-200 hover:bg-slate-50 hover:text-teal-600 hover:translate-x-1",
+                                            "block select-none rounded-md px-3 py-2 text-base font-semibold transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-teal-600 dark:hover:text-teal-400 hover:translate-x-1 cursor-pointer",
                                             isNavItemActive(item)
-                                                ? "text-teal-600 bg-teal-50/50"
-                                                : "text-slate-700"
+                                                ? "text-teal-600 dark:text-teal-400 bg-teal-50/50 dark:bg-teal-900/30"
+                                                : "text-slate-700 dark:text-slate-200"
                                         )}
                                     >
                                         {item.label}
@@ -282,7 +288,7 @@ export function Navbar() {
                                 {user ? (
                                     <>
                                         <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
-                                            <Link href="/my-bookings" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                            <Link href={isAdminUser ? "/control-panel" : "/my-bookings"} onClick={() => setIsOpen(false)} className="flex items-center gap-1">
                                                 <LayoutDashboard className="w-3 h-3" />
                                                 Dashboard
                                             </Link>

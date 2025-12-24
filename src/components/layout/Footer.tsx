@@ -12,7 +12,7 @@ const XIcon = ({ className }: { className?: string }) => (
 
 export function Footer() {
     return (
-        <footer className="bg-gradient-to-t from-teal-50/80 via-white to-white py-8 md:py-16">
+        <footer className="bg-gradient-to-t from-teal-50/80 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 py-8 md:py-16 border-t border-slate-200/40 dark:border-slate-700/40">
             <MotionDiv
                 variants={staggerContainer(0.1)}
                 initial="initial"
@@ -22,11 +22,11 @@ export function Footer() {
             >
                 {/* Logo Section */}
                 <MotionDiv variants={fadeInUp} className="flex flex-col items-center gap-4">
-                    <Link href="/" className="flex items-center gap-2 group">
+                    <Link href="/" className="flex items-center gap-2 group cursor-pointer">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-600 text-white transition-transform group-hover:scale-110">
                             <Heart className="h-6 w-6 fill-current" />
                         </div>
-                        <span className="text-2xl font-bold tracking-tight text-teal-900 group-hover:text-teal-700 transition-colors">Care.xyz</span>
+                        <span className="text-2xl font-bold tracking-tight text-teal-900 dark:text-teal-100 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors">Care.xyz</span>
                     </Link>
                 </MotionDiv>
 
@@ -34,30 +34,30 @@ export function Footer() {
                 <MotionDiv variants={fadeInUp}>
                     <nav>
                         <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-xs sm:text-sm font-medium text-muted-foreground">
-                            <li><Link href="/#about" className="hover:text-teal-600 transition-colors">About Us</Link></li>
-                            <li><Link href="/#services" className="hover:text-teal-600 transition-colors">Services</Link></li>
-                            <li><Link href="/contact" className="hover:text-teal-600 transition-colors">Contact</Link></li>
-                            <li><Link href="/privacy" className="hover:text-teal-600 transition-colors">Privacy</Link></li>
-                            <li><Link href="/terms" className="hover:text-teal-600 transition-colors">Terms</Link></li>
+                            <li><Link href="/#about" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">About Us</Link></li>
+                            <li><Link href="/#services" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Services</Link></li>
+                            <li><Link href="/contact" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Contact</Link></li>
+                            <li><Link href="/privacy" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Privacy</Link></li>
+                            <li><Link href="/terms" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Terms</Link></li>
                         </ul>
                     </nav>
                 </MotionDiv>
 
                 {/* Social Icons */}
                 <MotionDiv variants={fadeInUp} className="flex gap-5 md:gap-6">
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 hover:scale-110 transition-all">
+                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
                         <span className="sr-only">Facebook</span>
                         <Facebook className="h-5 w-5" />
                     </a>
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 hover:scale-110 transition-all">
+                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
                         <span className="sr-only">Instagram</span>
                         <Instagram className="h-5 w-5" />
                     </a>
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 hover:scale-110 transition-all">
+                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
                         <span className="sr-only">X (Twitter)</span>
                         <XIcon className="h-4 w-4 mt-0.5" />
                     </a>
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 hover:scale-110 transition-all">
+                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
                         <span className="sr-only">LinkedIn</span>
                         <Linkedin className="h-5 w-5" />
                     </a>

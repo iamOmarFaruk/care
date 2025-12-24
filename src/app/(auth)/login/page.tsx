@@ -40,7 +40,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
             <div className="container mx-auto flex min-h-screen items-center justify-center px-4 sm:px-6 lg:px-8">
                 {/* Login Form */}
                 <MotionDiv
@@ -51,7 +51,7 @@ export default function LoginPage() {
                 >
                     <div className="w-full max-w-md">
                         {/* Form Card */}
-                        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-5 md:p-8 lg:p-10 border border-slate-100">
+                        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 p-5 md:p-8 lg:p-10 border border-slate-100 dark:border-slate-700">
                             <MotionDiv
                                 variants={staggerContainer(0.1, 0.1)}
                                 initial="initial"
@@ -60,10 +60,10 @@ export default function LoginPage() {
                             >
                                 {/* Header */}
                                 <MotionDiv variants={fadeInUp} className="text-center space-y-2">
-                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
+                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
                                         Welcome back
                                     </h1>
-                                    <p className="text-slate-500 text-xs md:text-sm lg:text-base">
+                                    <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm lg:text-base">
                                         Sign in to continue to your account
                                     </p>
                                 </MotionDiv>
@@ -71,11 +71,11 @@ export default function LoginPage() {
                                 <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                                     {/* Email Field */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
-                                        <Label htmlFor="email" className="text-slate-700 font-medium block mb-1.5 text-sm">
+                                        <Label htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium block mb-1.5 text-sm">
                                             Email or Username
                                         </Label>
                                         <div className="relative">
-                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                 <Mail className="w-5 h-5" />
                                             </div>
                                             <Input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                                                 required
                                                 onFocus={() => setFocusedField('email')}
                                                 onBlur={() => setFocusedField(null)}
-                                                className="h-12 pl-12 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                className="h-12 pl-12 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                             />
                                         </div>
                                     </MotionDiv>
@@ -94,7 +94,7 @@ export default function LoginPage() {
                                     {/* Password Field */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
                                         <div className="flex items-center justify-between mb-1.5">
-                                            <Label htmlFor="password" className="text-slate-700 font-medium text-sm">
+                                            <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium text-sm">
                                                 Password
                                             </Label>
                                             <Link
@@ -105,7 +105,7 @@ export default function LoginPage() {
                                             </Link>
                                         </div>
                                         <div className="relative">
-                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'password' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'password' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                 <Lock className="w-5 h-5" />
                                             </div>
                                             <Input
@@ -116,7 +116,7 @@ export default function LoginPage() {
                                                 required
                                                 onFocus={() => setFocusedField('password')}
                                                 onBlur={() => setFocusedField(null)}
-                                                className="h-12 pl-12 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                className="h-12 pl-12 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                             />
                                         </div>
                                     </MotionDiv>
@@ -148,10 +148,10 @@ export default function LoginPage() {
                                     {/* Divider */}
                                     <MotionDiv variants={fadeInUp} className="relative py-2">
                                         <div className="absolute inset-0 flex items-center">
-                                            <span className="w-full border-t border-slate-200" />
+                                            <span className="w-full border-t border-slate-200 dark:border-slate-700" />
                                         </div>
                                         <div className="relative flex justify-center text-xs uppercase">
-                                            <span className="bg-white px-4 text-slate-400 font-medium">
+                                            <span className="bg-white dark:bg-slate-800 px-4 text-slate-400 dark:text-slate-500 font-medium">
                                                 Or continue with
                                             </span>
                                         </div>
@@ -162,7 +162,7 @@ export default function LoginPage() {
                                         <Button
                                             variant="outline"
                                             type="button"
-                                            className="w-full h-12 text-base font-medium border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl"
+                                            className="w-full h-12 text-base font-medium border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500 rounded-xl"
                                             onClick={() => toast.info("Social login coming soon!")}
                                         >
                                             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@ export default function LoginPage() {
 
                                 {/* Sign Up Link */}
                                 <MotionDiv variants={fadeInUp} className="text-center pt-2">
-                                    <p className="text-slate-500">
+                                    <p className="text-slate-500 dark:text-slate-400">
                                         Don&apos;t have an account?{" "}
                                         <Link
                                             href="/register"
@@ -192,11 +192,11 @@ export default function LoginPage() {
                         </div>
 
                         {/* Footer */}
-                        <p className="text-center text-slate-400 text-sm mt-8">
+                        <p className="text-center text-slate-400 dark:text-slate-500 text-sm mt-8">
                             By signing in, you agree to our{" "}
-                            <Link href="#" className="text-slate-600 hover:text-[#0d9488] transition-colors">Terms</Link>
+                            <Link href="#" className="text-slate-600 dark:text-slate-400 hover:text-[#0d9488] transition-colors">Terms</Link>
                             {" "}and{" "}
-                            <Link href="#" className="text-slate-600 hover:text-[#0d9488] transition-colors">Privacy Policy</Link>
+                            <Link href="#" className="text-slate-600 dark:text-slate-400 hover:text-[#0d9488] transition-colors">Privacy Policy</Link>
                         </p>
                     </div>
                 </MotionDiv>

@@ -45,7 +45,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
             <div className="container mx-auto flex min-h-screen items-center justify-center px-4 sm:px-6 lg:px-8">
                 {/* Register Form */}
                 <MotionDiv
@@ -56,7 +56,7 @@ export default function RegisterPage() {
                 >
                     <div className="w-full max-w-md">
                         {/* Form Card */}
-                        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-5 md:p-8 lg:p-10 border border-slate-100">
+                        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 p-5 md:p-8 lg:p-10 border border-slate-100 dark:border-slate-700">
                             <MotionDiv
                                 variants={staggerContainer(0.08, 0.1)}
                                 initial="initial"
@@ -65,10 +65,10 @@ export default function RegisterPage() {
                             >
                                 {/* Header */}
                                 <MotionDiv variants={fadeInUp} className="text-center space-y-2">
-                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
+                                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white">
                                         Create an account
                                     </h1>
-                                    <p className="text-slate-500 text-xs md:text-sm lg:text-base">
+                                    <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm lg:text-base">
                                         Join Care.xyz to find trusted care services
                                     </p>
                                 </MotionDiv>
@@ -77,9 +77,9 @@ export default function RegisterPage() {
                                     {/* Name & Contact Row */}
                                     <div className="grid gap-3 md:gap-4 md:grid-cols-2">
                                         <MotionDiv variants={fadeInUp} className="space-y-2">
-                                            <Label htmlFor="name" className="text-slate-700 font-medium block mb-1.5 text-sm">Full Name</Label>
+                                            <Label htmlFor="name" className="text-slate-700 dark:text-slate-300 font-medium block mb-1.5 text-sm">Full Name</Label>
                                             <div className="relative">
-                                                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'name' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'name' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                     <User className="w-4 h-4" />
                                                 </div>
                                                 <Input
@@ -89,14 +89,14 @@ export default function RegisterPage() {
                                                     required
                                                     onFocus={() => setFocusedField('name')}
                                                     onBlur={() => setFocusedField(null)}
-                                                    className="h-11 pl-11 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                    className="h-11 pl-11 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                                 />
                                             </div>
                                         </MotionDiv>
                                         <MotionDiv variants={fadeInUp} className="space-y-2">
-                                            <Label htmlFor="contact" className="text-slate-700 font-medium block mb-1.5 text-sm">Contact No</Label>
+                                            <Label htmlFor="contact" className="text-slate-700 dark:text-slate-300 font-medium block mb-1.5 text-sm">Contact No</Label>
                                             <div className="relative">
-                                                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'contact' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'contact' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                     <Phone className="w-4 h-4" />
                                                 </div>
                                                 <Input
@@ -106,7 +106,7 @@ export default function RegisterPage() {
                                                     required
                                                     onFocus={() => setFocusedField('contact')}
                                                     onBlur={() => setFocusedField(null)}
-                                                    className="h-11 pl-11 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                    className="h-11 pl-11 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                                 />
                                             </div>
                                         </MotionDiv>
@@ -114,9 +114,9 @@ export default function RegisterPage() {
 
                                     {/* NID */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
-                                        <Label htmlFor="nid" className="text-slate-700 font-medium block mb-1.5 text-sm">NID Number</Label>
+                                        <Label htmlFor="nid" className="text-slate-700 dark:text-slate-300 font-medium block mb-1.5 text-sm">NID Number</Label>
                                         <div className="relative">
-                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'nid' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'nid' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                 <CreditCard className="w-5 h-5" />
                                             </div>
                                             <Input
@@ -126,16 +126,16 @@ export default function RegisterPage() {
                                                 required
                                                 onFocus={() => setFocusedField('nid')}
                                                 onBlur={() => setFocusedField(null)}
-                                                className="h-11 pl-12 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                className="h-11 pl-12 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                             />
                                         </div>
                                     </MotionDiv>
 
                                     {/* Email */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
-                                        <Label htmlFor="email" className="text-slate-700 font-medium block mb-1.5 text-sm">Email address</Label>
+                                        <Label htmlFor="email" className="text-slate-700 dark:text-slate-300 font-medium block mb-1.5 text-sm">Email address</Label>
                                         <div className="relative">
-                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'email' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                 <Mail className="w-5 h-5" />
                                             </div>
                                             <Input
@@ -146,16 +146,16 @@ export default function RegisterPage() {
                                                 required
                                                 onFocus={() => setFocusedField('email')}
                                                 onBlur={() => setFocusedField(null)}
-                                                className="h-11 pl-12 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                className="h-11 pl-12 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                             />
                                         </div>
                                     </MotionDiv>
 
                                     {/* Password */}
                                     <MotionDiv variants={fadeInUp} className="space-y-2">
-                                        <Label htmlFor="password" className="text-slate-700 font-medium block mb-1.5 text-sm">Password</Label>
+                                        <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium block mb-1.5 text-sm">Password</Label>
                                         <div className="relative">
-                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'password' ? 'text-[#0d9488]' : 'text-slate-400'}`}>
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${focusedField === 'password' ? 'text-[#0d9488]' : 'text-slate-400 dark:text-slate-500'}`}>
                                                 <Lock className="w-5 h-5" />
                                             </div>
                                             <Input
@@ -166,10 +166,10 @@ export default function RegisterPage() {
                                                 placeholder="Min 6 chars, 1 Upper, 1 Lower"
                                                 onFocus={() => setFocusedField('password')}
                                                 onBlur={() => setFocusedField(null)}
-                                                className="h-11 pl-12 bg-slate-50/50 border-slate-200 rounded-xl text-slate-700 placeholder:text-slate-400 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white transition-all duration-200"
+                                                className="h-11 pl-12 bg-slate-50/50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0d9488] focus:ring-[#0d9488]/20 focus:bg-white dark:focus:bg-slate-700 transition-all duration-200"
                                             />
                                         </div>
-                                        <p className="text-xs text-slate-400 mt-1">Must include uppercase and lowercase letters</p>
+                                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Must include uppercase and lowercase letters</p>
                                     </MotionDiv>
 
                                     {/* Sign Up Button */}
@@ -199,7 +199,7 @@ export default function RegisterPage() {
 
                                 {/* Sign In Link */}
                                 <MotionDiv variants={fadeInUp} className="text-center pt-2">
-                                    <p className="text-slate-500">
+                                    <p className="text-slate-500 dark:text-slate-400">
                                         Already have an account?{" "}
                                         <Link
                                             href="/login"
@@ -213,11 +213,11 @@ export default function RegisterPage() {
                         </div>
 
                         {/* Footer */}
-                        <p className="text-center text-slate-400 text-sm mt-6">
+                        <p className="text-center text-slate-400 dark:text-slate-500 text-sm mt-6">
                             By signing up, you agree to our{" "}
-                            <Link href="#" className="text-slate-600 hover:text-[#0d9488] transition-colors">Terms</Link>
+                            <Link href="#" className="text-slate-600 dark:text-slate-400 hover:text-[#0d9488] transition-colors">Terms</Link>
                             {" "}and{" "}
-                            <Link href="#" className="text-slate-600 hover:text-[#0d9488] transition-colors">Privacy Policy</Link>
+                            <Link href="#" className="text-slate-600 dark:text-slate-400 hover:text-[#0d9488] transition-colors">Privacy Policy</Link>
                         </p>
                     </div>
                 </MotionDiv>
