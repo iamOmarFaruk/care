@@ -81,8 +81,8 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
                     animate="animate"
                 >
                     <Button variant="ghost" asChild className="mb-6 pl-0 hover:pl-2 transition-all">
-                        <Link href="/orders">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Orders
+                        <Link href="/dashboard">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
                         </Link>
                     </Button>
 
