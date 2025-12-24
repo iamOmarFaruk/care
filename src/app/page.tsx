@@ -1,14 +1,54 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Hero } from "@/components/sections/Hero";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Button } from "@/components/ui/button";
-import { TESTIMONIALS } from "@/lib/mock-data";
 import Link from "next/link";
-import { MotionDiv, MotionH2, MotionP, fadeInUp, fadeInLeft, fadeInRight, staggerContainer } from "@/components/ui/motion";
+import { MotionDiv, MotionH2, fadeInUp, fadeInLeft, fadeInRight, staggerContainer } from "@/components/ui/motion";
 import TestimonialsCarousel from "@/components/sections/TestimonialsCarousel";
+import { Loader2 } from "lucide-react";
+import type { AboutContent } from "@/types";
+
+// Fallback about content
+const fallbackAbout: AboutContent = {
+  title: "Trusted Care for Your Family",
+  description: "At Care.xyz, our mission is to make caregiving easy, secure, and accessible for everyone. We understand the challenges of finding reliable help for your loved ones. Whether you need a nanny for your children, a companion for your elderly parents, or specialized support for sick family members, we connect you with verified and compassionate professionals.",
+  image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2670&auto=format&fit=crop",
+  features: []
+};
 
 export default function Home() {
+  const [about, setAbout] = useState<AboutContent | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAbout = async () => {
+      try {
+        const res = await fetch("/api/public/about");
+        if (res.ok) {
+          const data = await res.json();
+          if (data) {
+            setAbout(data);
+          } else {
+            setAbout(fallbackAbout);
+          }
+        } else {
+          setAbout(fallbackAbout);
+        }
+      } catch (error) {
+        console.error("Failed to fetch about content:", error);
+        setAbout(fallbackAbout);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAbout();
+  }, []);
+
+  const aboutContent = about || fallbackAbout;
+
   return (
     <div className="flex flex-col">
       <Hero />
@@ -26,24 +66,35 @@ export default function Home() {
             variants={fadeInLeft}
             className="relative aspect-video overflow-hidden rounded-2xl"
           >
-            <img
-              src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2670&auto=format&fit=crop"
-              alt="Happy elderly person with caregiver"
-              className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
-            />
+            {loading ? (
+              <div className="h-full w-full flex items-center justify-center bg-muted">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <img
+                src={aboutContent.image}
+                alt="Happy elderly person with caregiver"
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+              />
+            )}
           </MotionDiv>
           <MotionDiv variants={fadeInRight} className="space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
-              Trusted Care for Your Family
+              {aboutContent.title}
             </h2>
             <p className="text-sm md:text-lg text-muted-foreground">
-              At Care.xyz, our mission is to make caregiving easy, secure, and accessible for everyone.
-              We understand the challenges of finding reliable help for your loved ones.
+              {aboutContent.description}
             </p>
-            <p className="text-sm md:text-lg text-muted-foreground">
-              Whether you need a nanny for your children, a companion for your elderly parents, or specialized
-              support for sick family members, we connect you with verified and compassionate professionals.
-            </p>
+            {aboutContent.features && aboutContent.features.length > 0 && (
+              <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
+                {aboutContent.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-center gap-2">
+                    <span className="text-primary">✓</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            )}
             <div className="pt-4">
               <Button asChild size="lg" variant="secondary">
                 <Link href="/about">Learn More About Us</Link>
@@ -86,6 +137,6 @@ export default function Home() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */

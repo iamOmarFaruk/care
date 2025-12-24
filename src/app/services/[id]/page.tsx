@@ -1,54 +1,57 @@
-import { notFound } from "next/navigation";
-import { SERVICES } from "@/lib/mock-data";
+"use client";
+
+import { useEffect, useState } from "react";
+import { notFound, useParams } from "next/navigation";
 import ServiceDetailContent from "@/components/sections/ServiceDetailContent";
+import { Loader2 } from "lucide-react";
+import type { Service } from "@/types";
 
-// Since we are using static export or simple runtime, we can use generateStaticParams if needed, 
-// but for now standard dynamic route.
+export default function ServiceDetailPage() {
+    const params = useParams();
+    const id = params.id as string;
 
-interface Props {
-    params: Promise<{ id: string }>;
-}
+    const [service, setService] = useState<Service | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-export async function generateMetadata({ params }: Props) {
-    const { id } = await params;
-    const service = SERVICES.find((s) => s.id === id);
-
-    if (!service) {
-        return {
-            title: "Service Not Found",
+    useEffect(() => {
+        const fetchService = async () => {
+            try {
+                const res = await fetch(`/api/services/${id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setService(data);
+                } else if (res.status === 404) {
+                    setError(true);
+                } else {
+                    setError(true);
+                }
+            } catch (err) {
+                console.error("Failed to fetch service:", err);
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
         };
+
+        if (id) {
+            fetchService();
+        }
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[400px]">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
     }
 
-    return {
-        title: service.title,
-        description: service.description,
-        keywords: [
-            service.title,
-            "care services",
-            "Bangladesh caregiving",
-            ...service.features,
-        ],
-        openGraph: {
-            title: `${service.title} | Care.xyz`,
-            description: service.description,
-            images: [service.image],
-        },
-    };
-}
-
-export default async function ServiceDetailPage({ params }: Props) {
-    const { id } = await params;
-    const service = SERVICES.find((s) => s.id === id);
-
-    if (!service) {
+    if (error || !service) {
         notFound();
     }
 
-    // Omit icon from service object as it's not serializable (contains React components)
-    // and not needed by the Client Component.
-    const { icon, ...serializableService } = service;
-
-    return <ServiceDetailContent service={serializableService} />;
+    return <ServiceDetailContent service={service} />;
 }
 
 /*
@@ -56,6 +59,6 @@ export default async function ServiceDetailPage({ params }: Props) {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */

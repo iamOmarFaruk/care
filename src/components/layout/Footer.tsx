@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Heart, Facebook, Instagram, Linkedin } from "lucide-react";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
+import type { FooterContent } from "@/types";
 
 const XIcon = ({ className }: { className?: string }) => (
     <svg role="img" viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -10,7 +12,52 @@ const XIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+// Fallback footer content
+const fallbackFooter: FooterContent = {
+    copyright: `© ${new Date().getFullYear()} Care.xyz. All rights reserved.`,
+    socialLinks: {
+        facebook: "#",
+        instagram: "#",
+        twitter: "#",
+        linkedin: "#"
+    },
+    navLinks: [
+        { label: "About Us", href: "/#about" },
+        { label: "Services", href: "/#services" },
+        { label: "Contact", href: "/contact" },
+        { label: "Privacy", href: "/privacy" },
+        { label: "Terms", href: "/terms" }
+    ]
+};
+
 export function Footer() {
+    const [footer, setFooter] = useState<FooterContent | null>(null);
+
+    useEffect(() => {
+        const fetchFooter = async () => {
+            try {
+                const res = await fetch("/api/public/footer");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data) {
+                        setFooter(data);
+                    } else {
+                        setFooter(fallbackFooter);
+                    }
+                } else {
+                    setFooter(fallbackFooter);
+                }
+            } catch (error) {
+                console.error("Failed to fetch footer content:", error);
+                setFooter(fallbackFooter);
+            }
+        };
+
+        fetchFooter();
+    }, []);
+
+    const footerContent = footer || fallbackFooter;
+
     return (
         <footer className="bg-gradient-to-t from-teal-50/80 via-white to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 py-8 md:py-16 border-t border-slate-200/40 dark:border-slate-700/40">
             <MotionDiv
@@ -34,39 +81,49 @@ export function Footer() {
                 <MotionDiv variants={fadeInUp}>
                     <nav>
                         <ul className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-xs sm:text-sm font-medium text-muted-foreground">
-                            <li><Link href="/#about" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">About Us</Link></li>
-                            <li><Link href="/#services" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Services</Link></li>
-                            <li><Link href="/contact" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Contact</Link></li>
-                            <li><Link href="/privacy" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Privacy</Link></li>
-                            <li><Link href="/terms" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">Terms</Link></li>
+                            {footerContent.navLinks.map((link, idx) => (
+                                <li key={idx}>
+                                    <Link href={link.href} className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors cursor-pointer">
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </nav>
                 </MotionDiv>
 
                 {/* Social Icons */}
                 <MotionDiv variants={fadeInUp} className="flex gap-5 md:gap-6">
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
-                        <span className="sr-only">Facebook</span>
-                        <Facebook className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
-                        <span className="sr-only">Instagram</span>
-                        <Instagram className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
-                        <span className="sr-only">X (Twitter)</span>
-                        <XIcon className="h-4 w-4 mt-0.5" />
-                    </a>
-                    <a href="#" className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
-                        <span className="sr-only">LinkedIn</span>
-                        <Linkedin className="h-5 w-5" />
-                    </a>
+                    {footerContent.socialLinks.facebook && (
+                        <a href={footerContent.socialLinks.facebook} className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
+                            <span className="sr-only">Facebook</span>
+                            <Facebook className="h-5 w-5" />
+                        </a>
+                    )}
+                    {footerContent.socialLinks.instagram && (
+                        <a href={footerContent.socialLinks.instagram} className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
+                            <span className="sr-only">Instagram</span>
+                            <Instagram className="h-5 w-5" />
+                        </a>
+                    )}
+                    {footerContent.socialLinks.twitter && (
+                        <a href={footerContent.socialLinks.twitter} className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
+                            <span className="sr-only">X (Twitter)</span>
+                            <XIcon className="h-4 w-4 mt-0.5" />
+                        </a>
+                    )}
+                    {footerContent.socialLinks.linkedin && (
+                        <a href={footerContent.socialLinks.linkedin} className="text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 hover:scale-110 transition-all cursor-pointer">
+                            <span className="sr-only">LinkedIn</span>
+                            <Linkedin className="h-5 w-5" />
+                        </a>
+                    )}
                 </MotionDiv>
 
                 {/* Copyright */}
                 <MotionDiv variants={fadeInUp} className="pt-2 md:pt-4">
                     <p className="text-xs text-muted-foreground/60">
-                        © {new Date().getFullYear()} Care.xyz. All rights reserved.
+                        {footerContent.copyright || `© ${new Date().getFullYear()} Care.xyz. All rights reserved.`}
                     </p>
                 </MotionDiv>
             </MotionDiv>
@@ -79,6 +136,6 @@ export function Footer() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */

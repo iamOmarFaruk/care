@@ -1,12 +1,90 @@
 "use client";
 
-import { TESTIMONIALS } from "@/lib/mock-data";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import type { Testimonial } from "@/types";
 
-interface TestimonialsCarouselProps {
-    testimonials?: typeof TESTIMONIALS;
-}
+// Fallback testimonials if API fails
+const fallbackTestimonials: Testimonial[] = [
+    {
+        id: "1",
+        name: "Rahim Uddin",
+        role: "Father of 2",
+        content: "Care.xyz has been a lifesaver for us. We found an amazing nanny for our twins within 24 hours. Highly professional!",
+        avatar: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=2680&auto=format&fit=crop",
+        isVisible: true
+    },
+    {
+        id: "2",
+        name: "Fatima Begum",
+        role: "Daughter",
+        content: "I was worried about leaving my mother alone at home. The caregiver from Care.xyz is like a family member now. Very trusted.",
+        avatar: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=2574&auto=format&fit=crop",
+        isVisible: true
+    },
+    {
+        id: "3",
+        name: "Tanvir Ahmed",
+        role: "Business Owner",
+        content: "Professional service and transparent pricing. I booked specialized care for my brother, and the experience was seamless.",
+        avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=2574&auto=format&fit=crop",
+        isVisible: true
+    },
+    {
+        id: "4",
+        name: "Ayesha Khan",
+        role: "Mother of 3",
+        content: "Finding a reliable nanny was stressful until Care.xyz matched us with someone caring and punctual. Our kids love her!",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2600&auto=format&fit=crop",
+        isVisible: true
+    },
+    {
+        id: "5",
+        name: "Mohammad Ali",
+        role: "Son",
+        content: "My dad needed daily assistance. The caregiver is compassionate and always on time. Peace of mind for our family.",
+        avatar: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=2600&auto=format&fit=crop",
+        isVisible: true
+    }
+];
 
-export default function TestimonialsCarousel({ testimonials = TESTIMONIALS }: TestimonialsCarouselProps) {
+export default function TestimonialsCarousel() {
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const res = await fetch("/api/public/testimonials");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        setTestimonials(data);
+                    } else {
+                        setTestimonials(fallbackTestimonials);
+                    }
+                } else {
+                    setTestimonials(fallbackTestimonials);
+                }
+            } catch (error) {
+                console.error("Failed to fetch testimonials:", error);
+                setTestimonials(fallbackTestimonials);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTestimonials();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[200px]">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+
     // Double the testimonials for seamless infinite scroll
     const doubledTestimonials = [...testimonials, ...testimonials];
 
@@ -78,6 +156,6 @@ export default function TestimonialsCarousel({ testimonials = TESTIMONIALS }: Te
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-23
- * │ Updated: 2025-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */
