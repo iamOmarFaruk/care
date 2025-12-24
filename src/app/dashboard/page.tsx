@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { mockStore, Booking, User } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 // --- Types ---
 type TabId = 'overview' | 'profile' | 'bookings' | 'payments' | 'address' | 'settings';
@@ -449,6 +450,7 @@ export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState<TabId>('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
 
     useEffect(() => {
         const currentUser = mockStore.getUser();
@@ -475,9 +477,14 @@ export default function DashboardPage() {
     };
 
     const handleCancelBooking = (id: string) => {
-        if (confirm("Are you sure you want to cancel this booking?")) {
-            mockStore.cancelBooking(id);
+        setCancelBookingId(id);
+    };
+
+    const confirmCancelBooking = () => {
+        if (cancelBookingId) {
+            mockStore.cancelBooking(cancelBookingId);
             if (user) refreshBookings(user.email);
+            setCancelBookingId(null);
         }
     };
 
@@ -576,6 +583,18 @@ export default function DashboardPage() {
                     </main>
                 </div>
             </div>
+
+            {/* Cancel Booking Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={!!cancelBookingId}
+                onClose={() => setCancelBookingId(null)}
+                onConfirm={confirmCancelBooking}
+                title="Cancel Booking"
+                message="Are you sure you want to cancel this booking? This action cannot be undone and you may need to rebook if you change your mind."
+                confirmText="Yes, Cancel Booking"
+                cancelText="Keep Booking"
+                variant="warning"
+            />
         </div>
     );
 }
@@ -585,6 +604,6 @@ export default function DashboardPage() {
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-24
- * │ Updated: 2025-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */
