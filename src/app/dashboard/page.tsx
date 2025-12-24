@@ -99,9 +99,9 @@ const OverviewSection = ({ user, bookings, onViewAllBookings }: { user: User, bo
                                         </p>
                                     </div>
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${booking.status === 'Confirmed' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' :
-                                            booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' :
-                                                booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' :
-                                                    'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
+                                        booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800' :
+                                            booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800' :
+                                                'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
                                         }`}>
                                         {booking.status}
                                     </span>
@@ -167,56 +167,64 @@ const ProfileSection = ({ user, onUpdate }: { user: User, onUpdate: (data: Parti
                             </Button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label>Full Name</Label>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-3">
+                                    <Label className="text-slate-600 dark:text-slate-400 font-semibold">Full Name</Label>
                                     <Input
                                         value={formData.name}
                                         disabled={!isEditing}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        className="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 transition-all font-medium text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label>Email</Label>
-                                    <Input value={user.email} disabled className="bg-slate-50 dark:bg-slate-900/50" />
+                                <div className="space-y-3">
+                                    <Label className="text-slate-600 dark:text-slate-400 font-semibold">Email</Label>
+                                    <Input
+                                        value={user.email}
+                                        disabled
+                                        className="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 cursor-not-allowed"
+                                    />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label>Phone Number</Label>
+                                <div className="space-y-3">
+                                    <Label className="text-slate-600 dark:text-slate-400 font-semibold">Phone Number</Label>
                                     <Input
                                         value={formData.phone}
                                         disabled={!isEditing}
                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                         placeholder="+880..."
+                                        className="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 transition-all font-medium text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label>NID Number</Label>
+                                <div className="space-y-3">
+                                    <Label className="text-slate-600 dark:text-slate-400 font-semibold">NID Number</Label>
                                     <Input
                                         value={formData.nid}
                                         disabled={!isEditing}
                                         onChange={(e) => setFormData({ ...formData, nid: e.target.value })}
                                         placeholder="Enter National ID"
+                                        className="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 transition-all font-medium text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                                     />
                                 </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Address</Label>
+                            <div className="space-y-3">
+                                <Label className="text-slate-600 dark:text-slate-400 font-semibold">Address</Label>
                                 <Input
                                     value={formData.address}
                                     disabled={!isEditing}
                                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                     placeholder="Your full address"
+                                    className="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 transition-all font-medium text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label>Bio</Label>
+                            <div className="space-y-3">
+                                <Label className="text-slate-600 dark:text-slate-400 font-semibold">Bio</Label>
                                 <Textarea
                                     value={formData.bio}
                                     disabled={!isEditing}
                                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                                     placeholder="Tell us a bit about yourself..."
-                                    className="h-24 resize-none"
+                                    className="min-h-[120px] rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-900 transition-all font-medium text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none"
                                 />
                             </div>
 
@@ -250,9 +258,9 @@ const BookingsSection = ({ bookings, onCancel }: { bookings: Booking[], onCancel
                                         <div className="flex items-center gap-2">
                                             <h3 className="font-semibold text-lg text-slate-800 dark:text-white">{booking.serviceName}</h3>
                                             <span className={`px-2 py-0.5 rounded text-xs font-medium border ${booking.status === 'Confirmed' ? 'bg-green-50 text-green-700 border-green-200 dark:text-green-400 dark:border-green-800 dark:bg-green-900/30' :
-                                                    booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:text-amber-400 dark:border-amber-800 dark:bg-amber-900/30' :
-                                                        booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:text-red-400 dark:border-red-800 dark:bg-red-900/30' :
-                                                            'bg-slate-50 text-slate-700 border-slate-200 dark:text-slate-400 dark:border-slate-700 dark:bg-slate-800'
+                                                booking.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:text-amber-400 dark:border-amber-800 dark:bg-amber-900/30' :
+                                                    booking.status === 'Cancelled' ? 'bg-red-50 text-red-700 border-red-200 dark:text-red-400 dark:border-red-800 dark:bg-red-900/30' :
+                                                        'bg-slate-50 text-slate-700 border-slate-200 dark:text-slate-400 dark:border-slate-700 dark:bg-slate-800'
                                                 }`}>
                                                 {booking.status}
                                             </span>
