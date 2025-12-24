@@ -1,53 +1,56 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { notFound, useParams } from "next/navigation";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import ServiceDetailContent from "@/components/sections/ServiceDetailContent";
-import { Loader2 } from "lucide-react";
-import type { Service } from "@/types";
+import { adminDb } from "@/lib/firebase-admin";
+import { Service } from "@/types";
 
-export default function ServiceDetailPage() {
-    const params = useParams();
-    const id = params.id as string;
+// Helper to fetch service data
+async function getService(id: string): Promise<Service | null> {
+    try {
+        const doc = await adminDb.collection("services").doc(id).get();
+        if (!doc.exists) return null;
+        return { id: doc.id, ...doc.data() } as Service;
+    } catch (error) {
+        console.error("Error fetching service:", error);
+        return null;
+    }
+}
 
-    const [service, setService] = useState<Service | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+// Generate Metadata
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params;
+    const service = await getService(id);
 
-    useEffect(() => {
-        const fetchService = async () => {
-            try {
-                const res = await fetch(`/api/services/${id}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setService(data);
-                } else if (res.status === 404) {
-                    setError(true);
-                } else {
-                    setError(true);
-                }
-            } catch (err) {
-                console.error("Failed to fetch service:", err);
-                setError(true);
-            } finally {
-                setLoading(false);
-            }
+    if (!service) {
+        return {
+            title: "Service Not Found",
+            description: "The requested service could not be found."
         };
-
-        if (id) {
-            fetchService();
-        }
-    }, [id]);
-
-    if (loading) {
-        return (
-            <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[400px]">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-        );
     }
 
-    if (error || !service) {
+    return {
+        title: `${service.title} | Care.xyz`,
+        description: service.description,
+        openGraph: {
+            title: service.title,
+            description: service.description,
+            images: [
+                {
+                    url: service.image,
+                    width: 1200,
+                    height: 630,
+                    alt: service.title,
+                },
+            ],
+        },
+    };
+}
+
+export default async function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const service = await getService(id);
+
+    if (!service) {
         notFound();
     }
 

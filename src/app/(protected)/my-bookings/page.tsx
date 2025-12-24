@@ -2,18 +2,54 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mockStore, Booking } from "@/lib/store";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
-
+import { useAuth } from "@/context/auth-context";
+import { Booking } from "@/types";
 
 export default function MyBookingsPage() {
+    const { user, loading: authLoading } = useAuth();
     const [bookings, setBookings] = useState<Booking[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setBookings(mockStore.getBookings());
-    }, []);
+        async function fetchBookings() {
+            if (!user) return;
+            try {
+                const token = await user.getIdToken();
+                const res = await fetch("/api/bookings", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setBookings(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch bookings:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        if (!authLoading) {
+            if (user) {
+                fetchBookings();
+            } else {
+                setLoading(false);
+            }
+        }
+    }, [user, authLoading]);
+
+    if (loading || authLoading) {
+        return (
+            <div className="flex min-h-[50vh] items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
 
     if (bookings.length === 0) {
         return (
@@ -55,8 +91,8 @@ export default function MyBookingsPage() {
                             <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
                                 {booking.serviceName}
                             </span>
-                            <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${booking.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-                                booking.status === 'Confirmed' ? 'bg-green-100 text-green-800 border-green-200' :
+                            <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                                booking.status === 'confirmed' ? 'bg-green-100 text-green-800 border-green-200' :
                                     'bg-gray-100 text-gray-800 border-gray-200'
                                 }`}>
                                 {booking.status}

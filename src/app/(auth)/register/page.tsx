@@ -7,10 +7,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { mockStore } from "@/lib/store";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { Mail, Lock, ArrowRight, User, Phone, CreditCard } from "lucide-react";
-
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -25,6 +25,8 @@ export default function RegisterPage() {
         const name = formData.get("name") as string;
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
+        const contact = formData.get("contact") as string;
+        const nid = formData.get("nid") as string;
 
         // Validate password: 6+ char, 1 uppercase, 1 lowercase
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
@@ -34,14 +36,54 @@ export default function RegisterPage() {
             return;
         }
 
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        try {
+            // Create user in Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-        mockStore.login(email, name);
-        toast.success("Account created successfully!");
+            // Update display name
+            await updateProfile(user, { displayName: name });
 
-        router.push("/#services");
-        setLoading(false);
+            // Get token for API call
+            const token = await user.getIdToken();
+
+            // Create detailed user profile in Firestore
+            const response = await fetch("/api/user/profile", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    fullName: name,
+                    contactNumber: contact,
+                    nid: nid,
+                    role: "user",
+                    createdAt: new Date().toISOString(),
+                }),
+            });
+
+            if (!response.ok) {
+                console.error("Failed to create profile, but auth succeeded");
+                // We don't block the user, but we log it
+            }
+
+            toast.success("Account created successfully!");
+            router.push("/#services");
+        } catch (error: any) {
+            console.error("Registration failed:", error);
+            if (error.code === "auth/email-already-in-use") {
+                toast.error("Email is already registered. Please login.");
+            } else if (error.code === "auth/weak-password") {
+                toast.error("Password is too weak.");
+            } else {
+                toast.error("Failed to create account. Please try again.");
+            }
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (

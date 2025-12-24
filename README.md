@@ -101,12 +101,5 @@ Implementation of `middleware.ts` to handle protected routes, ensuring that sens
    npm run dev
    ```
 
----
 
-## 📈 Future Roadmap
-
-- [ ] Multi-provider authentication (Google, Github).
-- [ ] Push notifications for booking updates.
-- [ ] Advanced analytics dashboard for admins.
-- [ ] Mobile application using the same backend.
 

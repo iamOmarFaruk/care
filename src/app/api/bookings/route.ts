@@ -3,6 +3,7 @@ import { adminDb } from "@/lib/firebase-admin";
 import { verifyIdToken, unauthorizedResponse, badRequestResponse } from "@/lib/auth-utils";
 import { bookingSchema } from "@/lib/validations";
 import { stripe } from "@/lib/stripe";
+import { resend } from "@/lib/resend";
 
 // Get user's bookings
 export async function GET(request: NextRequest) {
@@ -87,6 +88,36 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString(),
             type: "order"
         });
+
+        // Send Email Invoice
+        if (process.env.RESEND_API_KEY && user.email) {
+            try {
+                await resend.emails.send({
+                    from: 'Care.xyz <onboarding@resend.dev>',
+                    to: user.email,
+                    subject: `Booking Confirmed: ${bookingData.serviceName}`,
+                    html: `
+                        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                            <h1 style="color: #0d9488;">Booking Confirmation</h1>
+                            <p>Hi ${user.email?.split('@')[0]},</p>
+                            <p>Thank you for booking with Care.xyz. Here are your booking details:</p>
+                            <div style="background: #f0fdfa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                                <p><strong>Service:</strong> ${bookingData.serviceName}</p>
+                                <p><strong>Date:</strong> ${bookingData.date} at ${bookingData.time}</p>
+                                <p><strong>Duration:</strong> ${bookingData.duration}</p>
+                                <p><strong>Location:</strong> ${bookingData.location}</p>
+                                <p><strong>Total Cost:</strong> ৳${bookingData.totalCost}</p>
+                                <p><strong>Status:</strong> ${bookingData.status.toUpperCase()}</p>
+                            </div>
+                            <p>You can tracking your booking status in your Dashboard.</p>
+                        </div>
+                    `
+                });
+            } catch (emailError) {
+                console.error("Failed to send email:", emailError);
+                // Don't fail the request if email fails
+            }
+        }
 
         return NextResponse.json({
             success: true,

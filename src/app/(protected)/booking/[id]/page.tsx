@@ -22,6 +22,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "@/components/CheckoutForm";
 import { useTheme } from "@/components/ThemeProvider";
+import { divisions, districts } from "@/lib/bd-locations";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -39,7 +40,13 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
     const [duration, setDuration] = useState("4");
-    const [address, setAddress] = useState("");
+
+    // Location State
+    const [division, setDivision] = useState("");
+    const [district, setDistrict] = useState("");
+    const [area, setArea] = useState("");
+    const [addressDetails, setAddressDetails] = useState("");
+
     const [notes, setNotes] = useState("");
 
     // Payment State
@@ -104,7 +111,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
         setSubmitting(true);
 
         // Validate
-        if (!date || !time || !address || !duration) {
+        if (!date || !time || !duration || !division || !district || !area || !addressDetails) {
             toast.error("Please fill in all required fields");
             setSubmitting(false);
             return;
@@ -161,7 +168,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                     date,
                     time,
                     duration: `${duration} hours`,
-                    location: address,
+                    location: `${addressDetails}, ${area}, ${district}, ${division}`,
                     totalCost,
                     notes: notes || undefined,
                     paymentIntentId,
@@ -329,17 +336,74 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                             </div>
 
                             <div className="space-y-3">
-                                <Label htmlFor="address">Service Location</Label>
-                                <div className="relative">
-                                    <MapPin className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
-                                    <Textarea
-                                        id="address"
-                                        placeholder="Enter your full address (e.g. House #12, Road #3, Sector #4, Uttara, Dhaka)"
-                                        className="pl-9 min-h-[80px] resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
-                                        value={address}
-                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
-                                        required
-                                    />
+                                <Label>Service Location</Label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* Division */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="division" className="text-xs text-slate-500">Division</Label>
+                                        <select
+                                            id="division"
+                                            className="flex h-11 w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-700 dark:text-slate-200 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                                            value={division}
+                                            onChange={(e) => {
+                                                setDivision(e.target.value);
+                                                setDistrict(""); // Reset district
+                                            }}
+                                            required
+                                        >
+                                            <option value="">Select Division</option>
+                                            {divisions.map((div) => (
+                                                <option key={div} value={div}>{div}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* District */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="district" className="text-xs text-slate-500">District</Label>
+                                        <select
+                                            id="district"
+                                            className="flex h-11 w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-700 dark:text-slate-200 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 disabled:opacity-50"
+                                            value={district}
+                                            onChange={(e) => setDistrict(e.target.value)}
+                                            disabled={!division}
+                                            required
+                                        >
+                                            <option value="">Select District</option>
+                                            {division && districts[division]?.map((dist) => (
+                                                <option key={dist} value={dist}>{dist}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Area */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="area" className="text-xs text-slate-500">Area / Thana</Label>
+                                        <Input
+                                            id="area"
+                                            placeholder="e.g. Uttara, Dhanmondi, Mirpur"
+                                            className="h-11 border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
+                                            value={area}
+                                            onChange={(e) => setArea(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Specific Address */}
+                                    <div className="space-y-2 md:col-span-2">
+                                        <Label htmlFor="addressDetails" className="text-xs text-slate-500">Address Details</Label>
+                                        <div className="relative">
+                                            <MapPin className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
+                                            <Textarea
+                                                id="addressDetails"
+                                                placeholder="House #, Road #, Block # etc."
+                                                className="pl-9 min-h-[80px] resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
+                                                value={addressDetails}
+                                                onChange={(e) => setAddressDetails(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
