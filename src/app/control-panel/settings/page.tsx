@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { useTheme } from "@/components/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,6 +71,7 @@ const initialSettings: SettingsState = {
 };
 
 export default function AdminSettingsPage() {
+    const { theme, setTheme } = useTheme();
     const [settings, setSettings] = React.useState<SettingsState>(initialSettings);
     const [isSaving, setIsSaving] = React.useState(false);
     const [showPassword, setShowPassword] = React.useState(false);
@@ -448,33 +450,25 @@ export default function AdminSettingsPage() {
                                         {themeOptions.map((option) => (
                                             <button
                                                 key={option.value}
-                                                onClick={() =>
-                                                    setSettings((prev) => ({
-                                                        ...prev,
-                                                        appearance: {
-                                                            ...prev.appearance,
-                                                            theme: option.value,
-                                                        },
-                                                    }))
-                                                }
-                                                className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all cursor-pointer ${settings.appearance.theme === option.value
+                                                onClick={() => setTheme(option.value)}
+                                                className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all cursor-pointer ${theme === option.value
                                                     ? "border-teal-500 bg-teal-50 dark:bg-teal-900/30"
                                                     : "border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
                                                     }`}
                                             >
-                                                {settings.appearance.theme === option.value && (
+                                                {theme === option.value && (
                                                     <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-teal-500 flex items-center justify-center">
                                                         <Check className="w-3 h-3 text-white" />
                                                     </span>
                                                 )}
                                                 <option.icon
-                                                    className={`w-6 h-6 ${settings.appearance.theme === option.value
+                                                    className={`w-6 h-6 ${theme === option.value
                                                         ? "text-teal-500"
                                                         : "text-slate-400"
                                                         }`}
                                                 />
                                                 <span
-                                                    className={`text-sm font-medium ${settings.appearance.theme === option.value
+                                                    className={`text-sm font-medium ${theme === option.value
                                                         ? "text-teal-700 dark:text-teal-300"
                                                         : "text-slate-600 dark:text-slate-300"
                                                         }`}
