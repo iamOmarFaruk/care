@@ -78,21 +78,21 @@ export function Modal({
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         className={cn(
-                            "relative z-10 w-full mx-4 bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col",
+                            "relative z-10 w-full mx-4 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700",
                             sizeClasses[size]
                         )}
                     >
                         {/* Header */}
                         {(title || showCloseButton) && (
-                            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700">
                                 <div>
                                     {title && (
-                                        <h2 className="text-lg font-semibold text-slate-800">
+                                        <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
                                             {title}
                                         </h2>
                                     )}
                                     {description && (
-                                        <p className="text-sm text-slate-500 mt-0.5">
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                                             {description}
                                         </p>
                                     )}
@@ -100,7 +100,7 @@ export function Modal({
                                 {showCloseButton && (
                                     <button
                                         onClick={onClose}
-                                        className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                                        className="p-2 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                                     >
                                         <X className="w-5 h-5" />
                                     </button>

@@ -113,8 +113,8 @@ export default function FooterPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Footer Settings</h1>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Footer Settings</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Customize your website footer content
                     </p>
                 </div>
@@ -141,58 +141,58 @@ export default function FooterPage() {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6"
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6"
                 >
-                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Social Media Links</h3>
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Social Media Links</h3>
 
                     {isEditing ? (
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                                    <Facebook className="w-5 h-5 text-blue-600" />
+                                <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                    <Facebook className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <input
                                     type="url"
                                     value={formData.socialLinks.facebook}
                                     onChange={(e) => updateSocialLink("facebook", e.target.value)}
                                     placeholder="Facebook URL"
-                                    className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                    className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                 />
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center">
-                                    <Instagram className="w-5 h-5 text-pink-600" />
+                                <div className="w-10 h-10 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">
+                                    <Instagram className="w-5 h-5 text-pink-600 dark:text-pink-400" />
                                 </div>
                                 <input
                                     type="url"
                                     value={formData.socialLinks.instagram}
                                     onChange={(e) => updateSocialLink("instagram", e.target.value)}
                                     placeholder="Instagram URL"
-                                    className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                    className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                 />
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-                                    <XIcon className="w-4 h-4 text-slate-800" />
+                                <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                                    <XIcon className="w-4 h-4 text-slate-800 dark:text-white" />
                                 </div>
                                 <input
                                     type="url"
                                     value={formData.socialLinks.twitter}
                                     onChange={(e) => updateSocialLink("twitter", e.target.value)}
                                     placeholder="X (Twitter) URL"
-                                    className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                    className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                 />
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                                    <Linkedin className="w-5 h-5 text-blue-700" />
+                                <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                    <Linkedin className="w-5 h-5 text-blue-700 dark:text-blue-400" />
                                 </div>
                                 <input
                                     type="url"
                                     value={formData.socialLinks.linkedin}
                                     onChange={(e) => updateSocialLink("linkedin", e.target.value)}
                                     placeholder="LinkedIn URL"
-                                    className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                    className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                 />
                             </div>
                         </div>
@@ -203,7 +203,7 @@ export default function FooterPage() {
                                     href={footer.socialLinks.facebook}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-3 text-sm text-slate-600 hover:text-teal-600 transition-colors"
+                                    className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                                 >
                                     <Facebook className="w-4 h-4" />
                                     {footer.socialLinks.facebook}
@@ -214,7 +214,7 @@ export default function FooterPage() {
                                     href={footer.socialLinks.instagram}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-3 text-sm text-slate-600 hover:text-teal-600 transition-colors"
+                                    className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                                 >
                                     <Instagram className="w-4 h-4" />
                                     {footer.socialLinks.instagram}
@@ -225,7 +225,7 @@ export default function FooterPage() {
                                     href={footer.socialLinks.twitter}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-3 text-sm text-slate-600 hover:text-teal-600 transition-colors"
+                                    className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                                 >
                                     <XIcon className="w-3.5 h-3.5" />
                                     {footer.socialLinks.twitter}
@@ -236,7 +236,7 @@ export default function FooterPage() {
                                     href={footer.socialLinks.linkedin}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-3 text-sm text-slate-600 hover:text-teal-600 transition-colors"
+                                    className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                                 >
                                     <Linkedin className="w-4 h-4" />
                                     {footer.socialLinks.linkedin}
@@ -251,9 +251,9 @@ export default function FooterPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6"
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6"
                 >
-                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Navigation Links</h3>
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Navigation Links</h3>
 
                     {isEditing ? (
                         <div className="space-y-3">
@@ -264,20 +264,20 @@ export default function FooterPage() {
                                         value={link.label}
                                         onChange={(e) => updateNavLink(index, "label", e.target.value)}
                                         placeholder="Label"
-                                        className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                        className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                     />
                                     <input
                                         type="text"
                                         value={link.href}
                                         onChange={(e) => updateNavLink(index, "href", e.target.value)}
                                         placeholder="URL"
-                                        className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                        className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                     />
                                     {formData.navLinks.length > 1 && (
                                         <button
                                             type="button"
                                             onClick={() => removeNavLink(index)}
-                                            className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl"
+                                            className="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl"
                                         >
                                             <X className="w-4 h-4" />
                                         </button>
@@ -299,7 +299,7 @@ export default function FooterPage() {
                                 <a
                                     key={index}
                                     href={link.href}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-lg text-sm text-slate-600 hover:bg-teal-50 hover:text-teal-700 transition-colors"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-900/30 hover:text-teal-700 dark:hover:text-teal-400 transition-colors"
                                 >
                                     <LinkIcon className="w-3 h-3" />
                                     {link.label}
@@ -314,9 +314,9 @@ export default function FooterPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:col-span-2"
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:col-span-2"
                 >
-                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Copyright Text</h3>
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Copyright Text</h3>
 
                     {isEditing ? (
                         <input
@@ -325,11 +325,11 @@ export default function FooterPage() {
                             onChange={(e) =>
                                 setFormData((prev) => ({ ...prev, copyright: e.target.value }))
                             }
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             placeholder="© 2024 Care.xyz. All rights reserved."
                         />
                     ) : (
-                        <p className="text-sm text-slate-600">{footer.copyright}</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-300">{footer.copyright}</p>
                     )}
                 </motion.div>
             </div>

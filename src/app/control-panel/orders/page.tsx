@@ -24,11 +24,11 @@ import {
 } from "lucide-react";
 
 const statusColors: Record<OrderItem["status"], string> = {
-    pending: "bg-amber-100 text-amber-700 border-amber-200",
-    confirmed: "bg-blue-100 text-blue-700 border-blue-200",
-    in_progress: "bg-purple-100 text-purple-700 border-purple-200",
-    completed: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    cancelled: "bg-red-100 text-red-700 border-red-200",
+    pending: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
+    confirmed: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
+    in_progress: "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800",
+    completed: "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
+    cancelled: "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
 };
 
 const statusOptions: { value: OrderItem["status"]; label: string }[] = [
@@ -87,14 +87,14 @@ export default function OrdersPage() {
         <div className="space-y-6">
             {/* Page Header */}
             <div>
-                <h1 className="text-2xl font-bold text-slate-800">Orders Management</h1>
-                <p className="text-sm text-slate-500 mt-1">
+                <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Orders Management</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     View and manage all service bookings
                 </p>
             </div>
 
             {/* Filters */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/* Search */}
                     <div className="relative flex-1">
@@ -104,7 +104,7 @@ export default function OrdersPage() {
                             placeholder="Search orders..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
+                            className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-white placeholder:text-slate-400"
                         />
                     </div>
 
@@ -114,7 +114,7 @@ export default function OrdersPage() {
                         <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            className="px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white"
+                            className="px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200"
                         >
                             <option value="all">All Status</option>
                             {statusOptions.map((opt) => (
@@ -131,31 +131,31 @@ export default function OrdersPage() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
             >
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-slate-100 bg-slate-50/50">
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                            <tr className="border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Order ID
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Customer
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Service
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Date & Time
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Status
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Amount
                                 </th>
-                                <th className="text-right text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Actions
                                 </th>
                             </tr>
@@ -169,30 +169,30 @@ export default function OrdersPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, delay: index * 0.03 }}
-                                        className="hover:bg-slate-50/50 transition-colors"
+                                        className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-0"
                                     >
                                         <td className="px-6 py-4">
-                                            <span className="text-sm font-mono font-medium text-slate-700">
+                                            <span className="text-sm font-mono font-medium text-slate-700 dark:text-slate-300">
                                                 #{order.id.slice(-6).toUpperCase()}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div>
-                                                <p className="text-sm font-medium text-slate-700">
+                                                <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                                     {order.userName}
                                                 </p>
-                                                <p className="text-xs text-slate-500">{order.userEmail}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400">{order.userEmail}</p>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-sm text-slate-600">
+                                            <span className="text-sm text-slate-600 dark:text-slate-300">
                                                 {order.serviceName}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div>
-                                                <p className="text-sm text-slate-600">{order.date}</p>
-                                                <p className="text-xs text-slate-400">{order.time}</p>
+                                                <p className="text-sm text-slate-600 dark:text-slate-300">{order.date}</p>
+                                                <p className="text-xs text-slate-400 dark:text-slate-500">{order.time}</p>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
@@ -216,7 +216,7 @@ export default function OrdersPage() {
                                             </select>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-sm font-semibold text-slate-700">
+                                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                                                 ৳{order.totalCost.toLocaleString()}
                                             </span>
                                         </td>
@@ -225,7 +225,7 @@ export default function OrdersPage() {
                                                 <Tooltip content="View Details">
                                                     <button
                                                         onClick={() => viewOrder(order)}
-                                                        className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                                                        className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
                                                     >
                                                         <Eye className="w-4 h-4" />
                                                     </button>
@@ -234,7 +234,7 @@ export default function OrdersPage() {
                                                     <Tooltip content="Cancel Order">
                                                         <button
                                                             onClick={() => setConfirmCancel(order)}
-                                                            className="p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors"
+                                                            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                                                         >
                                                             <XCircle className="w-4 h-4" />
                                                         </button>
@@ -244,7 +244,7 @@ export default function OrdersPage() {
                                                     <Tooltip content="Confirm Order">
                                                         <button
                                                             onClick={() => handleStatusChange(order.id, "confirmed")}
-                                                            className="p-2 rounded-lg hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 transition-colors"
+                                                            className="p-2 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                                                         >
                                                             <CheckCircle2 className="w-4 h-4" />
                                                         </button>
@@ -279,8 +279,8 @@ export default function OrdersPage() {
                         {/* Order ID & Status */}
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-xs text-slate-500">Order ID</p>
-                                <p className="text-lg font-mono font-semibold text-slate-800">
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Order ID</p>
+                                <p className="text-lg font-mono font-semibold text-slate-800 dark:text-white">
                                     #{selectedOrder.id.slice(-6).toUpperCase()}
                                 </p>
                             </div>
@@ -293,21 +293,21 @@ export default function OrdersPage() {
                         </div>
 
                         {/* Customer Info */}
-                        <div className="bg-slate-50 rounded-xl p-4">
-                            <h4 className="text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
+                        <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4">
+                            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
                                 <User className="w-4 h-4" />
                                 Customer Information
                             </h4>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p className="text-xs text-slate-500">Name</p>
-                                    <p className="text-sm font-medium text-slate-700">
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">Name</p>
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                         {selectedOrder.userName}
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-slate-500">Email</p>
-                                    <p className="text-sm font-medium text-slate-700">
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">Email</p>
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                         {selectedOrder.userEmail}
                                     </p>
                                 </div>
@@ -316,38 +316,38 @@ export default function OrdersPage() {
 
                         {/* Service Details */}
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-slate-50 rounded-xl p-4">
-                                <h4 className="text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
+                            <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4">
+                                <h4 className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
                                     Schedule
                                 </h4>
-                                <p className="text-sm text-slate-600">
+                                <p className="text-sm text-slate-600 dark:text-slate-300">
                                     {selectedOrder.date} at {selectedOrder.time}
                                 </p>
-                                <p className="text-xs text-slate-500 mt-1">
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                                     Duration: {selectedOrder.duration}
                                 </p>
                             </div>
-                            <div className="bg-slate-50 rounded-xl p-4">
-                                <h4 className="text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
+                            <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4">
+                                <h4 className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
                                     <MapPin className="w-4 h-4" />
                                     Location
                                 </h4>
-                                <p className="text-sm text-slate-600">{selectedOrder.location}</p>
+                                <p className="text-sm text-slate-600 dark:text-slate-300">{selectedOrder.location}</p>
                             </div>
                         </div>
 
                         {/* Service & Cost */}
-                        <div className="flex items-center justify-between bg-gradient-to-r from-teal-50 to-teal-100/50 rounded-xl p-4 border border-teal-100">
+                        <div className="flex items-center justify-between bg-gradient-to-r from-teal-50 to-teal-100/50 dark:from-teal-900/40 dark:to-teal-900/20 rounded-xl p-4 border border-teal-100 dark:border-teal-900/50">
                             <div>
-                                <p className="text-xs text-teal-600">Service</p>
-                                <p className="text-sm font-medium text-teal-800">
+                                <p className="text-xs text-teal-600 dark:text-teal-400">Service</p>
+                                <p className="text-sm font-medium text-teal-800 dark:text-teal-200">
                                     {selectedOrder.serviceName}
                                 </p>
                             </div>
                             <div className="text-right">
-                                <p className="text-xs text-teal-600">Total Amount</p>
-                                <p className="text-xl font-bold text-teal-800">
+                                <p className="text-xs text-teal-600 dark:text-teal-400">Total Amount</p>
+                                <p className="text-xl font-bold text-teal-800 dark:text-teal-300">
                                     ৳{selectedOrder.totalCost.toLocaleString()}
                                 </p>
                             </div>
@@ -355,11 +355,11 @@ export default function OrdersPage() {
 
                         {/* Notes */}
                         {selectedOrder.notes && (
-                            <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                                <h4 className="text-sm font-medium text-amber-700 mb-2">
+                            <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-100 dark:border-amber-900/50">
+                                <h4 className="text-sm font-medium text-amber-700 dark:text-amber-400 mb-2">
                                     Customer Notes
                                 </h4>
-                                <p className="text-sm text-amber-800">{selectedOrder.notes}</p>
+                                <p className="text-sm text-amber-800 dark:text-amber-300">{selectedOrder.notes}</p>
                             </div>
                         )}
 

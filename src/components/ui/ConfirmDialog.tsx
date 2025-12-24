@@ -28,9 +28,9 @@ export function ConfirmDialog({
     isLoading = false,
 }: ConfirmDialogProps) {
     const iconColors = {
-        danger: "text-red-500 bg-red-50",
-        warning: "text-amber-500 bg-amber-50",
-        info: "text-blue-500 bg-blue-50",
+        danger: "text-red-500 bg-red-50 dark:bg-red-900/30",
+        warning: "text-amber-500 bg-amber-50 dark:bg-amber-900/30",
+        info: "text-blue-500 bg-blue-50 dark:bg-blue-900/30",
     };
 
     const handleConfirm = () => {
@@ -47,8 +47,8 @@ export function ConfirmDialog({
                     <AlertTriangle className="w-7 h-7" />
                 </div>
 
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">{title}</h3>
-                <p className="text-sm text-slate-500 mb-6">{message}</p>
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">{title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">{message}</p>
 
                 <div className="flex gap-3 w-full">
                     <Button

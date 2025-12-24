@@ -104,8 +104,8 @@ export default function SliderPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Hero Slider</h1>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Hero Slider</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage hero section slides
                     </p>
                 </div>
@@ -123,7 +123,7 @@ export default function SliderPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                        className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
                     >
                         <div className="flex flex-col md:flex-row">
                             {/* Image Preview */}
@@ -135,7 +135,7 @@ export default function SliderPage() {
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                    <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-500">
                                         <ImageIcon className="w-12 h-12" />
                                     </div>
                                 )}
@@ -151,20 +151,20 @@ export default function SliderPage() {
                             <div className="flex-1 p-5 md:p-6">
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1">
-                                        <h3 className="text-lg font-semibold text-slate-800 mb-1">
+                                        <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-1">
                                             {slide.title}
                                         </h3>
-                                        <p className="text-sm text-slate-500 mb-4">
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
                                             {slide.subtitle}
                                         </p>
 
-                                        <div className="flex items-center gap-4 text-sm text-slate-600">
+                                        <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-300">
                                             <div className="flex items-center gap-1.5">
-                                                <LinkIcon className="w-4 h-4 text-teal-600" />
+                                                <LinkIcon className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                                                 <span className="font-medium">{slide.ctaText}</span>
                                             </div>
-                                            <span className="text-slate-400">→</span>
-                                            <span className="text-slate-500">{slide.ctaLink}</span>
+                                            <span className="text-slate-400 dark:text-slate-500">→</span>
+                                            <span className="text-slate-500 dark:text-slate-400">{slide.ctaLink}</span>
                                         </div>
                                     </div>
 
@@ -173,7 +173,7 @@ export default function SliderPage() {
                                         <Tooltip content="Edit Slide">
                                             <button
                                                 onClick={() => openEditModal(slide)}
-                                                className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                                                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
                                             >
                                                 <Pencil className="w-4 h-4" />
                                             </button>
@@ -181,7 +181,7 @@ export default function SliderPage() {
                                         <Tooltip content="Delete Slide">
                                             <button
                                                 onClick={() => setDeleteConfirm(slide)}
-                                                className="p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors"
+                                                className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -200,12 +200,12 @@ export default function SliderPage() {
             </div>
 
             {sliders.length === 0 && (
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
-                    <ImageIcon className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-slate-700 mb-2">
+                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-12 text-center">
+                    <ImageIcon className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
                         No slides yet
                     </h3>
-                    <p className="text-sm text-slate-500 mb-4">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
                         Add slides to your hero section
                     </p>
                     <Button onClick={openAddModal}>
@@ -227,7 +227,7 @@ export default function SliderPage() {
             >
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                             Title
                         </label>
                         <input
@@ -237,13 +237,13 @@ export default function SliderPage() {
                                 setFormData((prev) => ({ ...prev, title: e.target.value }))
                             }
                             required
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             placeholder="Professional Child Care Services"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                             Subtitle
                         </label>
                         <input
@@ -253,14 +253,14 @@ export default function SliderPage() {
                                 setFormData((prev) => ({ ...prev, subtitle: e.target.value }))
                             }
                             required
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             placeholder="Trusted nannies and babysitters for your little ones"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                 Button Text
                             </label>
                             <input
@@ -270,12 +270,12 @@ export default function SliderPage() {
                                     setFormData((prev) => ({ ...prev, ctaText: e.target.value }))
                                 }
                                 required
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                 placeholder="Book Now"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                 Button Link
                             </label>
                             <input
@@ -285,14 +285,14 @@ export default function SliderPage() {
                                     setFormData((prev) => ({ ...prev, ctaLink: e.target.value }))
                                 }
                                 required
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                 placeholder="/services/baby-care"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                             Background Image URL
                         </label>
                         <input
@@ -304,11 +304,11 @@ export default function SliderPage() {
                                     backgroundImage: e.target.value,
                                 }))
                             }
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             placeholder="https://images.unsplash.com/..."
                         />
                         {formData.backgroundImage && (
-                            <div className="mt-3 rounded-xl overflow-hidden h-32 bg-slate-100">
+                            <div className="mt-3 rounded-xl overflow-hidden h-32 bg-slate-100 dark:bg-slate-700">
                                 <img
                                     src={formData.backgroundImage}
                                     alt="Preview"

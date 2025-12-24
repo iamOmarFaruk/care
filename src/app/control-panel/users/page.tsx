@@ -22,9 +22,9 @@ import {
 } from "lucide-react";
 
 const roleColors: Record<AdminUser["role"], string> = {
-    super_admin: "bg-purple-100 text-purple-700",
-    admin: "bg-blue-100 text-blue-700",
-    user: "bg-slate-100 text-slate-700",
+    super_admin: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+    admin: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+    user: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
 };
 
 const roleLabels: Record<AdminUser["role"], string> = {
@@ -148,8 +148,8 @@ export default function UsersPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Users Management</h1>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Users Management</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage user accounts and permissions
                     </p>
                 </div>
@@ -160,7 +160,7 @@ export default function UsersPage() {
             </div>
 
             {/* Search */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
@@ -168,7 +168,7 @@ export default function UsersPage() {
                         placeholder="Search users..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white placeholder:text-slate-400 transition-all"
                     />
                 </div>
             </div>
@@ -177,33 +177,33 @@ export default function UsersPage() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
             >
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-slate-100 bg-slate-50/50">
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                            <tr className="border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     User
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Username
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Role
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Status
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Joined
                                 </th>
-                                <th className="text-right text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-4">
+                                <th className="text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                             <AnimatePresence>
                                 {filteredUsers.map((user, index) => (
                                     <motion.tr
@@ -212,7 +212,7 @@ export default function UsersPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
                                         transition={{ duration: 0.2, delay: index * 0.03 }}
-                                        className="hover:bg-slate-50/50 transition-colors"
+                                        className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors"
                                     >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
@@ -230,15 +230,15 @@ export default function UsersPage() {
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-slate-700">
+                                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                                         {user.name}
                                                     </p>
-                                                    <p className="text-xs text-slate-500">{user.email}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-sm text-slate-600">@{user.username}</span>
+                                            <span className="text-sm text-slate-600 dark:text-slate-300">@{user.username}</span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <span
@@ -253,15 +253,15 @@ export default function UsersPage() {
                                         <td className="px-6 py-4">
                                             <span
                                                 className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${user.status === "active"
-                                                        ? "bg-emerald-100 text-emerald-700"
-                                                        : "bg-red-100 text-red-700"
+                                                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                                                    : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                                                     }`}
                                             >
                                                 {user.status === "active" ? "Active" : "Disabled"}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-sm text-slate-500">
+                                            <span className="text-sm text-slate-500 dark:text-slate-400">
                                                 {new Date(user.createdAt).toLocaleDateString()}
                                             </span>
                                         </td>
@@ -270,7 +270,7 @@ export default function UsersPage() {
                                                 <Tooltip content="Edit User">
                                                     <button
                                                         onClick={() => openEditModal(user)}
-                                                        className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+                                                        className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
                                                     >
                                                         <Pencil className="w-4 h-4" />
                                                     </button>
@@ -279,8 +279,8 @@ export default function UsersPage() {
                                                     <button
                                                         onClick={() => toggleStatus(user)}
                                                         className={`p-2 rounded-lg transition-colors ${user.status === "active"
-                                                                ? "hover:bg-amber-50 text-slate-500 hover:text-amber-600"
-                                                                : "hover:bg-emerald-50 text-slate-500 hover:text-emerald-600"
+                                                            ? "hover:bg-amber-50 dark:hover:bg-amber-900/30 text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400"
+                                                            : "hover:bg-emerald-50 dark:hover:bg-emerald-900/30 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400"
                                                             }`}
                                                     >
                                                         {user.status === "active" ? (
@@ -294,7 +294,7 @@ export default function UsersPage() {
                                                     <Tooltip content="Delete User">
                                                         <button
                                                             onClick={() => setDeleteConfirm(user)}
-                                                            className="p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors"
+                                                            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                                                         >
                                                             <Trash2 className="w-4 h-4" />
                                                         </button>
@@ -329,7 +329,7 @@ export default function UsersPage() {
             >
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                             Full Name
                         </label>
                         <input
@@ -339,13 +339,13 @@ export default function UsersPage() {
                                 setFormData((prev) => ({ ...prev, name: e.target.value }))
                             }
                             required
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                 Username
                             </label>
                             <input
@@ -355,11 +355,11 @@ export default function UsersPage() {
                                     setFormData((prev) => ({ ...prev, username: e.target.value }))
                                 }
                                 required
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                 Email
                             </label>
                             <input
@@ -369,14 +369,14 @@ export default function UsersPage() {
                                     setFormData((prev) => ({ ...prev, email: e.target.value }))
                                 }
                                 required
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                 Role
                             </label>
                             <select
@@ -388,7 +388,7 @@ export default function UsersPage() {
                                     }))
                                 }
                                 disabled={editingUser?.role === "super_admin"}
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white"
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             >
                                 <option value="user">User</option>
                                 <option value="admin">Admin</option>
@@ -396,7 +396,7 @@ export default function UsersPage() {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                 Status
                             </label>
                             <select
@@ -408,7 +408,7 @@ export default function UsersPage() {
                                     }))
                                 }
                                 disabled={editingUser?.role === "super_admin"}
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white"
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             >
                                 <option value="active">Active</option>
                                 <option value="disabled">Disabled</option>

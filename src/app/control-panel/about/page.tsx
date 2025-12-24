@@ -80,8 +80,8 @@ export default function AboutPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">About Section</h1>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">About Section</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage the about section content on your homepage
                     </p>
                 </div>
@@ -107,14 +107,14 @@ export default function AboutPage() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
             >
                 <div className="grid md:grid-cols-2 gap-0">
                     {/* Image */}
-                    <div className="relative h-64 md:h-auto bg-slate-100">
+                    <div className="relative h-64 md:h-auto bg-slate-100 dark:bg-slate-700">
                         {isEditing ? (
                             <div className="p-6 space-y-4">
-                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                     Image URL
                                 </label>
                                 <input
@@ -123,7 +123,7 @@ export default function AboutPage() {
                                     onChange={(e) =>
                                         setFormData((prev) => ({ ...prev, image: e.target.value }))
                                     }
-                                    className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                    className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                     placeholder="https://..."
                                 />
                                 {formData.image && (
@@ -143,7 +143,7 @@ export default function AboutPage() {
                                 className="w-full h-full object-cover"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center text-slate-400">
+                            <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-500">
                                 <ImageIcon className="w-16 h-16" />
                             </div>
                         )}
@@ -154,7 +154,7 @@ export default function AboutPage() {
                         {isEditing ? (
                             <>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                         Title
                                     </label>
                                     <input
@@ -163,12 +163,12 @@ export default function AboutPage() {
                                         onChange={(e) =>
                                             setFormData((prev) => ({ ...prev, title: e.target.value }))
                                         }
-                                        className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                         Description
                                     </label>
                                     <textarea
@@ -180,12 +180,12 @@ export default function AboutPage() {
                                             }))
                                         }
                                         rows={5}
-                                        className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none"
+                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
                                         Features
                                     </label>
                                     <div className="space-y-2">
@@ -195,14 +195,14 @@ export default function AboutPage() {
                                                     type="text"
                                                     value={feature}
                                                     onChange={(e) => updateFeature(index, e.target.value)}
-                                                    className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                                                    className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                                                     placeholder="Feature..."
                                                 />
                                                 {formData.features.length > 1 && (
                                                     <button
                                                         type="button"
                                                         onClick={() => removeFeature(index)}
-                                                        className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl"
+                                                        className="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl"
                                                     >
                                                         <X className="w-4 h-4" />
                                                     </button>
@@ -223,26 +223,26 @@ export default function AboutPage() {
                         ) : (
                             <>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-slate-800 mb-3">
+                                    <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-3">
                                         {about.title}
                                     </h2>
-                                    <p className="text-slate-600 leading-relaxed">
+                                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                                         {about.description}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <h4 className="text-sm font-medium text-slate-700 mb-3">
+                                    <h4 className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3">
                                         Key Features
                                     </h4>
                                     <div className="grid grid-cols-2 gap-2">
                                         {about.features.map((feature, index) => (
                                             <div
                                                 key={index}
-                                                className="flex items-center gap-2 text-sm text-slate-600"
+                                                className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
                                             >
-                                                <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
-                                                    <Check className="w-3 h-3 text-teal-600" />
+                                                <div className="w-5 h-5 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center flex-shrink-0">
+                                                    <Check className="w-3 h-3 text-teal-600 dark:text-teal-400" />
                                                 </div>
                                                 {feature}
                                             </div>
@@ -257,13 +257,13 @@ export default function AboutPage() {
 
             {/* Preview Note */}
             {isEditing && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-amber-600 text-sm">!</span>
+                <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 rounded-xl p-4 flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-amber-600 dark:text-amber-400 text-sm">!</span>
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-amber-800">Editing Mode</p>
-                        <p className="text-sm text-amber-700">
+                        <p className="text-sm font-medium text-amber-800 dark:text-amber-200">Editing Mode</p>
+                        <p className="text-sm text-amber-700 dark:text-amber-300">
                             Changes will be saved to local storage. In production, this will update your database.
                         </p>
                     </div>
