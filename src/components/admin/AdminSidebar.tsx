@@ -28,17 +28,37 @@ interface AdminSidebarProps {
     onToggle: () => void;
 }
 
-const menuItems = [
-    { href: "/control-panel", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/control-panel/orders", label: "Orders", icon: ShoppingBag },
-    { href: "/control-panel/users", label: "Users", icon: Users },
-    { href: "/control-panel/slider", label: "Slider", icon: Image },
-    { href: "/control-panel/about", label: "About", icon: Info },
-    { href: "/control-panel/services", label: "Services", icon: Briefcase },
-    { href: "/control-panel/testimonials", label: "Testimonials", icon: MessageSquareQuote },
-    { href: "/control-panel/footer", label: "Footer", icon: FileText },
-    { href: "/control-panel/profile", label: "Profile", icon: User },
-    { href: "/control-panel/settings", label: "Settings", icon: Settings },
+const menuGroups = [
+    {
+        label: "Overview",
+        items: [
+            { href: "/control-panel", label: "Dashboard", icon: LayoutDashboard },
+        ]
+    },
+    {
+        label: "Management",
+        items: [
+            { href: "/control-panel/orders", label: "Orders", icon: ShoppingBag },
+            { href: "/control-panel/users", label: "Users", icon: Users },
+            { href: "/control-panel/services", label: "Services", icon: Briefcase },
+        ]
+    },
+    {
+        label: "Content",
+        items: [
+            { href: "/control-panel/slider", label: "Slider", icon: Image },
+            { href: "/control-panel/testimonials", label: "Testimonials", icon: MessageSquareQuote },
+            { href: "/control-panel/about", label: "About", icon: Info },
+            { href: "/control-panel/footer", label: "Footer", icon: FileText },
+        ]
+    },
+    {
+        label: "System",
+        items: [
+            { href: "/control-panel/profile", label: "Profile", icon: User },
+            { href: "/control-panel/settings", label: "Settings", icon: Settings },
+        ]
+    }
 ];
 
 export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
@@ -85,78 +105,93 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-                <Link
-                    href="/"
-                    target="_blank"
-                    className={cn(
-                        "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-700/50 mb-2"
-                    )}
-                >
-                    <Globe className="w-5 h-5 flex-shrink-0" />
-                    {!isCollapsed && (
-                        <motion.span
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -10 }}
-                            className="font-medium text-sm"
-                        >
-                            Visit Site
-                        </motion.span>
-                    )}
-                    {!isCollapsed && <ExternalLink className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />}
-                </Link>
+            <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                <div className="space-y-1">
+                    <Link
+                        href="/"
+                        target="_blank"
+                        className={cn(
+                            "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-700/50 mb-2"
+                        )}
+                    >
+                        <Globe className="w-5 h-5 flex-shrink-0" />
+                        {!isCollapsed && (
+                            <motion.span
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                className="font-medium text-sm"
+                            >
+                                Visit Site
+                            </motion.span>
+                        )}
+                        {!isCollapsed && <ExternalLink className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />}
+                    </Link>
+                </div>
 
-                <div className="h-px bg-slate-700/50 mx-2 mb-4" />
+                {menuGroups.map((group, groupIndex) => (
+                    <div key={group.label} className="space-y-1">
+                        {!isCollapsed && (
+                            <div className="px-3 mb-2">
+                                <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    {group.label}
+                                </h3>
+                            </div>
+                        )}
+                        {group.label !== "Overview" && isCollapsed && (
+                            <div className="h-px bg-slate-700/50 mx-2 my-2" />
+                        )}
 
-                {menuItems.map((item) => {
-                    const isActive =
-                        pathname === item.href ||
-                        (item.href !== "/control-panel" && pathname.startsWith(item.href));
-                    const Icon = item.icon;
+                        {group.items.map((item) => {
+                            const isActive =
+                                pathname === item.href ||
+                                (item.href !== "/control-panel" && pathname.startsWith(item.href));
+                            const Icon = item.icon;
 
-                    const linkContent = (
-                        <Link
-                            href={item.href}
-                            className={cn(
-                                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
-                                isActive
-                                    ? "bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg shadow-teal-500/20"
-                                    : "text-slate-400 hover:text-white hover:bg-slate-700/50"
-                            )}
-                        >
-                            <Icon className={cn("w-5 h-5 flex-shrink-0", isActive && "text-white")} />
-                            <AnimatePresence>
-                                {!isCollapsed && (
-                                    <motion.span
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -10 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="font-medium text-sm"
-                                    >
-                                        {item.label}
-                                    </motion.span>
-                                )}
-                            </AnimatePresence>
-                            {isActive && (
-                                <motion.div
-                                    layoutId="activeIndicator"
-                                    className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
-                        </Link>
-                    );
+                            const linkContent = (
+                                <Link
+                                    href={item.href}
+                                    className={cn(
+                                        "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
+                                        isActive
+                                            ? "bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow-lg shadow-teal-500/20"
+                                            : "text-slate-400 hover:text-white hover:bg-slate-700/50"
+                                    )}
+                                >
+                                    <Icon className={cn("w-5 h-5 flex-shrink-0", isActive && "text-white")} />
+                                    <AnimatePresence>
+                                        {!isCollapsed && (
+                                            <motion.span
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="font-medium text-sm"
+                                            >
+                                                {item.label}
+                                            </motion.span>
+                                        )}
+                                    </AnimatePresence>
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeIndicator"
+                                            className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white"
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        />
+                                    )}
+                                </Link>
+                            );
 
-                    return isCollapsed ? (
-                        <Tooltip key={item.href} content={item.label} position="right">
-                            {linkContent}
-                        </Tooltip>
-                    ) : (
-                        <div key={item.href}>{linkContent}</div>
-                    );
-                })}
+                            return isCollapsed ? (
+                                <Tooltip key={item.href} content={item.label} position="right">
+                                    {linkContent}
+                                </Tooltip>
+                            ) : (
+                                <div key={item.href}>{linkContent}</div>
+                            );
+                        })}
+                    </div>
+                ))}
             </nav>
 
             {/* Footer */}
