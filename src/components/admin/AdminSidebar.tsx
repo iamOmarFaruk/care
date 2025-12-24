@@ -74,7 +74,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
             {/* Toggle Button - Absolute Positioned */}
             <button
                 onClick={onToggle}
-                className="absolute -right-3 top-20 bg-slate-800 border border-slate-600 text-slate-400 hover:text-white rounded-full p-1 shadow-lg hover:shadow-xl transition-all z-50 overflow-hidden"
+                className="absolute -right-3 top-5 bg-slate-800 border border-slate-600 text-slate-400 hover:text-white rounded-full p-1 shadow-lg hover:shadow-xl transition-all z-50 overflow-hidden"
             >
                 <motion.div
                     animate={{ rotate: isCollapsed ? 180 : 0 }}
