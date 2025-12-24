@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Heart, LogOut, LayoutDashboard } from "lucide-react";
+import { Menu, X, Heart, LogOut, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -211,8 +211,16 @@ export function Navbar() {
                     <ThemeToggle />
                     {user ? (
                         <>
+                            {isAdminUser && (
+                                <Button variant="ghost" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:text-amber-500 dark:hover:text-amber-400 dark:hover:bg-amber-950/30">
+                                    <Link href="/control-panel" className="flex items-center gap-2">
+                                        <ShieldCheck className="w-4 h-4" />
+                                        <span className="hidden lg:inline">Admin</span>
+                                    </Link>
+                                </Button>
+                            )}
                             <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
-                                <Link href={isAdminUser ? "/control-panel" : "/dashboard"} className="flex items-center gap-2">
+                                <Link href="/dashboard" className="flex items-center gap-2">
                                     <LayoutDashboard className="w-4 h-4" />
                                     Dashboard
                                 </Link>
@@ -294,8 +302,16 @@ export function Navbar() {
                             >
                                 {user ? (
                                     <>
+                                        {isAdminUser && (
+                                            <Button variant="ghost" size="sm" asChild className="transition-all duration-200 hover:scale-105 justify-start text-amber-600 dark:text-amber-500">
+                                                <Link href="/control-panel" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                                    <ShieldCheck className="w-3 h-3" />
+                                                    Admin Panel
+                                                </Link>
+                                            </Button>
+                                        )}
                                         <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
-                                            <Link href={isAdminUser ? "/control-panel" : "/dashboard"} onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                            <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
                                                 <LayoutDashboard className="w-3 h-3" />
                                                 Dashboard
                                             </Link>
