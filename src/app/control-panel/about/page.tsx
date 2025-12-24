@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
     Save,
-    RotateCcw,
     FileText,
     Image as ImageIcon,
     Layout,
@@ -76,10 +75,7 @@ export default function AboutPage() {
         }
     };
 
-    const handleReset = () => {
-        // Reload original data
-        fetchAbout();
-    };
+
 
     if (isLoading) {
         return (
@@ -90,7 +86,7 @@ export default function AboutPage() {
     }
 
     return (
-        <div className="space-y-6 max-w-5xl mx-auto">
+        <div className="space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
@@ -100,10 +96,6 @@ export default function AboutPage() {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" onClick={handleReset} disabled={isSaving}>
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Reset
-                    </Button>
                     <Button onClick={handleSave} disabled={isSaving}>
                         {isSaving ? (
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
