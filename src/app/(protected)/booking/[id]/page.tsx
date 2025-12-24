@@ -17,6 +17,11 @@ import { MotionDiv } from "@/components/ui/motion";
 import { useAuth } from "@/context/auth-context";
 import { Service } from "@/types";
 import { auth } from "@/lib/firebase";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "@/components/CheckoutForm";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function BookingPage({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
@@ -33,6 +38,10 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     const [duration, setDuration] = useState("4");
     const [address, setAddress] = useState("");
     const [notes, setNotes] = useState("");
+
+    // Payment State
+    const [clientSecret, setClientSecret] = useState<string | null>(null);
+    const [showPayment, setShowPayment] = useState(false);
 
     // Fetch service from Firebase
     useEffect(() => {
@@ -85,7 +94,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
 
     const totalCost = service.pricePerHr * parseInt(duration || "0");
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleInitiatePayment = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
 
@@ -105,7 +114,36 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                 return;
             }
 
-            // Create booking via API
+            // Create Payment Intent
+            const res = await fetch("/api/create-payment-intent", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    amount: totalCost,
+                }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to initiate payment");
+            }
+
+            setClientSecret(data.clientSecret);
+            setShowPayment(true);
+        } catch (error: any) {
+            console.error("Payment initiation failed:", error);
+            toast.error(error.message || "Failed to initiate payment");
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleBookingSuccess = async (paymentIntentId: string) => {
+        try {
+            const token = await user?.getIdToken();
             const res = await fetch("/api/bookings", {
                 method: "POST",
                 headers: {
@@ -121,22 +159,20 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                     location: address,
                     totalCost,
                     notes: notes || undefined,
+                    paymentIntentId,
                 }),
             });
 
             const data = await res.json();
-
             if (!res.ok) {
-                throw new Error(data.error || "Failed to create booking");
+                throw new Error(data.error || "Failed to finalise booking");
             }
 
-            toast.success("Booking request sent successfully!");
+            toast.success("Booking confirmed successfully!");
             router.push("/dashboard");
         } catch (error: any) {
-            console.error("Booking failed:", error);
-            toast.error(error.message || "Failed to create booking");
-        } finally {
-            setSubmitting(false);
+            console.error("Booking finalized failed:", error);
+            toast.error("Payment successful but booking failed. Please contact support.");
         }
     };
 
@@ -192,110 +228,125 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {!showPayment ? (
+                        <form onSubmit={handleInitiatePayment} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-3">
+                                    <Label htmlFor="date">Date</Label>
+                                    <div className="relative">
+                                        <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                        <Input
+                                            id="date"
+                                            type="date"
+                                            className="pl-9 border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
+                                            value={date}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
+                                            min={new Date().toISOString().split("T")[0]}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-3">
+                                    <Label htmlFor="time">Start Time</Label>
+                                    <div className="relative">
+                                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                        <Input
+                                            id="time"
+                                            type="time"
+                                            className="pl-9 border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
+                                            value={time}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTime(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="space-y-3">
-                                <Label htmlFor="date">Date</Label>
+                                <Label htmlFor="duration">Duration (Hours)</Label>
+                                <select
+                                    id="duration"
+                                    className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-teal-500"
+                                    value={duration}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDuration(e.target.value)}
+                                >
+                                    {[2, 3, 4, 5, 6, 8, 10, 12, 24].map((h) => (
+                                        <option key={h} value={h}>{h} Hours</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="space-y-3">
+                                <Label htmlFor="address">Service Location</Label>
                                 <div className="relative">
-                                    <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <Input
-                                        id="date"
-                                        type="date"
-                                        className="pl-9 border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
-                                        value={date}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
-                                        min={new Date().toISOString().split("T")[0]}
+                                    <MapPin className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
+                                    <Textarea
+                                        id="address"
+                                        placeholder="Enter your full address (e.g. House #12, Road #3, Sector #4, Uttara, Dhaka)"
+                                        className="pl-9 min-h-[80px] resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
+                                        value={address}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
                                         required
                                     />
                                 </div>
                             </div>
+
                             <div className="space-y-3">
-                                <Label htmlFor="time">Start Time</Label>
-                                <div className="relative">
-                                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <Input
-                                        id="time"
-                                        type="time"
-                                        className="pl-9 border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
-                                        value={time}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTime(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            <Label htmlFor="duration">Duration (Hours)</Label>
-                            <select
-                                id="duration"
-                                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-teal-500"
-                                value={duration}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDuration(e.target.value)}
-                            >
-                                {[2, 3, 4, 5, 6, 8, 10, 12, 24].map((h) => (
-                                    <option key={h} value={h}>{h} Hours</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="space-y-3">
-                            <Label htmlFor="address">Service Location</Label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
+                                <Label htmlFor="notes">Special Requirements (Optional)</Label>
                                 <Textarea
-                                    id="address"
-                                    placeholder="Enter your full address (e.g. House #12, Road #3, Sector #4, Uttara, Dhaka)"
-                                    className="pl-9 min-h-[80px] resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
-                                    value={address}
-                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
-                                    required
+                                    id="notes"
+                                    placeholder="Any specific instructions or needs?"
+                                    className="resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
                                 />
                             </div>
-                        </div>
 
-                        <div className="space-y-3">
-                            <Label htmlFor="notes">Special Requirements (Optional)</Label>
-                            <Textarea
-                                id="notes"
-                                placeholder="Any specific instructions or needs?"
-                                className="resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                            />
+                            <div className="pt-4">
+                                <Button
+                                    type="submit"
+                                    className="w-auto px-8 h-12 text-base bg-teal-600 hover:bg-teal-700"
+                                    disabled={submitting}
+                                >
+                                    {submitting ? (
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            Processing...
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-2">
+                                            Proceed to Payment
+                                            <ArrowRight className="w-4 h-4" />
+                                        </div>
+                                    )}
+                                </Button>
+                                <p className="text-xs text-left text-slate-500 dark:text-slate-400 mt-4">
+                                    By booking, you agree to our{" "}
+                                    <a href="/terms" className="text-teal-600 dark:text-teal-400 hover:underline">
+                                        Terms of Service
+                                    </a>.
+                                </p>
+                            </div>
+                        </form>
+                    ) : (
+                        <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl">
+                            <div className="mb-6 flex justify-between items-center">
+                                <h3 className="text-lg font-semibold dark:text-white">Secure Payment</h3>
+                                <Button variant="ghost" size="sm" onClick={() => setShowPayment(false)}>
+                                    Edit Details
+                                </Button>
+                            </div>
+                            {clientSecret && (
+                                <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                                    <CheckoutForm
+                                        amount={totalCost}
+                                        onSuccess={handleBookingSuccess}
+                                        onCancel={() => setShowPayment(false)}
+                                    />
+                                </Elements>
+                            )}
                         </div>
-
-                        <div className="pt-4">
-                            <Button
-                                type="submit"
-                                className="w-auto px-8 h-12 text-base bg-teal-600 hover:bg-teal-700"
-                                disabled={submitting}
-                            >
-                                {submitting ? (
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        Processing...
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center gap-2">
-                                        Confirm Booking
-                                        <ArrowRight className="w-4 h-4" />
-                                    </div>
-                                )}
-                            </Button>
-                            <p className="text-xs text-left text-slate-500 dark:text-slate-400 mt-4">
-                                By booking, you agree to our{" "}
-                                <a href="/terms" className="text-teal-600 dark:text-teal-400 hover:underline">
-                                    Terms of Service
-                                </a>{" "}
-                                and{" "}
-                                <a href="/privacy" className="text-teal-600 dark:text-teal-400 hover:underline">
-                                    Privacy Policy
-                                </a>
-                                . Payment will be collected after service confirmation.
-                            </p>
-                        </div>
-                    </form>
+                    )}
                 </div>
             </MotionDiv>
 

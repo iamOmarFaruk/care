@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase-admin";
 import { verifyIdToken, unauthorizedResponse, badRequestResponse } from "@/lib/auth-utils";
 import { bookingSchema } from "@/lib/validations";
+import { stripe } from "@/lib/stripe";
 
 // Get user's bookings
 export async function GET(request: NextRequest) {
@@ -45,12 +46,30 @@ export async function POST(request: NextRequest) {
             return badRequestResponse(validation.error.flatten().fieldErrors);
         }
 
-        const bookingData = {
+        const bookingData: any = {
             ...validation.data,
             userId: user.uid,
             status: "pending",
             createdAt: new Date().toISOString(),
         };
+
+        // If payment intent ID is provided, verify it
+        if (body.paymentIntentId) {
+            try {
+                const paymentIntent = await stripe.paymentIntents.retrieve(body.paymentIntentId);
+                if (paymentIntent.status === 'succeeded') {
+                    bookingData.status = 'confirmed';
+                    bookingData.paymentStatus = 'paid';
+                    bookingData.paymentIntentId = body.paymentIntentId;
+                    bookingData.amountPaid = paymentIntent.amount / 100;
+                } else {
+                    return NextResponse.json({ error: "Payment not successful" }, { status: 400 });
+                }
+            } catch (stripeError) {
+                console.error("Stripe verification failed:", stripeError);
+                return NextResponse.json({ error: "Failed to verify payment" }, { status: 500 });
+            }
+        }
 
         const docRef = await adminDb.collection("bookings").add(bookingData);
 
