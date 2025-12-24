@@ -15,13 +15,18 @@ export async function GET(request: NextRequest) {
         const snapshot = await adminDb
             .collection("bookings")
             .where("userId", "==", user.uid)
-            .orderBy("createdAt", "desc")
             .get();
 
-        const bookings = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
+        const bookings = snapshot.docs
+            .map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }))
+            .sort((a: any, b: any) => {
+                const dateA = new Date(a.createdAt || 0).getTime();
+                const dateB = new Date(b.createdAt || 0).getTime();
+                return dateB - dateA;
+            });
 
         return NextResponse.json(bookings);
     } catch (error) {
