@@ -47,8 +47,8 @@ export default function AdminDashboard() {
             {/* Page Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Dashboard Overview</h1>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Dashboard Overview</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Welcome back! Here's what's happening today.
                     </p>
                 </div>
@@ -95,12 +95,12 @@ export default function AdminDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
-                className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
             >
-                <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                     <div>
-                        <h2 className="text-lg font-semibold text-slate-800">Recent Orders</h2>
-                        <p className="text-sm text-slate-500">Latest booking requests</p>
+                        <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Recent Orders</h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">Latest booking requests</p>
                     </div>
                     <Link
                         href="/control-panel/orders"
@@ -114,59 +114,59 @@ export default function AdminDashboard() {
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-slate-100 bg-slate-50/50">
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                            <tr className="border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Order ID
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Customer
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Service
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Date
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Status
                                 </th>
-                                <th className="text-left text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                                <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Amount
                                 </th>
-                                <th className="text-right text-xs font-medium text-slate-500 uppercase tracking-wider px-6 py-3">
+                                <th className="text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-3">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                             {recentOrders.map((order, index) => (
                                 <motion.tr
                                     key={order.id}
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="hover:bg-slate-50/50 transition-colors"
+                                    className="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors"
                                 >
                                     <td className="px-6 py-4">
-                                        <span className="text-sm font-medium text-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                             #{order.id.slice(-6).toUpperCase()}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div>
-                                            <p className="text-sm font-medium text-slate-700">
+                                            <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                                 {order.userName}
                                             </p>
-                                            <p className="text-xs text-slate-500">{order.userEmail}</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">{order.userEmail}</p>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="text-sm text-slate-600">
+                                        <span className="text-sm text-slate-600 dark:text-slate-300">
                                             {order.serviceName}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="text-sm text-slate-600">{order.date}</span>
+                                        <span className="text-sm text-slate-600 dark:text-slate-300">{order.date}</span>
                                     </td>
                                     <td className="px-6 py-4">
                                         <span
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="text-sm font-semibold text-slate-700">
+                                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                                             ৳{order.totalCost.toLocaleString()}
                                         </span>
                                     </td>
@@ -199,8 +199,8 @@ export default function AdminDashboard() {
 
                 {recentOrders.length === 0 && (
                     <div className="px-6 py-12 text-center">
-                        <ShoppingBag className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                        <p className="text-slate-500">No orders yet</p>
+                        <ShoppingBag className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-3" />
+                        <p className="text-slate-500 dark:text-slate-400">No orders yet</p>
                     </div>
                 )}
             </motion.div>
