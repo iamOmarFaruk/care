@@ -2,30 +2,30 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { toast } from "sonner";
 import {
     Calendar as CalendarIcon,
     Clock,
     MapPin,
-    CreditCard,
-    CheckCircle2,
     ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
-import { mockStore, User } from "@/lib/store";
-import { SERVICES } from "@/lib/mock-data";
+import { MotionDiv } from "@/components/ui/motion";
+import { useAuth } from "@/context/auth-context";
+import { Service } from "@/types";
+import { auth } from "@/lib/firebase";
 
 export default function BookingPage({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
     const { id } = use(params);
+    const { user, profile, loading: authLoading } = useAuth();
 
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [service, setService] = useState<Service | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     // Form State
     const [date, setDate] = useState("");
@@ -34,15 +34,43 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     const [address, setAddress] = useState("");
     const [notes, setNotes] = useState("");
 
-    const service = SERVICES.find((s) => s.id === id);
-
+    // Fetch service from Firebase
     useEffect(() => {
-        // Check auth - though ProtectedLayout handles this, we need user info
-        const currentUser = mockStore.getUser();
-        if (currentUser) {
-            setUser(currentUser);
+        async function fetchService() {
+            try {
+                const res = await fetch(`/api/services/${id}`);
+                if (!res.ok) {
+                    throw new Error("Service not found");
+                }
+                const data = await res.json();
+                setService(data);
+            } catch (error) {
+                console.error("Failed to fetch service:", error);
+                toast.error("Service not found");
+                router.push("/#services");
+            } finally {
+                setLoading(false);
+            }
         }
-    }, []);
+
+        fetchService();
+    }, [id, router]);
+
+    // Redirect if not logged in
+    useEffect(() => {
+        if (!authLoading && !user) {
+            toast.error("Please log in to book a service");
+            router.push("/login");
+        }
+    }, [authLoading, user, router]);
+
+    if (loading || authLoading) {
+        return (
+            <div className="min-h-[60vh] flex flex-col items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            </div>
+        );
+    }
 
     if (!service) {
         return (
@@ -59,39 +87,57 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+        setSubmitting(true);
 
         // Validate
         if (!date || !time || !address || !duration) {
             toast.error("Please fill in all required fields");
-            setLoading(false);
+            setSubmitting(false);
             return;
         }
 
-        // Simulate API
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            // Get auth token
+            const token = await user?.getIdToken();
+            if (!token) {
+                toast.error("Please log in to book a service");
+                router.push("/login");
+                return;
+            }
 
-        // Create booking
-        if (user) {
-            mockStore.createBooking({
-                serviceId: service.id,
-                serviceName: service.title,
-                date,
-                duration: `${duration} hours`,
-                // Save time in notes or combined with date if strictly needed, 
-                // but for now storing in expanded fields if store schema allowed, 
-                // else keep it simple.
-                // We appended time to date in schema? No. 
-                // We'll append it to location/notes or just rely on 'date' being just date.
-                location: address,
-                totalCost,
-                userEmail: user.email,
-                status: 'Pending',
-            } as any);
+            // Create booking via API
+            const res = await fetch("/api/bookings", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    serviceId: service.id,
+                    serviceName: service.title,
+                    date,
+                    time,
+                    duration: `${duration} hours`,
+                    location: address,
+                    totalCost,
+                    notes: notes || undefined,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to create booking");
+            }
+
+            toast.success("Booking request sent successfully!");
+            router.push("/dashboard");
+        } catch (error: any) {
+            console.error("Booking failed:", error);
+            toast.error(error.message || "Failed to create booking");
+        } finally {
+            setSubmitting(false);
         }
-
-        toast.success("Booking request sent successfully!");
-        router.push("/dashboard");
     };
 
     return (
@@ -158,6 +204,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                                         className="pl-9 border-slate-200 dark:border-slate-700 focus-visible:ring-teal-500"
                                         value={date}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
+                                        min={new Date().toISOString().split("T")[0]}
                                         required
                                     />
                                 </div>
@@ -222,9 +269,9 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                             <Button
                                 type="submit"
                                 className="w-auto px-8 h-12 text-base bg-teal-600 hover:bg-teal-700"
-                                disabled={loading}
+                                disabled={submitting}
                             >
-                                {loading ? (
+                                {submitting ? (
                                     <div className="flex items-center gap-2">
                                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                         Processing...
@@ -261,6 +308,6 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-24
- * │ Updated: 2025-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */

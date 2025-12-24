@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/context/auth-context";
 import "./globals.css";
 
 const inter = Inter({
@@ -80,8 +81,10 @@ export default function RootLayout({
         className={`${inter.variable} antialiased bg-background text-foreground font-sans`}
       >
         <ThemeProvider>
-          <LayoutWrapper>{children}</LayoutWrapper>
-          <Toaster position="top-right" richColors />
+          <AuthProvider>
+            <LayoutWrapper>{children}</LayoutWrapper>
+            <Toaster position="top-right" richColors />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

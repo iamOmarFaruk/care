@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { adminStore, SliderContent } from "@/lib/admin-data";
+import { ApiService } from "@/services/api-service";
+import { SliderContent } from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -19,6 +20,7 @@ import {
 
 export default function SliderPage() {
     const [sliders, setSliders] = React.useState<SliderContent[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [isFormOpen, setIsFormOpen] = React.useState(false);
     const [editingItem, setEditingItem] = React.useState<SliderContent | null>(null);
     const [deleteConfirm, setDeleteConfirm] = React.useState<SliderContent | null>(null);
@@ -31,8 +33,21 @@ export default function SliderPage() {
         backgroundImage: "",
     });
 
+    const fetchSliders = async () => {
+        setIsLoading(true);
+        try {
+            const data = await ApiService.getSliders();
+            setSliders(data);
+        } catch (error) {
+            console.error("Failed to fetch sliders:", error);
+            toast.error("Failed to load sliders");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     React.useEffect(() => {
-        setSliders(adminStore.getSliders());
+        fetchSliders();
     }, []);
 
     const resetForm = () => {
@@ -63,41 +78,58 @@ export default function SliderPage() {
         setIsFormOpen(true);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (editingItem) {
-            const updated = sliders.map((s) =>
-                s.id === editingItem.id ? { ...s, ...formData } : s
-            );
-            adminStore.saveSliders(updated);
-            setSliders(updated);
-            toast.success("Slider updated!");
-        } else {
-            const newSlider: SliderContent = {
-                id: `slider-${Date.now()}`,
-                order: sliders.length + 1,
-                ...formData,
-            };
-            const updated = [...sliders, newSlider];
-            adminStore.saveSliders(updated);
-            setSliders(updated);
-            toast.success("Slider added!");
+        try {
+            if (editingItem) {
+                const updated = sliders.map((s) =>
+                    s.id === editingItem.id ? { ...s, ...formData } : s
+                );
+                await ApiService.saveSliders(updated);
+                setSliders(updated);
+                toast.success("Slider updated!");
+            } else {
+                const newSlider: SliderContent = {
+                    id: `slider-${Date.now()}`,
+                    order: sliders.length + 1,
+                    ...formData,
+                };
+                const updated = [...sliders, newSlider];
+                await ApiService.saveSliders(updated);
+                setSliders(updated);
+                toast.success("Slider added!");
+            }
+            setIsFormOpen(false);
+            resetForm();
+        } catch (error) {
+            console.error("Failed to save slider:", error);
+            toast.error("Failed to save changes");
         }
-
-        setIsFormOpen(false);
-        resetForm();
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (deleteConfirm) {
-            const updated = sliders.filter((s) => s.id !== deleteConfirm.id);
-            adminStore.saveSliders(updated);
-            setSliders(updated);
-            toast.success("Slider deleted!");
-            setDeleteConfirm(null);
+            try {
+                const updated = sliders.filter((s) => s.id !== deleteConfirm.id);
+                await ApiService.saveSliders(updated);
+                setSliders(updated);
+                toast.success("Slider deleted!");
+                setDeleteConfirm(null);
+            } catch (error) {
+                console.error("Failed to delete slider:", error);
+                toast.error("Failed to delete slider");
+            }
         }
     };
+
+    if (isLoading && sliders.length === 0) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">

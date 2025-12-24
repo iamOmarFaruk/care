@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { adminStore, OrderItem } from "@/lib/admin-data";
+import { ApiService } from "@/services/api-service";
+import { Booking } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -14,14 +15,18 @@ import {
     Eye,
     CheckCircle2,
     XCircle,
-    Clock,
     Truck,
     MapPin,
     Calendar,
-    DollarSign,
     User,
     FileText,
 } from "lucide-react";
+
+// Types for Order
+type OrderItem = Booking & {
+    userName: string;
+    userEmail: string;
+};
 
 const statusColors: Record<OrderItem["status"], string> = {
     pending: "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
@@ -41,33 +46,57 @@ const statusOptions: { value: OrderItem["status"]; label: string }[] = [
 
 export default function OrdersPage() {
     const [orders, setOrders] = React.useState<OrderItem[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [searchQuery, setSearchQuery] = React.useState("");
     const [statusFilter, setStatusFilter] = React.useState<string>("all");
     const [selectedOrder, setSelectedOrder] = React.useState<OrderItem | null>(null);
     const [isViewModalOpen, setIsViewModalOpen] = React.useState(false);
     const [confirmCancel, setConfirmCancel] = React.useState<OrderItem | null>(null);
 
+    const fetchOrders = async () => {
+        setIsLoading(true);
+        try {
+            const data = await ApiService.getAllBookings();
+            // Cast to OrderItem[] as our API now returns enriched data with userName/Email
+            setOrders(data as unknown as OrderItem[]);
+        } catch (error) {
+            console.error("Failed to fetch orders:", error);
+            toast.error("Failed to load orders");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     React.useEffect(() => {
-        setOrders(adminStore.getOrders());
+        fetchOrders();
     }, []);
 
     const filteredOrders = orders.filter((order) => {
         const matchesSearch =
-            order.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            order.userEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (order.userName || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (order.userEmail || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
             order.id.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesStatus =
             statusFilter === "all" || order.status === statusFilter;
         return matchesSearch && matchesStatus;
     });
 
-    const handleStatusChange = (orderId: string, newStatus: OrderItem["status"]) => {
-        const updated = adminStore.updateOrderStatus(orderId, newStatus);
-        setOrders(updated);
-        toast.success(`Order status updated to ${newStatus.replace("_", " ")}`);
+    const handleStatusChange = async (orderId: string, newStatus: OrderItem["status"]) => {
+        try {
+            await ApiService.updateBookingStatus(orderId, newStatus);
 
-        if (selectedOrder?.id === orderId) {
-            setSelectedOrder({ ...selectedOrder, status: newStatus });
+            // Optimistic update
+            const updated = orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o);
+            setOrders(updated);
+
+            toast.success(`Order status updated to ${newStatus.replace("_", " ")}`);
+
+            if (selectedOrder?.id === orderId) {
+                setSelectedOrder({ ...selectedOrder, status: newStatus });
+            }
+        } catch (error) {
+            console.error("Failed to update status:", error);
+            toast.error("Failed to update status");
         }
     };
 
@@ -82,6 +111,14 @@ export default function OrdersPage() {
         setSelectedOrder(order);
         setIsViewModalOpen(true);
     };
+
+    if (isLoading && orders.length === 0) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -160,7 +197,7 @@ export default function OrdersPage() {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                             <AnimatePresence>
                                 {filteredOrders.map((order, index) => (
                                     <motion.tr
@@ -173,7 +210,7 @@ export default function OrdersPage() {
                                     >
                                         <td className="px-6 py-4">
                                             <span className="text-sm font-mono font-medium text-slate-700 dark:text-slate-300">
-                                                #{order.id.slice(-6).toUpperCase()}
+                                                #{order.id.slice(0, 8).toUpperCase()}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
@@ -281,7 +318,7 @@ export default function OrdersPage() {
                             <div>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">Order ID</p>
                                 <p className="text-lg font-mono font-semibold text-slate-800 dark:text-white">
-                                    #{selectedOrder.id.slice(-6).toUpperCase()}
+                                    #{selectedOrder.id.slice(0, 8).toUpperCase()}
                                 </p>
                             </div>
                             <span
@@ -422,7 +459,7 @@ export default function OrdersPage() {
                 onClose={() => setConfirmCancel(null)}
                 onConfirm={handleCancelOrder}
                 title="Cancel Order"
-                message={`Are you sure you want to cancel order #${confirmCancel?.id.slice(-6).toUpperCase()}? This action cannot be undone.`}
+                message={`Are you sure you want to cancel order #${confirmCancel?.id.slice(0, 8).toUpperCase()}? This action cannot be undone.`}
                 confirmText="Cancel Order"
                 variant="danger"
             />

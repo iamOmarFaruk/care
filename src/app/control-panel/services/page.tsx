@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { adminStore, ServiceItem } from "@/lib/admin-data";
+import { ApiService } from "@/services/api-service";
+import { ServiceItem } from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -28,6 +29,7 @@ const iconMap: Record<string, React.ElementType> = {
 
 export default function ServicesPage() {
     const [services, setServices] = React.useState<ServiceItem[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [isFormOpen, setIsFormOpen] = React.useState(false);
     const [editingService, setEditingService] = React.useState<ServiceItem | null>(null);
     const [deleteConfirm, setDeleteConfirm] = React.useState<ServiceItem | null>(null);
@@ -40,10 +42,24 @@ export default function ServicesPage() {
         image: "",
         features: [""],
         isActive: true,
+        icon: "baby-care", // Default icon
     });
 
+    const fetchServices = async () => {
+        setIsLoading(true);
+        try {
+            const data = await ApiService.getServices();
+            setServices(data);
+        } catch (error) {
+            console.error("Failed to fetch services:", error);
+            toast.error("Failed to load services");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     React.useEffect(() => {
-        setServices(adminStore.getServices());
+        fetchServices();
     }, []);
 
     const resetForm = () => {
@@ -54,6 +70,7 @@ export default function ServicesPage() {
             image: "",
             features: [""],
             isActive: true,
+            icon: "baby-care",
         });
         setEditingService(null);
     };
@@ -72,66 +89,86 @@ export default function ServicesPage() {
             image: service.image,
             features: service.features.length > 0 ? service.features : [""],
             isActive: service.isActive,
+            icon: service.icon,
         });
         setIsFormOpen(true);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const filteredFeatures = formData.features.filter((f) => f.trim() !== "");
 
-        if (editingService) {
-            // Update existing
-            const updated = services.map((s) =>
-                s.id === editingService.id
-                    ? {
-                        ...s,
-                        ...formData,
-                        features: filteredFeatures,
-                    }
-                    : s
-            );
-            adminStore.saveServices(updated);
-            setServices(updated);
-            toast.success("Service updated successfully!");
-        } else {
-            // Add new
-            const newService: ServiceItem = {
-                id: `service-${Date.now()}`,
-                icon: "baby-care",
-                ...formData,
-                features: filteredFeatures,
-            };
-            const updated = [...services, newService];
-            adminStore.saveServices(updated);
-            setServices(updated);
-            toast.success("Service added successfully!");
-        }
+        try {
+            if (editingService) {
+                // Update existing
+                const updatedService = {
+                    ...editingService,
+                    ...formData,
+                    features: filteredFeatures,
+                };
+                await ApiService.updateService(updatedService);
 
-        setIsFormOpen(false);
-        resetForm();
+                const updated = services.map((s) =>
+                    s.id === editingService.id ? updatedService : s
+                );
+                setServices(updated);
+                toast.success("Service updated successfully!");
+            } else {
+                // Add new
+                const newService: ServiceItem = {
+                    id: `service-${Date.now()}`, // Temporary ID, Firestore will gen real one if we let it, but keepingconsistent
+                    ...formData,
+                    features: filteredFeatures,
+                };
+                // If API handles ID gen, we should refetch or return created obj. 
+                // Creating with client-side ID for list consistency until refetch
+                await ApiService.addService(newService);
+
+                // Ideally we refetch here to get server ID, but for now simple optimistic-ish
+                const updated = [...services, newService];
+                setServices(updated);
+                toast.success("Service added successfully!");
+            }
+            setIsFormOpen(false);
+            resetForm();
+        } catch (error) {
+            console.error("Failed to save service:", error);
+            toast.error("Failed to save service");
+        }
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (deleteConfirm) {
-            const updated = services.filter((s) => s.id !== deleteConfirm.id);
-            adminStore.saveServices(updated);
-            setServices(updated);
-            toast.success("Service deleted successfully!");
-            setDeleteConfirm(null);
+            try {
+                await ApiService.deleteService(deleteConfirm.id);
+                const updated = services.filter((s) => s.id !== deleteConfirm.id);
+                setServices(updated);
+                toast.success("Service deleted successfully!");
+                setDeleteConfirm(null);
+            } catch (error) {
+                console.error("Failed to delete service:", error);
+                toast.error("Failed to delete service");
+            }
         }
     };
 
-    const toggleActive = (service: ServiceItem) => {
-        const updated = services.map((s) =>
-            s.id === service.id ? { ...s, isActive: !s.isActive } : s
-        );
-        adminStore.saveServices(updated);
-        setServices(updated);
-        toast.success(
-            service.isActive ? "Service deactivated" : "Service activated"
-        );
+    const toggleActive = async (service: ServiceItem) => {
+        const updatedService = { ...service, isActive: !service.isActive };
+        try {
+            await ApiService.updateService(updatedService);
+
+            const updated = services.map((s) =>
+                s.id === service.id ? updatedService : s
+            );
+            setServices(updated);
+            toast.success(
+                service.isActive ? "Service deactivated" : "Service activated"
+            );
+        } catch (error) {
+            console.error("Failed to toggle service:", error);
+            toast.error("Failed to update service");
+        }
     };
 
     const addFeatureField = () => {
@@ -151,6 +188,14 @@ export default function ServicesPage() {
             features: prev.features.map((f, i) => (i === index ? value : f)),
         }));
     };
+
+    if (isLoading && services.length === 0) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">

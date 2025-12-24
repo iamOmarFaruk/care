@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { adminStore, TestimonialItem } from "@/lib/admin-data";
+import { ApiService } from "@/services/api-service";
+import { Testimonial } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -12,32 +13,51 @@ import {
     Plus,
     Pencil,
     Trash2,
-    Eye,
-    EyeOff,
     Quote,
     Star,
+    MessageSquare,
 } from "lucide-react";
 
 export default function TestimonialsPage() {
-    const [testimonials, setTestimonials] = React.useState<TestimonialItem[]>([]);
+    const [testimonials, setTestimonials] = React.useState<Testimonial[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [isFormOpen, setIsFormOpen] = React.useState(false);
-    const [editingItem, setEditingItem] = React.useState<TestimonialItem | null>(null);
-    const [deleteConfirm, setDeleteConfirm] = React.useState<TestimonialItem | null>(null);
+    const [editingItem, setEditingItem] = React.useState<Testimonial | null>(null);
+    const [deleteConfirm, setDeleteConfirm] = React.useState<Testimonial | null>(null);
 
     const [formData, setFormData] = React.useState({
         name: "",
         role: "",
         content: "",
+        rating: 5,
         avatar: "",
-        isVisible: true,
     });
 
+    const fetchTestimonials = async () => {
+        setIsLoading(true);
+        try {
+            const data = await ApiService.getTestimonials();
+            setTestimonials(data);
+        } catch (error) {
+            console.error("Failed to fetch testimonials:", error);
+            toast.error("Failed to load testimonials");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     React.useEffect(() => {
-        setTestimonials(adminStore.getTestimonials());
+        fetchTestimonials();
     }, []);
 
     const resetForm = () => {
-        setFormData({ name: "", role: "", content: "", avatar: "", isVisible: true });
+        setFormData({
+            name: "",
+            role: "",
+            content: "",
+            rating: 5,
+            avatar: "",
+        });
         setEditingItem(null);
     };
 
@@ -46,61 +66,77 @@ export default function TestimonialsPage() {
         setIsFormOpen(true);
     };
 
-    const openEditModal = (item: TestimonialItem) => {
+    const openEditModal = (item: Testimonial) => {
         setEditingItem(item);
         setFormData({
             name: item.name,
             role: item.role,
             content: item.content,
-            avatar: item.avatar,
-            isVisible: item.isVisible,
+            rating: item.rating ?? 5,
+            avatar: item.avatar || "",
         });
         setIsFormOpen(true);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (editingItem) {
-            const updated = testimonials.map((t) =>
-                t.id === editingItem.id ? { ...t, ...formData } : t
-            );
-            adminStore.saveTestimonials(updated);
-            setTestimonials(updated);
-            toast.success("Testimonial updated!");
-        } else {
-            const newItem: TestimonialItem = {
-                id: Date.now(),
-                ...formData,
-            };
-            const updated = [...testimonials, newItem];
-            adminStore.saveTestimonials(updated);
-            setTestimonials(updated);
-            toast.success("Testimonial added!");
-        }
+        try {
+            if (editingItem) {
+                const updatedItem = {
+                    ...editingItem,
+                    ...formData,
+                };
+                await ApiService.updateTestimonial(updatedItem);
 
-        setIsFormOpen(false);
-        resetForm();
+                const updated = testimonials.map((t) =>
+                    t.id === editingItem.id ? updatedItem : t
+                );
+                setTestimonials(updated);
+                toast.success("Testimonial updated!");
+            } else {
+                const newItem: Testimonial = {
+                    id: `testimonial-${Date.now()}`,
+                    ...formData,
+                    isVisible: true,
+                };
+                // In real app, API returns the created item with server ID
+                await ApiService.addTestimonial(newItem);
+
+                const updated = [...testimonials, newItem];
+                setTestimonials(updated);
+                toast.success("Testimonial added!");
+            }
+            setIsFormOpen(false);
+            resetForm();
+        } catch (error) {
+            console.error("Failed to save testimonial:", error);
+            toast.error("Failed to save changes");
+        }
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (deleteConfirm) {
-            const updated = testimonials.filter((t) => t.id !== deleteConfirm.id);
-            adminStore.saveTestimonials(updated);
-            setTestimonials(updated);
-            toast.success("Testimonial deleted!");
-            setDeleteConfirm(null);
+            try {
+                await ApiService.deleteTestimonial(deleteConfirm.id);
+                const updated = testimonials.filter((t) => t.id !== deleteConfirm.id);
+                setTestimonials(updated);
+                toast.success("Testimonial deleted!");
+                setDeleteConfirm(null);
+            } catch (error) {
+                console.error("Failed to delete testimonial:", error);
+                toast.error("Failed to delete testimonial");
+            }
         }
     };
 
-    const toggleVisibility = (item: TestimonialItem) => {
-        const updated = testimonials.map((t) =>
-            t.id === item.id ? { ...t, isVisible: !t.isVisible } : t
+    if (isLoading && testimonials.length === 0) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            </div>
         );
-        adminStore.saveTestimonials(updated);
-        setTestimonials(updated);
-        toast.success(item.isVisible ? "Hidden from website" : "Now visible on website");
-    };
+    }
 
     return (
         <div className="space-y-6">
@@ -109,7 +145,7 @@ export default function TestimonialsPage() {
                 <div>
                     <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Testimonials</h1>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                        Manage customer reviews and testimonials
+                        Manage client reviews and feedback
                     </p>
                 </div>
                 <Button onClick={openAddModal} className="w-fit">
@@ -118,8 +154,8 @@ export default function TestimonialsPage() {
                 </Button>
             </div>
 
-            {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* Testimonials Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence>
                     {testimonials.map((item, index) => (
                         <motion.div
@@ -127,92 +163,70 @@ export default function TestimonialsPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.3, delay: index * 0.03 }}
-
-                            className={`relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm border p-5 ${item.isVisible ? "border-slate-200 dark:border-slate-700" : "border-red-200 dark:border-red-900/50 opacity-60"
-                                }`}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                            className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col"
                         >
-                            {/* Quote Icon */}
-                            <Quote className="absolute top-4 right-4 w-8 h-8 text-teal-100" />
-
-                            {/* Avatar & Info */}
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700">
-                                    {item.avatar ? (
-                                        <img
-                                            src={item.avatar}
-                                            alt={item.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-400 font-semibold text-lg">
-                                            {item.name.charAt(0)}
-                                        </div>
-                                    )}
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-slate-800 dark:text-white">{item.name}</p>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{item.role}</p>
-                                </div>
-                            </div>
-
-                            {/* Content */}
-                            <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-4 mb-4 italic">
-                                "{item.content}"
-                            </p>
-
-                            {/* Status Badge */}
-                            <div className="flex items-center gap-2 mb-4">
-                                <span
-                                    className={`px-2 py-1 rounded-lg text-xs font-medium ${item.isVisible
-                                        ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
-                                        : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                                        }`}
-                                >
-                                    {item.isVisible ? "Visible" : "Hidden"}
-                                </span>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="flex items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-700">
-                                <Tooltip content="Edit">
-                                    <button
-                                        onClick={() => openEditModal(item)}
-                                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                                    >
-                                        <Pencil className="w-4 h-4" />
-                                        Edit
-                                    </button>
-                                </Tooltip>
-                                <Tooltip content={item.isVisible ? "Hide" : "Show"}>
-                                    <button
-                                        onClick={() => toggleVisibility(item)}
-                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm transition-colors ${item.isVisible
-                                            ? "text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30"
-                                            : "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30"
-                                            }`}
-                                    >
-                                        {item.isVisible ? (
-                                            <>
-                                                <EyeOff className="w-4 h-4" />
-                                                Hide
-                                            </>
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold overflow-hidden">
+                                        {item.avatar ? (
+                                            <img
+                                                src={item.avatar}
+                                                alt={item.name}
+                                                className="w-full h-full object-cover"
+                                            />
                                         ) : (
-                                            <>
-                                                <Eye className="w-4 h-4" />
-                                                Show
-                                            </>
+                                            item.name.charAt(0).toUpperCase()
                                         )}
-                                    </button>
-                                </Tooltip>
-                                <Tooltip content="Delete">
-                                    <button
-                                        onClick={() => setDeleteConfirm(item)}
-                                        className="p-2 rounded-lg text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                </Tooltip>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm font-semibold text-slate-800 dark:text-white">
+                                            {item.name}
+                                        </h3>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                                            {item.role}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Quote className="w-6 h-6 text-teal-100 dark:text-teal-900/30" />
+                            </div>
+
+                            <div className="flex-1 mb-4">
+                                <p className="text-sm text-slate-600 dark:text-slate-300 italic">
+                                    "{item.content}"
+                                </p>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+                                <div className="flex gap-0.5">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star
+                                            key={i}
+                                            className={`w-3.5 h-3.5 ${i < (item.rating ?? 5)
+                                                ? "text-amber-400 fill-amber-400"
+                                                : "text-slate-300 dark:text-slate-600"
+                                                }`}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Tooltip content="Edit">
+                                        <button
+                                            onClick={() => openEditModal(item)}
+                                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                                        >
+                                            <Pencil className="w-3.5 h-3.5" />
+                                        </button>
+                                    </Tooltip>
+                                    <Tooltip content="Delete">
+                                        <button
+                                            onClick={() => setDeleteConfirm(item)}
+                                            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-400 hover:text-red-500 transition-colors"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </Tooltip>
+                                </div>
                             </div>
                         </motion.div>
                     ))}
@@ -221,12 +235,12 @@ export default function TestimonialsPage() {
 
             {testimonials.length === 0 && (
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-12 text-center">
-                    <Star className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                    <MessageSquare className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
                         No testimonials yet
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                        Add customer reviews to display on your website
+                        Add client feedback to build trust
                     </p>
                     <Button onClick={openAddModal}>
                         <Plus className="w-4 h-4 mr-2" />
@@ -245,58 +259,41 @@ export default function TestimonialsPage() {
                 title={editingItem ? "Edit Testimonial" : "Add Testimonial"}
                 size="md"
             >
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({ ...prev, name: e.target.value }))
-                                }
-                                required
-                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                placeholder="John Doe"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-                                Role / Title
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.role}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({ ...prev, role: e.target.value }))
-                                }
-                                required
-                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                placeholder="Father of 2"
-                            />
-                        </div>
-                    </div>
-
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-                            Avatar URL (optional)
+                            Client Name
                         </label>
                         <input
-                            type="url"
-                            value={formData.avatar}
+                            type="text"
+                            value={formData.name}
                             onChange={(e) =>
-                                setFormData((prev) => ({ ...prev, avatar: e.target.value }))
+                                setFormData((prev) => ({ ...prev, name: e.target.value }))
                             }
+                            required
                             className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                            placeholder="https://..."
+                            placeholder="John Doe"
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-                            Testimonial Content
+                            Role / Title
+                        </label>
+                        <input
+                            type="text"
+                            value={formData.role}
+                            onChange={(e) =>
+                                setFormData((prev) => ({ ...prev, role: e.target.value }))
+                            }
+                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
+                            placeholder="Parent of two"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
+                            Review Content
                         </label>
                         <textarea
                             value={formData.content}
@@ -304,27 +301,42 @@ export default function TestimonialsPage() {
                                 setFormData((prev) => ({ ...prev, content: e.target.value }))
                             }
                             required
-                            rows={4}
+                            rows={3}
                             className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                            placeholder="What the customer said..."
+                            placeholder="Share their experience..."
                         />
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={() =>
-                                setFormData((prev) => ({ ...prev, isVisible: !prev.isVisible }))
-                            }
-                            className={`relative w-12 h-6 rounded-full transition-colors ${formData.isVisible ? "bg-teal-500" : "bg-slate-300 dark:bg-slate-600"
-                                }`}
-                        >
-                            <span
-                                className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${formData.isVisible ? "left-7" : "left-1"
-                                    }`}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
+                                Rating (1-5)
+                            </label>
+                            <input
+                                type="number"
+                                min="1"
+                                max="5"
+                                value={formData.rating}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({ ...prev, rating: Number(e.target.value) }))
+                                }
+                                required
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
                             />
-                        </button>
-                        <span className="text-sm text-slate-600 dark:text-slate-300">Show on website</span>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
+                                Avatar URL
+                            </label>
+                            <input
+                                type="url"
+                                value={formData.avatar}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({ ...prev, avatar: e.target.value }))
+                                }
+                                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
+                            />
+                        </div>
                     </div>
 
                     <div className="flex gap-3 pt-4">
@@ -352,7 +364,7 @@ export default function TestimonialsPage() {
                 onClose={() => setDeleteConfirm(null)}
                 onConfirm={handleDelete}
                 title="Delete Testimonial"
-                message={`Are you sure you want to delete the testimonial from "${deleteConfirm?.name}"?`}
+                message="Are you sure you want to delete this testimonial? This action cannot be undone."
                 confirmText="Delete"
                 variant="danger"
             />

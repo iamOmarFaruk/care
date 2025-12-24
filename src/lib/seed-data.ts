@@ -1,6 +1,5 @@
-"use client";
-
-import { SERVICES, TESTIMONIALS } from "./mock-data";
+// This file contains data ONLY for the server-side seeding script.
+// It avoids importing React components or client-side code.
 
 // Types
 export type AdminUser = {
@@ -12,7 +11,6 @@ export type AdminUser = {
     avatar?: string;
     status: "active" | "disabled";
     createdAt: string;
-    phone?: string;
 };
 
 export type SliderContent = {
@@ -30,10 +28,6 @@ export type AboutContent = {
     description: string;
     image: string;
     features: string[];
-    // Extended fields for admin panel
-    subtitle?: string;
-    stats?: { value: string; label: string }[];
-    images?: string[];
 };
 
 export type ServiceItem = {
@@ -65,11 +59,6 @@ export type FooterContent = {
         linkedin: string;
     };
     navLinks: { label: string; href: string }[];
-    // Extended fields for admin panel
-    description?: string;
-    address?: string;
-    email?: string;
-    phone?: string;
 };
 
 export type OrderItem = {
@@ -89,9 +78,8 @@ export type OrderItem = {
     createdAt: string;
 };
 
-// Initial Mock Data
-// Initial Mock Data
-export const INITIAL_ADMIN_DATA = {
+// Seed Data
+export const SEED_DATA = {
     sliders: [
         {
             id: "slider-1",
@@ -139,16 +127,61 @@ export const INITIAL_ADMIN_DATA = {
         ],
     } as AboutContent,
 
-    services: SERVICES.map((s, i) => ({
-        ...s,
-        icon: s.id,
-        isActive: true,
-    })) as ServiceItem[],
+    services: [
+        {
+            id: "baby-care",
+            title: "Child Care & Babysitting",
+            description: "Reliable and loving nannies to take care of your children while you are away. We ensure safety and engagement.",
+            icon: "baby-care",
+            pricePerHr: 500,
+            image: "https://images.unsplash.com/photo-1602052577122-f73b9710adba?q=80&w=2670&auto=format&fit=crop",
+            features: [
+                "Certified Nannies",
+                "Educational Activities",
+                "Meal Preparation",
+                "Bedtime Routine"
+            ],
+            isActive: true,
+        },
+        {
+            id: "elderly-care",
+            title: "Elderly Care Companion",
+            description: "Compassionate caregivers to assist your elderly parents with daily activities, medication, and companionship.",
+            icon: "elderly-care",
+            pricePerHr: 600,
+            image: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?q=80&w=2670&auto=format&fit=crop",
+            features: [
+                "Medication Reminders",
+                "Mobility Assistance",
+                "Personal Hygiene",
+                "Doctor Visits"
+            ],
+            isActive: true,
+        },
+        {
+            id: "special-care",
+            title: "Special Needs Support",
+            description: "Professional care for individuals with special needs, ensuring comfort, dignity, and proper medical attention.",
+            icon: "special-care",
+            pricePerHr: 700,
+            image: "https://images.unsplash.com/photo-1508847154043-be5407fcaa5a?q=80&w=2670&auto=format&fit=crop",
+            features: [
+                "Specialized Training",
+                "Therapy Support",
+                "24/7 Monitoring",
+                "Emergency Handling"
+            ],
+            isActive: true,
+        }
+    ] as ServiceItem[],
 
-    testimonials: TESTIMONIALS.map((t) => ({
-        ...t,
-        isVisible: true,
-    })) as TestimonialItem[],
+    testimonials: [
+        { id: 1, name: "Rahim Uddin", role: "Father of 2", content: "Care.xyz has been a lifesaver for us. We found an amazing nanny for our twins within 24 hours. Highly professional!", avatar: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=2680&auto=format&fit=crop", isVisible: true },
+        { id: 2, name: "Fatima Begum", role: "Daughter", content: "I was worried about leaving my mother alone at home. The caregiver from Care.xyz is like a family member now. Very trusted.", avatar: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=2574&auto=format&fit=crop", isVisible: true },
+        { id: 3, name: "Tanvir Ahmed", role: "Business Owner", content: "Professional service and transparent pricing. I booked specialized care for my brother, and the experience was seamless.", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=2574&auto=format&fit=crop", isVisible: true },
+        { id: 4, name: "Ayesha Khan", role: "Mother of 3", content: "Finding a reliable nanny was stressful until Care.xyz matched us with someone caring and punctual. Our kids love her!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2600&auto=format&fit=crop", isVisible: true },
+        { id: 5, name: "Mohammad Ali", role: "Son", content: "My dad needed daily assistance. The caregiver is compassionate and always on time. Peace of mind for our family.", avatar: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=2600&auto=format&fit=crop", isVisible: true },
+    ] as TestimonialItem[],
 
     footer: {
         copyright: "© 2024 Care.xyz. All rights reserved.",
@@ -168,7 +201,7 @@ export const INITIAL_ADMIN_DATA = {
     } as FooterContent,
 
     users: [
-        // Admins
+        // 2 Admins
         {
             id: "admin-1",
             username: "admin",
@@ -189,7 +222,7 @@ export const INITIAL_ADMIN_DATA = {
             status: "active",
             createdAt: "2024-02-01T00:00:00Z",
         },
-        // Users
+        // 5 Users
         {
             id: "user-1",
             username: "alice_w",
@@ -237,7 +270,7 @@ export const INITIAL_ADMIN_DATA = {
             role: "user",
             name: "Eva Green",
             avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
-            status: "disabled",
+            status: "active",
             createdAt: "2024-10-12T16:45:00Z",
         },
     ] as AdminUser[],
@@ -294,8 +327,8 @@ export const INITIAL_ADMIN_DATA = {
             userId: "user-1",
             userName: "Alice Williams",
             userEmail: "user1@care.xyz",
-            serviceId: "cleaning",
-            serviceName: "Home Cleaning",
+            serviceId: "baby-care",
+            serviceName: "Child Care & Babysitting",
             date: "2024-12-15",
             time: "09:00",
             duration: "3 hours",
@@ -337,136 +370,11 @@ export const INITIAL_ADMIN_DATA = {
     ] as OrderItem[],
 };
 
-// Storage keys
-const ADMIN_STORAGE_KEYS = {
-    isAdmin: "care_admin_session",
-    sliders: "care_admin_sliders",
-    about: "care_admin_about",
-    services: "care_admin_services",
-    testimonials: "care_admin_testimonials",
-    footer: "care_admin_footer",
-    users: "care_admin_users",
-    orders: "care_admin_orders",
-};
-
-// Helper to get or initialize data
-function getStoredData<T>(key: string, defaultData: T): T {
-    if (typeof window === "undefined") return defaultData;
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : defaultData;
-}
-
-function setStoredData<T>(key: string, data: T): void {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(key, JSON.stringify(data));
-}
-
-// Admin Store
-export const adminStore = {
-    // Auth
-    adminLogin: (username: string, password: string): AdminUser | null => {
-        // Accept both username 'admin' or email 'admin@care.xyz' with password 'care1234'
-        const isValidAdmin = (username === "admin" || username === "admin@care.xyz") && password === "care1234";
-        if (isValidAdmin) {
-            const adminUser = INITIAL_ADMIN_DATA.users.find(
-                (u) => u.username === "admin"
-            );
-            if (adminUser) {
-                setStoredData(ADMIN_STORAGE_KEYS.isAdmin, adminUser);
-                return adminUser;
-            }
-        }
-        return null;
-    },
-
-    adminLogout: () => {
-        if (typeof window === "undefined") return;
-        localStorage.removeItem(ADMIN_STORAGE_KEYS.isAdmin);
-    },
-
-    getAdminSession: (): AdminUser | null => {
-        return getStoredData<AdminUser | null>(ADMIN_STORAGE_KEYS.isAdmin, null);
-    },
-
-    isAdmin: (): boolean => {
-        const session = adminStore.getAdminSession();
-        return session !== null && (session.role === "super_admin" || session.role === "admin");
-    },
-
-    // Sliders
-    getSliders: (): SliderContent[] => {
-        return getStoredData(ADMIN_STORAGE_KEYS.sliders, INITIAL_ADMIN_DATA.sliders);
-    },
-    saveSliders: (sliders: SliderContent[]) => {
-        setStoredData(ADMIN_STORAGE_KEYS.sliders, sliders);
-    },
-
-    // About
-    getAbout: (): AboutContent => {
-        return getStoredData(ADMIN_STORAGE_KEYS.about, INITIAL_ADMIN_DATA.about);
-    },
-    saveAbout: (about: AboutContent) => {
-        setStoredData(ADMIN_STORAGE_KEYS.about, about);
-    },
-
-    // Services
-    getServices: (): ServiceItem[] => {
-        return getStoredData(ADMIN_STORAGE_KEYS.services, INITIAL_ADMIN_DATA.services);
-    },
-    saveServices: (services: ServiceItem[]) => {
-        setStoredData(ADMIN_STORAGE_KEYS.services, services);
-    },
-
-    // Testimonials
-    getTestimonials: (): TestimonialItem[] => {
-        return getStoredData(
-            ADMIN_STORAGE_KEYS.testimonials,
-            INITIAL_ADMIN_DATA.testimonials
-        );
-    },
-    saveTestimonials: (testimonials: TestimonialItem[]) => {
-        setStoredData(ADMIN_STORAGE_KEYS.testimonials, testimonials);
-    },
-
-    // Footer
-    getFooter: (): FooterContent => {
-        return getStoredData(ADMIN_STORAGE_KEYS.footer, INITIAL_ADMIN_DATA.footer);
-    },
-    saveFooter: (footer: FooterContent) => {
-        setStoredData(ADMIN_STORAGE_KEYS.footer, footer);
-    },
-
-    // Users
-    getUsers: (): AdminUser[] => {
-        return getStoredData(ADMIN_STORAGE_KEYS.users, INITIAL_ADMIN_DATA.users);
-    },
-    saveUsers: (users: AdminUser[]) => {
-        setStoredData(ADMIN_STORAGE_KEYS.users, users);
-    },
-
-    // Orders
-    getOrders: (): OrderItem[] => {
-        return getStoredData(ADMIN_STORAGE_KEYS.orders, INITIAL_ADMIN_DATA.orders);
-    },
-    saveOrders: (orders: OrderItem[]) => {
-        setStoredData(ADMIN_STORAGE_KEYS.orders, orders);
-    },
-    updateOrderStatus: (orderId: string, status: OrderItem["status"]) => {
-        const orders = adminStore.getOrders();
-        const updated = orders.map((o) =>
-            o.id === orderId ? { ...o, status } : o
-        );
-        adminStore.saveOrders(updated);
-        return updated;
-    },
-};
-
 /*
  * ┌── o m a r ──┐
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
- * │ Created: 2024-12-24
+ * │ Created: 24-12-24
  * │ Updated: 24-12-24
  * └─ care ───┘
  */
-

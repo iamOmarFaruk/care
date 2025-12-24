@@ -3,7 +3,6 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { StatsCard } from "@/components/admin/StatsCard";
-import { adminStore, OrderItem } from "@/lib/admin-data";
 import {
     ShoppingBag,
     Users,
@@ -15,8 +14,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/Tooltip";
 import Link from "next/link";
+import { ApiService } from "@/services/api-service";
+import { Booking } from "@/types";
+import { AdminUser } from "@/lib/admin-data";
 
-const statusColors: Record<OrderItem["status"], string> = {
+// Extended Order type for UI
+type OrderItem = Booking & {
+    userName: string;
+    userEmail: string;
+};
+
+const statusColors: Record<Booking["status"], string> = {
     pending: "bg-amber-100 text-amber-700",
     confirmed: "bg-blue-100 text-blue-700",
     in_progress: "bg-purple-100 text-purple-700",
@@ -26,21 +34,59 @@ const statusColors: Record<OrderItem["status"], string> = {
 
 export default function AdminDashboard() {
     const [orders, setOrders] = React.useState<OrderItem[]>([]);
-    const [users, setUsers] = React.useState<{ id: string }[]>([]);
+    const [users, setUsers] = React.useState<AdminUser[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
-        setOrders(adminStore.getOrders());
-        setUsers(adminStore.getUsers());
+        const fetchData = async () => {
+            try {
+                const [bookingsData, usersData] = await Promise.all([
+                    ApiService.getAllBookings(),
+                    ApiService.getUsers(),
+                ]);
+
+                // Create a map of users for quick lookup
+                const userMap = new Map((usersData as any[]).map((u) => [u.id, u]));
+
+                // Merge booking data with user info
+                // Note: The API might already enrich this, but ensuring consistency here
+                const enrichedOrders = bookingsData.map((booking) => {
+                    const user = userMap.get(booking.userId);
+                    return {
+                        ...booking,
+                        userName: booking.userName !== "Unknown User" ? booking.userName : (user?.name || "Unknown User"), // Use user.name from AdminUser type
+                        userEmail: booking.userEmail !== "No Email" ? booking.userEmail : (user?.email || "No Email"),
+                    };
+                });
+
+                setOrders(enrichedOrders);
+                setUsers(usersData);
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
     }, []);
 
     const stats = {
         totalOrders: orders.length,
         pendingOrders: orders.filter((o) => o.status === "pending").length,
         completedOrders: orders.filter((o) => o.status === "completed").length,
-        totalUsers: users.filter((u) => u.id !== "user-1").length, // Exclude admin
+        totalUsers: users.length,
     };
 
     const recentOrders = orders.slice(0, 5);
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -149,7 +195,7 @@ export default function AdminDashboard() {
                                 >
                                     <td className="px-6 py-4">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                            #{order.id.slice(-6).toUpperCase()}
+                                            #{order.id.slice(0, 8).toUpperCase()}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
@@ -212,7 +258,7 @@ export default function AdminDashboard() {
  * ┌── o m a r ──┐
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
- * │ Created: 2025-12-24
- * │ Updated: 2025-12-24
+ * │ Created: 2024-12-24
+ * │ Updated: 2024-12-24
  * └─ care ───┘
  */
