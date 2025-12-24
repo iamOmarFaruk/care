@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, ShieldCheck, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MotionDiv, fadeInUp, fadeInLeft, fadeInRight, staggerContainer } from "@/components/ui/motion";
 
@@ -53,11 +53,13 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
                     className="flex flex-col justify-center space-y-8"
                 >
                     <MotionDiv variants={fadeInRight}>
-                        <div className="mb-4 flex items-center gap-2">
-                            <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+                        <div className="mb-4 flex flex-wrap items-center gap-3">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-600/10 border border-teal-600/20 px-3.5 py-1.5 text-sm font-medium text-teal-600 dark:text-teal-400 shadow-sm hover:shadow-md transition-shadow">
+                                <ShieldCheck className="h-4 w-4" />
                                 Trusted Care
                             </span>
-                            <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent-foreground">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-600/10 border border-amber-600/20 px-3.5 py-1.5 text-sm font-medium text-amber-600 dark:text-amber-400 shadow-sm hover:shadow-md transition-shadow">
+                                <BadgeCheck className="h-4 w-4" />
                                 Verified Pros
                             </span>
                         </div>
@@ -112,6 +114,6 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */
