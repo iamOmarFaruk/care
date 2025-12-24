@@ -36,7 +36,7 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
                     variants={fadeInLeft}
                     initial="initial"
                     animate="animate"
-                    className="overflow-hidden rounded-2xl border shadow-lg"
+                    className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg"
                 >
                     <img
                         src={service.image}
@@ -71,7 +71,7 @@ export default function ServiceDetailContent({ service }: { service: Service }) 
 
                     <MotionDiv
                         variants={fadeInUp}
-                        className="space-y-3 md:space-y-4 rounded-xl border bg-card p-4 md:p-6 shadow-sm"
+                        className="space-y-3 md:space-y-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-card p-4 md:p-6 shadow-sm"
                     >
                         <h3 className="font-semibold text-foreground text-sm md:text-base">Service Features</h3>
                         <ul className="grid gap-2 md:gap-3 sm:grid-cols-2">
