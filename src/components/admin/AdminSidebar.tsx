@@ -105,7 +105,7 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+            <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto scrollbar-hide">
                 <div className="space-y-1">
                     <Link
                         href="/"
@@ -198,14 +198,25 @@ export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
             <div className="p-4 border-t border-slate-700/50">
                 <AnimatePresence>
                     {!isCollapsed && (
-                        <motion.p
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="text-xs text-slate-500 text-center"
+                            className="text-xs text-slate-500 text-left space-y-0.5"
                         >
-                            Admin Panel v1.0
-                        </motion.p>
+                            <p>
+                                NextAdmin by{' '}
+                                <a
+                                    href="https://github.com/iamOmarFaruk"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-teal-400 transition-colors"
+                                >
+                                    Omar
+                                </a>
+                            </p>
+                            <p>Version 1.0.1 • All Rights Reserved</p>
+                        </motion.div>
                     )}
                 </AnimatePresence>
             </div>
