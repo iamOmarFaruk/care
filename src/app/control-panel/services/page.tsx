@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ApiService } from "@/services/api-service";
+import { ApiService, NotAuthenticatedError } from "@/services/api-service";
 import { ServiceItem } from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
@@ -51,6 +51,11 @@ export default function ServicesPage() {
             const data = await ApiService.getServices();
             setServices(data);
         } catch (error) {
+            // Silently ignore NotAuthenticatedError (user not logged in)
+            if (error instanceof NotAuthenticatedError) {
+                console.log("Not authenticated, skipping services fetch");
+                return;
+            }
             console.error("Failed to fetch services:", error);
             toast.error("Failed to load services");
         } finally {

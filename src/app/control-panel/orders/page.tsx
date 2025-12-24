@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ApiService } from "@/services/api-service";
+import { ApiService, NotAuthenticatedError } from "@/services/api-service";
 import { Booking } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
@@ -60,6 +60,11 @@ export default function OrdersPage() {
             // Cast to OrderItem[] as our API now returns enriched data with userName/Email
             setOrders(data as unknown as OrderItem[]);
         } catch (error) {
+            // Silently ignore NotAuthenticatedError (user not logged in)
+            if (error instanceof NotAuthenticatedError) {
+                console.log("Not authenticated, skipping orders fetch");
+                return;
+            }
             console.error("Failed to fetch orders:", error);
             toast.error("Failed to load orders");
         } finally {

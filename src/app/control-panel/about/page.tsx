@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { ApiService } from "@/services/api-service";
+import { ApiService, NotAuthenticatedError } from "@/services/api-service";
 import { AboutContent } from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -44,6 +44,11 @@ export default function AboutPage() {
                 });
             }
         } catch (error) {
+            // Silently ignore NotAuthenticatedError (user not logged in)
+            if (error instanceof NotAuthenticatedError) {
+                console.log("Not authenticated, skipping about fetch");
+                return;
+            }
             console.error("Failed to fetch about content:", error);
             toast.error("Failed to load content");
         } finally {

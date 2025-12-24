@@ -38,19 +38,28 @@ async function getAuthToken(): Promise<string | null> {
     }
 }
 
+// Custom error for unauthenticated API calls
+export class NotAuthenticatedError extends Error {
+    constructor() {
+        super("Not authenticated");
+        this.name = "NotAuthenticatedError";
+    }
+}
+
 // Helper for making API requests with authentication
 async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
     const token = await getAuthToken();
 
+    // If no token, throw specific error that can be handled silently
+    if (!token) {
+        throw new NotAuthenticatedError();
+    }
+
     const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(options?.headers || {}),
+        "Authorization": `Bearer ${token}`,
     };
-
-    // Add auth header if token is available
-    if (token) {
-        (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
-    }
 
     const response = await fetch(url, {
         ...options,

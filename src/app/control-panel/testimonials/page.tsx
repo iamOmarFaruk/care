@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ApiService } from "@/services/api-service";
+import { ApiService, NotAuthenticatedError } from "@/services/api-service";
 import { Testimonial } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
@@ -39,6 +39,11 @@ export default function TestimonialsPage() {
             const data = await ApiService.getTestimonials();
             setTestimonials(data);
         } catch (error) {
+            // Silently ignore NotAuthenticatedError (user not logged in)
+            if (error instanceof NotAuthenticatedError) {
+                console.log("Not authenticated, skipping testimonials fetch");
+                return;
+            }
             console.error("Failed to fetch testimonials:", error);
             toast.error("Failed to load testimonials");
         } finally {

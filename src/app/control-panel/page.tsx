@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/Tooltip";
 import Link from "next/link";
-import { ApiService } from "@/services/api-service";
+import { ApiService, NotAuthenticatedError } from "@/services/api-service";
 import { Booking } from "@/types";
 import { AdminUser } from "@/lib/admin-data";
 
@@ -62,6 +62,11 @@ export default function AdminDashboard() {
                 setOrders(enrichedOrders);
                 setUsers(usersData);
             } catch (error) {
+                // Silently ignore NotAuthenticatedError (user not logged in)
+                if (error instanceof NotAuthenticatedError) {
+                    console.log("Not authenticated, skipping dashboard fetch");
+                    return;
+                }
                 console.error("Error fetching dashboard data:", error);
             } finally {
                 setIsLoading(false);

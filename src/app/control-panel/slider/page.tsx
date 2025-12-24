@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { ApiService } from "@/services/api-service";
+import { ApiService, NotAuthenticatedError } from "@/services/api-service";
 import { SliderContent } from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
@@ -39,6 +39,11 @@ export default function SliderPage() {
             const data = await ApiService.getSliders();
             setSliders(data);
         } catch (error) {
+            // Silently ignore NotAuthenticatedError (user not logged in)
+            if (error instanceof NotAuthenticatedError) {
+                console.log("Not authenticated, skipping sliders fetch");
+                return;
+            }
             console.error("Failed to fetch sliders:", error);
             toast.error("Failed to load sliders");
         } finally {
