@@ -144,17 +144,12 @@ export default function AdminProfilePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6"
             >
-                {/* Profile Header with Gradient */}
-                <div className="relative h-32 bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-600">
-                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yIDItNCAyLTRzMiAyIDIgNHYyaC00di0yeiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
-                </div>
-
-                {/* Avatar Section */}
-                <div className="relative px-6 pb-6">
-                    <div className="relative -mt-16 mb-4">
-                        <div className="w-32 h-32 rounded-2xl overflow-hidden bg-white dark:bg-slate-700 border-4 border-white dark:border-slate-800 shadow-lg">
+                <div className="flex flex-col md:flex-row items-start gap-6">
+                    {/* Avatar Section */}
+                    <div className="relative">
+                        <div className="w-32 h-32 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 shadow-sm">
                             {user.avatar ? (
                                 <img
                                     src={user.avatar}
@@ -162,27 +157,30 @@ export default function AdminProfilePage() {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center">
-                                    <span className="text-4xl font-bold text-white">
+                                <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
+                                    <span className="text-4xl font-bold text-slate-400 dark:text-slate-500">
                                         {user.name.charAt(0)}
                                     </span>
                                 </div>
                             )}
                         </div>
                         {isEditing && (
-                            <button className="absolute bottom-2 right-2 w-10 h-10 rounded-xl bg-teal-500 hover:bg-teal-600 text-white flex items-center justify-center shadow-lg transition-colors">
-                                <Camera className="w-5 h-5" />
+                            <button className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-teal-500 hover:bg-teal-600 text-white flex items-center justify-center shadow-md transition-colors border-2 border-white dark:border-slate-800">
+                                <Camera className="w-4 h-4" />
                             </button>
                         )}
                     </div>
 
                     {/* User Info */}
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                        <div className="flex-1 space-y-1">
-                            <div className="flex items-center gap-3">
+                    <div className="flex-1 space-y-2 pt-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
                                 <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
                                     {user.name}
                                 </h2>
+                                <p className="text-slate-500 dark:text-slate-400 font-medium">@{user.username}</p>
+                            </div>
+                            <div className="flex items-center gap-3">
                                 <span
                                     className={`px-3 py-1 rounded-full text-xs font-semibold ${getRoleBadgeStyle(
                                         user.role
@@ -190,20 +188,30 @@ export default function AdminProfilePage() {
                                 >
                                     {user.role.replace("_", " ").toUpperCase()}
                                 </span>
+                                <span
+                                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${user.status === "active"
+                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800"
+                                        : "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800"
+                                        }`}
+                                >
+                                    <div className={`w-1.5 h-1.5 rounded-full ${user.status === "active" ? "bg-emerald-500" : "bg-red-500"}`} />
+                                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                                </span>
                             </div>
-                            <p className="text-slate-500 dark:text-slate-400">@{user.username}</p>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <span
-                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${user.status === "active"
-                                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400"
-                                    : "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400"
-                                    }`}
-                            >
-                                <CheckCircle className="w-4 h-4" />
-                                {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                            </span>
+                        <div className="flex flex-wrap gap-4 pt-2">
+                            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <Mail className="w-4 h-4" />
+                                {user.email}
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <Calendar className="w-4 h-4" />
+                                {new Date(user.createdAt).toLocaleDateString("en-US", {
+                                    month: "long",
+                                    year: "numeric"
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>
