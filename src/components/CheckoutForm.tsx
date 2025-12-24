@@ -47,11 +47,28 @@ export default function CheckoutForm({ amount, onSuccess, onCancel }: { amount: 
             <PaymentElement />
             {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
             <div className="flex gap-4">
-                <Button type="button" variant="outline" onClick={onCancel} disabled={processing}>Cancel</Button>
-                <Button type="submit" disabled={!stripe || processing} className="flex-1 bg-teal-600 hover:bg-teal-700 text-white">
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={onCancel}
+                    disabled={processing}
+                    className="border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                >
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={!stripe || processing} className="bg-teal-600 hover:bg-teal-700 text-white">
                     {processing ? "Processing..." : `Pay ৳${amount}`}
                 </Button>
             </div>
         </form>
     );
 }
+
+/*
+ * ┌── o m a r ──┐
+ * │ gh@iamOmarFaruk
+ * │ omarfaruk.dev
+ * │ Created: 24-12-25
+ * │ Updated: 24-12-25
+ * └─ Care ───┘
+ */

@@ -20,6 +20,7 @@ import { auth } from "@/lib/firebase";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "@/components/CheckoutForm";
+import { useTheme } from "@/components/ThemeProvider";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -27,6 +28,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
     const router = useRouter();
     const { id } = use(params);
     const { user, profile, loading: authLoading } = useAuth();
+    const { resolvedTheme } = useTheme();
 
     const [service, setService] = useState<Service | null>(null);
     const [loading, setLoading] = useState(true);
@@ -337,7 +339,19 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                                 </Button>
                             </div>
                             {clientSecret && (
-                                <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                                <Elements
+                                    stripe={stripePromise}
+                                    options={{
+                                        clientSecret,
+                                        appearance: {
+                                            theme: resolvedTheme === 'dark' ? 'night' : 'stripe',
+                                            labels: 'floating',
+                                            variables: {
+                                                colorPrimary: '#0d9488',
+                                            }
+                                        }
+                                    }}
+                                >
                                     <CheckoutForm
                                         amount={totalCost}
                                         onSuccess={handleBookingSuccess}
