@@ -4,10 +4,11 @@
 [![Firebase](https://img.shields.io/badge/Firebase-12.7-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![Stripe](https://img.shields.io/badge/Stripe-20.1-blueviolet?style=for-the-badge&logo=stripe)](https://stripe.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 
 **Care** is a modern, high-performance service booking platform designed to provide trusted care for families. Built with the latest web technologies, it offers a seamless experience for both users looking for services and administrators managing operations.
 
-![Project Overview](./Screenshot%202025-12-25%20at%2012.02.11%20AM.png)
+![Project Overview](project-screenshot.png)
 
 ---
 
@@ -26,6 +27,7 @@
 ## 🛠️ Technology Stack
 
 - **Frontend**: 
+  - **TypeScript**: Ensuring end-to-end type safety across the entire codebase.
   - **Next.js 16 (App Router)**: Utilizing Server Components and modern routing.
   - **React 19**: Leveraging the newest React features for optimal state management.
   - **Tailwind CSS 4**: For high-performance, utility-first styling.
@@ -59,7 +61,13 @@ The `/control-panel` route is a full-featured administrative system that demonst
 - **Real-time Updates**: Immediate feedback loops for administrative actions.
 - **System Monitoring**: Tracking total earnings and system activity.
 
-### 4. Middleware Security
+### 4. End-to-End Type Safety
+By leveraging **TypeScript**, the project ensures:
+- **Reduced Runtime Errors**: Catching potential bugs during development.
+- **Enhanced Developer Experience**: Clearer interfaces and autocompletion for complex data structures like `Booking` and `Service`.
+- **Better Maintainability**: Facilitating easier refactoring and code exploration.
+
+### 5. Middleware Security
 Implementation of `middleware.ts` to handle protected routes, ensuring that sensitive areas like the dashboard and control panel are locked behind robust authentication checks before a single component is rendered.
 
 ---
@@ -102,13 +110,3 @@ Implementation of `middleware.ts` to handle protected routes, ensuring that sens
 - [ ] Advanced analytics dashboard for admins.
 - [ ] Mobile application using the same backend.
 
----
-
-/*
- * ┌── o m a r ──┐
- * │ gh@iamOmarFaruk
- * │ omarfaruk.dev
- * │ Created: 25-12-24
- * │ Updated: 25-12-25
- * └─ care-app ──────┘
- */
