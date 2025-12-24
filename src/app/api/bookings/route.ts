@@ -78,6 +78,16 @@ export async function POST(request: NextRequest) {
 
         const docRef = await adminDb.collection("bookings").add(bookingData);
 
+        // Log activity
+        await adminDb.collection("activities").add({
+            userId: user.uid,
+            userName: user.email?.split('@')[0] || "User",
+            action: "created_booking",
+            details: `Booked service for ${bookingData.date}`,
+            timestamp: new Date().toISOString(),
+            type: "order"
+        });
+
         return NextResponse.json({
             success: true,
             id: docRef.id,
@@ -127,6 +137,17 @@ export async function PUT(request: NextRequest) {
             }
 
             await bookingRef.update({ status: "cancelled" });
+
+            // Log activity
+            await adminDb.collection("activities").add({
+                userId: user.uid,
+                userName: user.email?.split('@')[0] || "User",
+                action: "cancelled_booking",
+                details: `Cancelled booking #${id}`,
+                timestamp: new Date().toISOString(),
+                type: "order"
+            });
+
             return NextResponse.json({ success: true, message: "Booking cancelled" });
         }
 

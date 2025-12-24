@@ -94,6 +94,10 @@ export const ApiService = {
 
     // Users
     getUsers: () => fetchApi<AdminUser[]>("/api/admin/users"),
+
+    // Activities
+    getActivities: () => fetchApi<any[]>("/api/activities"),
+
     updateUser: (user: Partial<AdminUser> & { id: string }) =>
         fetchApi<void>("/api/admin/users", {
             method: "PUT",

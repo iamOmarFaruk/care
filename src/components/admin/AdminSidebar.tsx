@@ -20,6 +20,7 @@ import {
     ExternalLink,
     User,
     Settings,
+    Activity,
 } from "lucide-react";
 import { Tooltip } from "@/components/ui/Tooltip";
 
@@ -33,6 +34,7 @@ const menuGroups = [
         label: "Overview",
         items: [
             { href: "/control-panel", label: "Dashboard", icon: LayoutDashboard },
+            { href: "/control-panel/activity", label: "Activity", icon: Activity },
         ]
     },
     {

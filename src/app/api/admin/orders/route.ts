@@ -59,6 +59,17 @@ export async function PUT(request: NextRequest) {
 
         const { id, status } = validation.data;
         await adminDb.collection("bookings").doc(id).update({ status });
+
+        // Log activity
+        await adminDb.collection("activities").add({
+            userId: admin.uid,
+            userName: admin.email?.split('@')[0] || "Admin",
+            action: "updated_order_status",
+            details: `Updated order #${id} status to ${status}`,
+            timestamp: new Date().toISOString(),
+            type: "order"
+        });
+
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("Failed to update order status:", error);
