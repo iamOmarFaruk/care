@@ -61,11 +61,18 @@ export default function UsersPage() {
         fetchUsers();
     }, []);
 
-    const filteredUsers = users.filter((user) =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (user.phone || "").includes(searchQuery)
-    );
+    // Helper to get display name (handles both 'name' and 'fullName' from Firestore)
+    const getUserName = (user: AdminUser & { fullName?: string }): string => {
+        return user.name || (user as unknown as { fullName?: string }).fullName || "Unknown User";
+    };
+
+    const filteredUsers = users.filter((user) => {
+        const name = getUserName(user).toLowerCase();
+        const email = (user.email || "").toLowerCase();
+        const phone = user.phone || "";
+        const query = searchQuery.toLowerCase();
+        return name.includes(query) || email.includes(query) || phone.includes(query);
+    });
 
     const openEditModal = (user: AdminUser) => {
         setSelectedUser(user);
@@ -220,16 +227,16 @@ export default function UsersPage() {
                                                     {user.avatar ? (
                                                         <img
                                                             src={user.avatar}
-                                                            alt={user.name}
+                                                            alt={getUserName(user)}
                                                             className="w-full h-full rounded-full object-cover"
                                                         />
                                                     ) : (
-                                                        user.name.charAt(0).toUpperCase()
+                                                        getUserName(user).charAt(0).toUpperCase()
                                                     )}
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                                        {user.name}
+                                                        {getUserName(user)}
                                                     </p>
                                                     <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                                         <Mail className="w-3 h-3" />
@@ -389,7 +396,7 @@ export default function UsersPage() {
                 onClose={() => setDeleteConfirm(null)}
                 onConfirm={handleDelete}
                 title="Delete User"
-                message={`Are you sure you want to delete "${deleteConfirm?.name}"? This action cannot be undone.`}
+                message={`Are you sure you want to delete "${deleteConfirm ? getUserName(deleteConfirm) : ""}"? This action cannot be undone.`}
                 confirmText="Delete User"
                 variant="danger"
             />
@@ -401,7 +408,7 @@ export default function UsersPage() {
  * ┌── o m a r ──┐
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
- * │ Created: 2024-12-24
- * │ Updated: 2024-12-24
+ * │ Created: 24-12-24
+ * │ Updated: 24-12-24
  * └─ care ───┘
  */
