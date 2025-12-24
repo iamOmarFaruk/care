@@ -18,6 +18,8 @@ import {
     Heart,
     Globe,
     ExternalLink,
+    User,
+    Settings,
 } from "lucide-react";
 import { Tooltip } from "@/components/ui/Tooltip";
 
@@ -35,6 +37,8 @@ const menuItems = [
     { href: "/control-panel/services", label: "Services", icon: Briefcase },
     { href: "/control-panel/testimonials", label: "Testimonials", icon: MessageSquareQuote },
     { href: "/control-panel/footer", label: "Footer", icon: FileText },
+    { href: "/control-panel/profile", label: "Profile", icon: User },
+    { href: "/control-panel/settings", label: "Settings", icon: Settings },
 ];
 
 export function AdminSidebar({ isCollapsed, onToggle }: AdminSidebarProps) {
