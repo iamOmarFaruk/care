@@ -65,12 +65,12 @@ export function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
         try {
             // Sign out from Firebase Auth
             await auth.signOut();
+            toast.success("Logged out successfully");
         } catch (error) {
             console.error("Firebase signout error:", error);
+            toast.error("Logout failed");
         }
-        // Clear local admin session
-        adminStore.adminLogout();
-        toast.success("Logged out successfully");
+
         setShowLogoutConfirm(false);
         router.push("/control-panel/login");
     };

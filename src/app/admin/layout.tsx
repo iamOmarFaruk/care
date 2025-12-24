@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { adminStore, AdminUser } from "@/lib/admin-data";
+import { useAuth } from "@/context/auth-context";
 
 export default function AdminLayout({
     children,
@@ -15,21 +16,31 @@ export default function AdminLayout({
     const router = useRouter();
     const [isCollapsed, setIsCollapsed] = React.useState(false);
     const [isMobileOpen, setIsMobileOpen] = React.useState(false);
+    const { user: firebaseUser, profile, loading: authLoading, isAdmin } = useAuth();
     const [user, setUser] = React.useState<AdminUser | null>(null);
-    const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
-        // Check admin session
-        const session = adminStore.getAdminSession();
-        if (!session || (session.role !== "super_admin" && session.role !== "admin")) {
-            router.replace("/login");
-        } else {
-            setUser(session);
-        }
-        setIsLoading(false);
-    }, [router]);
+        if (authLoading) return;
 
-    if (isLoading) {
+        if (!firebaseUser || !isAdmin || !profile) {
+            router.replace("/control-panel/login"); // Redirect to the working login page
+        } else {
+            // Map UserProfile to AdminUser
+            const adminUser: AdminUser = {
+                id: profile.uid,
+                username: profile.email.split('@')[0] || "admin",
+                email: profile.email,
+                role: (profile.role === "super_admin" || profile.role === "admin") ? profile.role : "user",
+                name: profile.fullName || "Admin",
+                avatar: profile.photoURL || undefined,
+                status: "active",
+                createdAt: profile.createdAt,
+            };
+            setUser(adminUser);
+        }
+    }, [firebaseUser, isAdmin, profile, authLoading, router]);
+
+    if (authLoading) {
         return (
             <div className="min-h-screen bg-slate-50 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
@@ -41,7 +52,7 @@ export default function AdminLayout({
     }
 
     if (!user) {
-        return null;
+        return null; // Will redirect
     }
 
     return (

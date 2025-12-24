@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { adminStore, AdminUser } from "@/lib/admin-data";
+import { useAuth } from "@/context/auth-context";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ import {
 } from "lucide-react";
 
 export default function AdminProfilePage() {
+    const { profile, loading } = useAuth();
     const [user, setUser] = React.useState<AdminUser | null>(null);
     const [isEditing, setIsEditing] = React.useState(false);
     const [isSaving, setIsSaving] = React.useState(false);
@@ -30,16 +32,25 @@ export default function AdminProfilePage() {
     });
 
     React.useEffect(() => {
-        const currentUser = adminStore.getAdminSession();
-        if (currentUser) {
-            setUser(currentUser);
+        if (!loading && profile) {
+            const adminUser: AdminUser = {
+                id: profile.uid,
+                username: profile.email.split('@')[0] || "admin",
+                email: profile.email,
+                role: (profile.role === "super_admin" || profile.role === "admin") ? profile.role : "user",
+                name: profile.fullName || "Admin",
+                avatar: profile.photoURL || undefined,
+                status: "active",
+                createdAt: profile.createdAt,
+            };
+            setUser(adminUser);
             setFormData({
-                name: currentUser.name,
-                email: currentUser.email,
-                avatar: currentUser.avatar || "",
+                name: adminUser.name,
+                email: adminUser.email,
+                avatar: adminUser.avatar || "",
             });
         }
-    }, []);
+    }, [profile, loading]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

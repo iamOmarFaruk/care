@@ -60,12 +60,6 @@ export default function AdminLoginPage() {
                 return;
             }
 
-            // Store admin session in localStorage (for layout checks)
-            const adminUser: AdminUser = data.user;
-            if (typeof window !== "undefined") {
-                localStorage.setItem("care_admin_session", JSON.stringify(adminUser));
-            }
-
             toast.success("Welcome back, Admin!");
             router.push("/control-panel");
         } catch (error: unknown) {

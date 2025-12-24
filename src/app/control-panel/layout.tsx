@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { adminStore, AdminUser } from "@/lib/admin-data";
+import { useAuth } from "@/context/auth-context";
 
 export default function ControlPanelLayout({
     children,
@@ -16,34 +17,45 @@ export default function ControlPanelLayout({
     const pathname = usePathname();
     const [isCollapsed, setIsCollapsed] = React.useState(false);
     const [isMobileOpen, setIsMobileOpen] = React.useState(false);
+
+    // Use the shared AuthContext
+    const { user: firebaseUser, profile, loading: authLoading, isAdmin } = useAuth();
     const [user, setUser] = React.useState<AdminUser | null>(null);
-    const [isLoading, setIsLoading] = React.useState(true);
 
     // Skip auth check for login page
     const isLoginPage = pathname === "/control-panel/login";
 
     React.useEffect(() => {
+        if (authLoading) return;
+
         if (isLoginPage) {
-            setIsLoading(false);
+            // If already logged in as admin, redirect to control panel
+            if (isAdmin && profile) {
+                router.replace("/control-panel");
+            }
             return;
         }
 
-        // Check admin session
-        const session = adminStore.getAdminSession();
-        if (!session || (session.role !== "super_admin" && session.role !== "admin")) {
+        if (!firebaseUser || !isAdmin || !profile) {
             router.replace("/control-panel/login");
         } else {
-            setUser(session);
+            // Map UserProfile to AdminUser
+            const adminUser: AdminUser = {
+                id: profile.uid,
+                username: profile.email.split('@')[0] || "admin",
+                email: profile.email,
+                role: (profile.role === "super_admin" || profile.role === "admin") ? profile.role : "user",
+                name: profile.fullName || "Admin",
+                avatar: profile.photoURL || undefined,
+                status: "active",
+                createdAt: profile.createdAt,
+            };
+            setUser(adminUser);
         }
-        setIsLoading(false);
-    }, [router, isLoginPage]);
+    }, [firebaseUser, isAdmin, profile, authLoading, router, isLoginPage]);
 
-    // For login page, just render children
-    if (isLoginPage) {
-        return <>{children}</>;
-    }
-
-    if (isLoading) {
+    // Show loading state while auth is initializing
+    if (authLoading) {
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
@@ -54,6 +66,16 @@ export default function ControlPanelLayout({
         );
     }
 
+    // For login page, just render children
+    // If we are redirecting away from login page because we are already logged in, 
+    // we might briefly show the login page, but the useEffect will handle it.
+    // Ideally we should wait, but for now we follow the pattern.
+    if (isLoginPage) {
+        return <>{children}</>;
+    }
+
+    // If not on login page and no user (or not admin), we render nothing while redirect changes page
+    // (handled by useEffect)
     if (!user) {
         return null;
     }
