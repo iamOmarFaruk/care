@@ -3,15 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Heart, LogOut, LayoutDashboard, ShieldCheck } from "lucide-react";
+import { Menu, X, Heart, LogOut, LayoutDashboard, ShieldCheck, User2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
-import { mockStore, User } from "@/lib/store";
-import { adminStore } from "@/lib/admin-data";
+import { useAuth } from "@/context/auth-context";
 
 const NAV_ITEMS = [
     { label: "Home", href: "/", sectionId: null },
@@ -24,28 +23,20 @@ export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [activeSection, setActiveSection] = useState<string | null>(null);
-    const [user, setUser] = useState<User | null>(null);
-    const [isAdminUser, setIsAdminUser] = useState(false);
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const lastScrollY = useRef(0);
     const pathname = usePathname();
     const router = useRouter();
 
-    // Check user authentication state
-    useEffect(() => {
-        const currentUser = mockStore.getUser();
-        setUser(currentUser);
-        // Check if admin is logged in
-        setIsAdminUser(adminStore.isAdmin());
-    }, [pathname]);
+    // Use Firebase Auth context
+    const { user, profile, isAdmin, logout, loading } = useAuth();
 
     const handleLogoutClick = () => {
         setShowLogoutConfirm(true);
     };
 
-    const handleLogoutConfirm = () => {
-        mockStore.logout();
-        setUser(null);
+    const handleLogoutConfirm = async () => {
+        await logout();
         setIsOpen(false);
         setShowLogoutConfirm(false);
         router.push('/');
@@ -211,20 +202,31 @@ export function Navbar() {
                     <ThemeToggle />
                     {user ? (
                         <>
-                            {isAdminUser && (
-                                <Button variant="ghost" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:text-amber-500 dark:hover:text-amber-400 dark:hover:bg-amber-950/30">
-                                    <Link href="/control-panel" className="flex items-center gap-2">
-                                        <ShieldCheck className="w-4 h-4" />
-                                        <span className="hidden lg:inline">Admin</span>
+                            {isAdmin ? (
+                                // Admin Navigation: User Dashboard + Admin Dashboard
+                                <>
+                                    <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
+                                        <Link href="/dashboard" className="flex items-center gap-2">
+                                            <User2 className="w-4 h-4" />
+                                            User Dashboard
+                                        </Link>
+                                    </Button>
+                                    <Button variant="ghost" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:text-amber-500 dark:hover:text-amber-400 dark:hover:bg-amber-950/30">
+                                        <Link href="/control-panel" className="flex items-center gap-2">
+                                            <ShieldCheck className="w-4 h-4" />
+                                            Admin Dashboard
+                                        </Link>
+                                    </Button>
+                                </>
+                            ) : (
+                                // Regular User Navigation: Dashboard only
+                                <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
+                                    <Link href="/dashboard" className="flex items-center gap-2">
+                                        <LayoutDashboard className="w-4 h-4" />
+                                        Dashboard
                                     </Link>
                                 </Button>
                             )}
-                            <Button variant="secondary" asChild className="transition-transform hover:scale-105 active:scale-95 cursor-pointer">
-                                <Link href="/dashboard" className="flex items-center gap-2">
-                                    <LayoutDashboard className="w-4 h-4" />
-                                    Dashboard
-                                </Link>
-                            </Button>
                             <Button
                                 onClick={handleLogoutClick}
                                 className="transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
@@ -302,20 +304,31 @@ export function Navbar() {
                             >
                                 {user ? (
                                     <>
-                                        {isAdminUser && (
-                                            <Button variant="ghost" size="sm" asChild className="transition-all duration-200 hover:scale-105 justify-start text-amber-600 dark:text-amber-500">
-                                                <Link href="/control-panel" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
-                                                    <ShieldCheck className="w-3 h-3" />
-                                                    Admin Panel
+                                        {isAdmin ? (
+                                            // Admin Mobile Navigation: User Dashboard + Admin Dashboard
+                                            <>
+                                                <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
+                                                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                                        <User2 className="w-3 h-3" />
+                                                        User Dashboard
+                                                    </Link>
+                                                </Button>
+                                                <Button variant="ghost" size="sm" asChild className="transition-all duration-200 hover:scale-105 justify-start text-amber-600 dark:text-amber-500">
+                                                    <Link href="/control-panel" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                                        <ShieldCheck className="w-3 h-3" />
+                                                        Admin Dashboard
+                                                    </Link>
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            // Regular User Mobile Navigation: Dashboard only
+                                            <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
+                                                <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
+                                                    <LayoutDashboard className="w-3 h-3" />
+                                                    Dashboard
                                                 </Link>
                                             </Button>
                                         )}
-                                        <Button variant="secondary" size="sm" asChild className="transition-all duration-200 hover:scale-105">
-                                            <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center gap-1">
-                                                <LayoutDashboard className="w-3 h-3" />
-                                                Dashboard
-                                            </Link>
-                                        </Button>
                                         <Button
                                             size="sm"
                                             onClick={handleLogoutClick}

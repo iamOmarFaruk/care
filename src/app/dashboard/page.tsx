@@ -28,9 +28,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { mockStore, Booking, User } from "@/lib/store";
+import { mockStore, Booking } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useAuth } from "@/context/auth-context";
+
+// Dashboard User type (compatible with existing components)
+interface DashboardUser {
+    name: string;
+    email: string;
+    photo?: string;
+    phone?: string;
+    address?: string;
+    nid?: string;
+    bio?: string;
+}
 
 // --- Types ---
 type TabId = 'overview' | 'profile' | 'bookings' | 'payments' | 'address' | 'settings';
@@ -38,7 +50,7 @@ type TabId = 'overview' | 'profile' | 'bookings' | 'payments' | 'address' | 'set
 // --- Components ---
 
 // 1. Overview Section
-const OverviewSection = ({ user, bookings, onViewAllBookings }: { user: User, bookings: Booking[], onViewAllBookings: () => void }) => {
+const OverviewSection = ({ user, bookings, onViewAllBookings }: { user: DashboardUser, bookings: Booking[], onViewAllBookings: () => void }) => {
     const pendingCount = bookings.filter(b => b.status === "Pending").length;
     const activeCount = bookings.filter(b => b.status === "Confirmed").length;
     const completedCount = bookings.filter(b => b.status === "Completed").length;
@@ -119,7 +131,7 @@ const OverviewSection = ({ user, bookings, onViewAllBookings }: { user: User, bo
 };
 
 // 2. Profile Section
-const ProfileSection = ({ user, onUpdate }: { user: User, onUpdate: (data: Partial<User>) => void }) => {
+const ProfileSection = ({ user, onUpdate }: { user: DashboardUser, onUpdate: (data: Partial<DashboardUser>) => void }) => {
     const [formData, setFormData] = useState({
         name: user.name,
         phone: user.phone || '',
@@ -359,7 +371,7 @@ const PaymentsSection = () => (
 );
 
 // 5. Address Section (Mock)
-const AddressSection = ({ user }: { user: User }) => (
+const AddressSection = ({ user }: { user: DashboardUser }) => (
     <div className="space-y-6">
         <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Saved Addresses</h2>
@@ -445,34 +457,48 @@ const SettingsSection = () => (
 
 export default function DashboardPage() {
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
+    const { user: firebaseUser, profile, loading: authLoading, logout } = useAuth();
+    const [dashboardUser, setDashboardUser] = useState<DashboardUser | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [activeTab, setActiveTab] = useState<TabId>('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
 
     useEffect(() => {
-        const currentUser = mockStore.getUser();
-        if (!currentUser) {
+        // Wait for Firebase auth to complete loading
+        if (authLoading) return;
+
+        // Redirect if not logged in
+        if (!firebaseUser) {
             router.push("/login?redirect=/dashboard");
             return;
         }
-        setUser(currentUser);
-        refreshBookings(currentUser.email);
-        setLoading(false);
-    }, [router]);
+
+        // Create dashboard user from Firebase profile
+        const user: DashboardUser = {
+            name: profile?.fullName || firebaseUser.displayName || "User",
+            email: profile?.email || firebaseUser.email || "",
+            photo: profile?.photoURL || firebaseUser.photoURL || undefined,
+            phone: profile?.contactNumber || "",
+            address: profile?.address || "",
+            nid: "",
+            bio: ""
+        };
+        setDashboardUser(user);
+
+        // Load bookings (keep using mockStore for now for booking data)
+        refreshBookings(user.email);
+    }, [firebaseUser, profile, authLoading, router]);
 
     const refreshBookings = (email: string) => {
         const userBookings = mockStore.getBookings(email);
         setBookings(userBookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
     };
 
-    const handleUpdateProfile = (data: Partial<User>) => {
-        const updated = mockStore.updateUser(data);
-        if (updated) {
-            setUser(updated);
-            // Show toast or success message here
+    const handleUpdateProfile = (data: Partial<DashboardUser>) => {
+        // Profile update would go through API in a full implementation
+        if (dashboardUser) {
+            setDashboardUser({ ...dashboardUser, ...data });
         }
     };
 
@@ -483,12 +509,12 @@ export default function DashboardPage() {
     const confirmCancelBooking = () => {
         if (cancelBookingId) {
             mockStore.cancelBooking(cancelBookingId);
-            if (user) refreshBookings(user.email);
+            if (dashboardUser) refreshBookings(dashboardUser.email);
             setCancelBookingId(null);
         }
     };
 
-    if (loading) return null; // Or a spinner
+    if (authLoading || !dashboardUser) return null; // Loading state
 
     const MENU_ITEMS: { id: TabId; label: string; icon: any }[] = [
         { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -523,11 +549,11 @@ export default function DashboardPage() {
                             <div className="p-6 border-b border-slate-100 dark:border-slate-700 bg-teal-50/50 dark:bg-teal-900/10">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-800 flex items-center justify-center text-teal-700 dark:text-teal-200 font-bold text-lg">
-                                        {user?.name.charAt(0)}
+                                        {dashboardUser?.name.charAt(0)}
                                     </div>
                                     <div className="overflow-hidden">
-                                        <h3 className="font-bold text-slate-800 dark:text-white truncate">{user?.name}</h3>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email}</p>
+                                        <h3 className="font-bold text-slate-800 dark:text-white truncate">{dashboardUser?.name}</h3>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{dashboardUser?.email}</p>
                                     </div>
                                 </div>
                             </div>
@@ -572,11 +598,11 @@ export default function DashboardPage() {
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.2 }}
                             >
-                                {activeTab === 'overview' && <OverviewSection user={user!} bookings={bookings} onViewAllBookings={() => setActiveTab('bookings')} />}
-                                {activeTab === 'profile' && <ProfileSection user={user!} onUpdate={handleUpdateProfile} />}
+                                {activeTab === 'overview' && <OverviewSection user={dashboardUser!} bookings={bookings} onViewAllBookings={() => setActiveTab('bookings')} />}
+                                {activeTab === 'profile' && <ProfileSection user={dashboardUser!} onUpdate={handleUpdateProfile} />}
                                 {activeTab === 'bookings' && <BookingsSection bookings={bookings} onCancel={handleCancelBooking} />}
                                 {activeTab === 'payments' && <PaymentsSection />}
-                                {activeTab === 'address' && <AddressSection user={user!} />}
+                                {activeTab === 'address' && <AddressSection user={dashboardUser!} />}
                                 {activeTab === 'settings' && <SettingsSection />}
                             </motion.div>
                         </AnimatePresence>

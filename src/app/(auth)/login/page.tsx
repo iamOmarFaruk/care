@@ -9,13 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { Mail, Lock, ArrowRight } from "lucide-react";
-
-import { mockStore } from "@/lib/store";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useAuth } from "@/context/auth-context";
 
 export default function LoginPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [focusedField, setFocusedField] = useState<string | null>(null);
+    const { signInWithGoogle } = useAuth();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -25,18 +27,38 @@ export default function LoginPage() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // User login only (no admin access from this page)
-        if (email && password) {
-            mockStore.login(email);
+        try {
+            // Firebase authentication
+            await signInWithEmailAndPassword(auth, email, password);
             toast.success("Successfully logged in!");
             router.push("/dashboard");
-        } else {
-            toast.error("Please fill in all fields.");
+        } catch (error: any) {
+            console.error("Login error:", error);
+            if (error.code === "auth/user-not-found") {
+                toast.error("No account found with this email.");
+            } else if (error.code === "auth/wrong-password") {
+                toast.error("Incorrect password.");
+            } else if (error.code === "auth/invalid-email") {
+                toast.error("Invalid email address.");
+            } else if (error.code === "auth/invalid-credential") {
+                toast.error("Invalid email or password.");
+            } else {
+                toast.error("Login failed. Please try again.");
+            }
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
+    }
+
+    async function handleGoogleSignIn() {
+        try {
+            await signInWithGoogle();
+            toast.success("Successfully logged in with Google!");
+            router.push("/dashboard");
+        } catch (error: any) {
+            console.error("Google sign-in error:", error);
+            toast.error("Google sign-in failed. Please try again.");
+        }
     }
 
     return (
@@ -163,7 +185,8 @@ export default function LoginPage() {
                                             variant="outline"
                                             type="button"
                                             className="w-full h-12 text-base font-medium border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500 rounded-xl"
-                                            onClick={() => toast.info("Social login coming soon!")}
+                                            onClick={handleGoogleSignIn}
+                                            disabled={loading}
                                         >
                                             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
