@@ -12,7 +12,6 @@ import {
     FileText,
     Image as ImageIcon,
     Layout,
-    CheckCircle2,
 } from "lucide-react";
 
 export default function AboutPage() {
@@ -142,7 +141,8 @@ export default function AboutPage() {
                                     value={formData.title}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                     className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                    placeholder="About Care"
+                                    placeholder="Trusted Care for Your Family"
+
                                 />
                             </div>
 
@@ -155,7 +155,8 @@ export default function AboutPage() {
                                     value={formData.subtitle}
                                     onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                                     className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                    placeholder="Providing compassionate care since 2020"
+                                    placeholder="Subtitle (Optional)"
+
                                 />
                             </div>
 
@@ -168,7 +169,8 @@ export default function AboutPage() {
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     rows={6}
                                     className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                    placeholder="Write about your company mission and values..."
+                                    placeholder="At Care.xyz, our mission is to make caregiving easy, secure, and accessible for everyone..."
+
                                 />
                             </div>
                         </div>
@@ -200,13 +202,14 @@ export default function AboutPage() {
                                 onChange={(e) => setFormData({ ...formData, features: e.target.value.split("\n") })}
                                 rows={5}
                                 className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                placeholder="Certified Caregivers&#10;24/7 Support&#10;Affordable Pricing"
+                                placeholder="Verified Caregivers&#10;24/7 Support&#10;Flexible Scheduling&#10;Affordable Rates"
+
                             />
                         </div>
                     </motion.div>
                 </div>
 
-                {/* Right Column - Images & Stats */}
+                {/* Right Column - Image */}
                 <div className="space-y-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -218,95 +221,26 @@ export default function AboutPage() {
                             <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                                 <ImageIcon className="w-5 h-5" />
                             </div>
-                            <h2 className="text-lg font-bold text-slate-800 dark:text-white">Images</h2>
+                            <h2 className="text-lg font-bold text-slate-800 dark:text-white">Feature Image</h2>
                         </div>
 
                         <div className="space-y-4">
-                            {formData.images?.map((img, idx) => (
-                                <div key={idx} className="space-y-2">
-                                    <label className="text-xs font-medium text-slate-500">Image {idx + 1} URL</label>
-                                    <input
-                                        type="url"
-                                        value={img}
-                                        onChange={(e) => {
-                                            const newImages = [...(formData.images || [])];
-                                            newImages[idx] = e.target.value;
-                                            setFormData({ ...formData, images: newImages });
-                                        }}
-                                        className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                                    />
-                                    {img && (
-                                        <div className="h-32 rounded-lg overflow-hidden bg-slate-100">
-                                            <img src={img} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                            {(formData.images?.length || 0) < 2 && (
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="w-full"
-                                    onClick={() => setFormData({ ...formData, images: [...(formData.images || []), ""] })}
-                                >
-                                    Add Image
-                                </Button>
-                            )}
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6"
-                    >
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
-                                <CheckCircle2 className="w-5 h-5" />
+                            <div className="space-y-2">
+                                <label className="text-xs font-medium text-slate-500">Image URL</label>
+                                <input
+                                    type="url"
+                                    value={formData.image}
+                                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
+                                    placeholder="https://example.com/image.jpg"
+                                />
+                                {formData.image && (
+                                    <div className="h-48 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900">
+                                        <img src={formData.image} alt="Feature Preview" className="w-full h-full object-cover" />
+                                    </div>
+                                )}
                             </div>
-                            <h2 className="text-lg font-bold text-slate-800 dark:text-white">Stats</h2>
                         </div>
-
-                        <div className="space-y-4">
-                            {formData.stats?.map((stat, idx) => (
-                                <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl space-y-2">
-                                    <input
-                                        type="text"
-                                        value={stat.value}
-                                        onChange={(e) => {
-                                            const newStats = [...(formData.stats || [])];
-                                            newStats[idx] = { ...newStats[idx], value: e.target.value };
-                                            setFormData({ ...formData, stats: newStats });
-                                        }}
-                                        placeholder="Value (e.g. 500+)"
-                                        className="w-full px-3 py-1.5 border border-slate-200 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={stat.label}
-                                        onChange={(e) => {
-                                            const newStats = [...(formData.stats || [])];
-                                            newStats[idx] = { ...newStats[idx], label: e.target.value };
-                                            setFormData({ ...formData, stats: newStats });
-                                        }}
-                                        placeholder="Label (e.g. Happy Clients)"
-                                        className="w-full px-3 py-1.5 border border-slate-200 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800"
-                                    />
-                                </div>
-                            ))}
-                            {(formData.stats?.length || 0) < 4 && (
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="w-full"
-                                    onClick={() => setFormData({ ...formData, stats: [...(formData.stats || []), { value: "", label: "" }] })}
-                                >
-                                    Add Stat
-                                </Button>
-                            )}
-                        </div>
-
                     </motion.div>
                 </div>
             </div>
