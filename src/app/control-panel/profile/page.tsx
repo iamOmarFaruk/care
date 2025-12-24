@@ -81,7 +81,7 @@ export default function AdminProfilePage() {
     const getRoleBadgeStyle = (role: string) => {
         switch (role) {
             case "super_admin":
-                return "bg-secondary text-secondary-foreground";
+                return "bg-amber-500 text-white";
             case "admin":
                 return "bg-gradient-to-r from-teal-500 to-emerald-500 text-white";
             default:
