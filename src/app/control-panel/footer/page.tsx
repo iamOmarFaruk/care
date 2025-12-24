@@ -8,15 +8,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
     Save,
-    RotateCcw,
-    MapPin,
-    Mail,
-    Phone,
     Facebook,
     Twitter,
     Instagram,
     Linkedin,
     Globe,
+    Plus,
+    Trash,
+    Link as LinkIcon,
 } from "lucide-react";
 
 export default function FooterPage() {
@@ -37,6 +36,26 @@ export default function FooterPage() {
         copyright: "",
         navLinks: [],
     });
+
+    const [newLink, setNewLink] = React.useState({ label: "", href: "" });
+
+    const handleAddLink = () => {
+        if (!newLink.label || !newLink.href) {
+            toast.error("Please fill in both label and URL");
+            return;
+        }
+
+        const updatedLinks = [...formData.navLinks, newLink];
+        setFormData({ ...formData, navLinks: updatedLinks });
+        setNewLink({ label: "", href: "" });
+        toast.success("Link added");
+    };
+
+    const handleRemoveLink = (index: number) => {
+        const updatedLinks = formData.navLinks.filter((_, i) => i !== index);
+        setFormData({ ...formData, navLinks: updatedLinks });
+        toast.success("Link removed");
+    };
 
     const fetchFooter = async () => {
         setIsLoading(true);
@@ -75,9 +94,7 @@ export default function FooterPage() {
         }
     };
 
-    const handleReset = () => {
-        fetchFooter();
-    };
+
 
     if (isLoading) {
         return (
@@ -88,7 +105,7 @@ export default function FooterPage() {
     }
 
     return (
-        <div className="space-y-6 max-w-4xl mx-auto">
+        <div className="space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
@@ -98,10 +115,6 @@ export default function FooterPage() {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" onClick={handleReset} disabled={isSaving}>
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Reset
-                    </Button>
                     <Button onClick={handleSave} disabled={isSaving}>
                         {isSaving ? (
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -113,70 +126,7 @@ export default function FooterPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Contact Info */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-5"
-                >
-                    <h2 className="text-lg font-bold text-slate-800 dark:text-white border-b border-slate-100 dark:border-slate-700 pb-3 mb-4">
-                        Contact Information
-                    </h2>
-
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5">
-                            Short Description
-                        </label>
-                        <textarea
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            rows={3}
-                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 resize-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                            placeholder="Brief company slogan..."
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-slate-400" />
-                            Address
-                        </label>
-                        <input
-                            type="text"
-                            value={formData.address}
-                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
-                            <Mail className="w-4 h-4 text-slate-400" />
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
-                            <Phone className="w-4 h-4 text-slate-400" />
-                            Phone
-                        </label>
-                        <input
-                            type="tel"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                        />
-                    </div>
-                </motion.div>
-
+            <div className="space-y-6">
                 {/* Social Links & Copyright */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -273,8 +223,96 @@ export default function FooterPage() {
                     </div>
 
                 </motion.div>
+
+
+                {/* Footer Menu Links */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-6"
+                >
+                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+                        <h2 className="text-lg font-bold text-slate-800 dark:text-white">
+                            Footer Menu Links
+                        </h2>
+                        <span className="text-sm text-slate-500">{formData.navLinks.length} Links</span>
+                    </div>
+
+                    <div className="space-y-4">
+                        {/* List of existing links */}
+                        {formData.navLinks.length > 0 ? (
+                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                {formData.navLinks.map((link, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="group relative flex items-center justify-between p-3 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 hover:border-teal-500/30 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400">
+                                                <LinkIcon className="w-4 h-4" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
+                                                    {link.label}
+                                                </p>
+                                                <p className="text-xs text-slate-500 truncate">{link.href}</p>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => handleRemoveLink(idx)}
+                                            className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                                            title="Remove link"
+                                        >
+                                            <Trash className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-8 text-slate-400 border-2 border-dashed border-slate-100 dark:border-slate-700 rounded-xl">
+                                <LinkIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">No menu links added yet</p>
+                            </div>
+                        )}
+
+                        {/* Add new link form */}
+                        <div className="pt-4 border-t border-slate-100 dark:border-slate-700">
+                            <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Add New Link</h3>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <div className="flex-1">
+                                    <input
+                                        type="text"
+                                        value={newLink.label}
+                                        onChange={(e) => setNewLink({ ...newLink, label: e.target.value })}
+                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
+                                        placeholder="Link Label (e.g. Services)"
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <input
+                                        type="text"
+                                        value={newLink.href}
+                                        onChange={(e) => setNewLink({ ...newLink, href: e.target.value })}
+                                        className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
+                                        placeholder="URL or Path (e.g. /services)"
+                                    />
+                                </div>
+                                <Button
+                                    onClick={handleAddLink}
+                                    variant="outline"
+                                    className="sm:w-auto w-full bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-800 hover:bg-teal-100 dark:hover:bg-teal-900/40"
+                                >
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Add Link
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
-        </div>
+        </div >
     );
 }
 
