@@ -29,6 +29,6 @@ export { Input }
  * │ gh@iamOmarFaruk
  * │ omarfaruk.dev
  * │ Created: 2025-12-22
- * │ Updated: 2025-12-22
+ * │ Updated: 2025-12-24
  * └─ care ───┘
  */

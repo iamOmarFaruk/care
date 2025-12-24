@@ -289,13 +289,13 @@ export default function AdminSettingsPage() {
                                 ].map((item) => (
                                     <div
                                         key={item.key}
-                                        className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl"
+                                        className="flex items-center justify-between p-5 bg-white dark:bg-slate-700/30 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-200 hover:shadow-sm"
                                     >
-                                        <div>
+                                        <div className="flex-1">
                                             <p className="font-medium text-slate-700 dark:text-slate-200">
                                                 {item.label}
                                             </p>
-                                            <p className="text-sm text-slate-500 dark:text-slate-400">
+                                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                                                 {item.description}
                                             </p>
                                         </div>
@@ -305,7 +305,7 @@ export default function AdminSettingsPage() {
                                                 item.key as keyof typeof settings.notifications
                                                 ]
                                             }
-                                            onCheckedChange={(checked) =>
+                                            onCheckedChange={(checked: boolean) =>
                                                 handleSwitchChange("notifications", item.key, checked)
                                             }
                                         />
@@ -330,18 +330,18 @@ export default function AdminSettingsPage() {
                                 </h3>
 
                                 <div className="space-y-5">
-                                    <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
-                                        <div>
+                                    <div className="flex items-center justify-between p-5 bg-white dark:bg-slate-700/30 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-200 hover:shadow-sm">
+                                        <div className="flex-1">
                                             <p className="font-medium text-slate-700 dark:text-slate-200">
                                                 Two-Factor Authentication
                                             </p>
-                                            <p className="text-sm text-slate-500 dark:text-slate-400">
+                                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                                                 Add an extra layer of security to your account
                                             </p>
                                         </div>
                                         <Switch
                                             checked={settings.security.twoFactorAuth}
-                                            onCheckedChange={(checked) =>
+                                            onCheckedChange={(checked: boolean) =>
                                                 handleSwitchChange("security", "twoFactorAuth", checked)
                                             }
                                         />
@@ -487,18 +487,18 @@ export default function AdminSettingsPage() {
                                 </div>
 
                                 {/* Compact Mode */}
-                                <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
-                                    <div>
+                                <div className="flex items-center justify-between p-5 bg-white dark:bg-slate-700/30 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-200 hover:shadow-sm">
+                                    <div className="flex-1">
                                         <p className="font-medium text-slate-700 dark:text-slate-200">
                                             Compact Mode
                                         </p>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                                             Reduce spacing and padding in the dashboard
                                         </p>
                                     </div>
                                     <Switch
                                         checked={settings.appearance.compactMode}
-                                        onCheckedChange={(checked) =>
+                                        onCheckedChange={(checked: boolean) =>
                                             handleSwitchChange("appearance", "compactMode", checked)
                                         }
                                     />
