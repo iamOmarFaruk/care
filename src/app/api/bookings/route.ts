@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             try {
                 const paymentIntent = await stripe.paymentIntents.retrieve(body.paymentIntentId);
                 if (paymentIntent.status === 'succeeded') {
-                    bookingData.status = 'confirmed';
+                    bookingData.status = 'pending';
                     bookingData.paymentStatus = 'paid';
                     bookingData.paymentIntentId = body.paymentIntentId;
                     bookingData.amountPaid = paymentIntent.amount / 100;
