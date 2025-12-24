@@ -11,9 +11,8 @@ import { MotionDiv, fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { Shield, Lock, ArrowRight, Mail } from "lucide-react";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
-import { adminStore, AdminUser } from "@/lib/admin-data";
+import { auth } from "@/lib/firebase";
+import { AdminUser } from "@/lib/admin-data";
 
 export default function AdminLoginPage() {
     const router = useRouter();
@@ -33,41 +32,36 @@ export default function AdminLoginPage() {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const firebaseUser = userCredential.user;
 
-            // Fetch user data from Firestore to check role
-            const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+            // Get ID token to verify admin status on server
+            const idToken = await firebaseUser.getIdToken();
 
-            if (!userDoc.exists()) {
-                toast.error("User profile not found.");
+            // Verify admin status via server-side API (bypasses Firestore rules)
+            const response = await fetch("/api/auth/verify-admin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ idToken }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                toast.error(data.error || "Access denied.");
                 await auth.signOut();
                 setLoading(false);
                 return;
             }
 
-            const userData = userDoc.data();
-            const role = userData?.role;
-
-            // Check if user is admin or super_admin
-            if (role !== "admin" && role !== "super_admin") {
+            if (!data.isAdmin) {
                 toast.error("Access denied. Admin privileges required.");
                 await auth.signOut();
                 setLoading(false);
                 return;
             }
 
-            // Create admin session for local storage (for layout checks)
-            const adminUser: AdminUser = {
-                id: firebaseUser.uid,
-                username: userData?.username || email.split("@")[0],
-                email: firebaseUser.email || email,
-                role: role as "super_admin" | "admin",
-                name: userData?.name || "Admin",
-                avatar: userData?.avatar,
-                status: userData?.status || "active",
-                createdAt: userData?.createdAt || new Date().toISOString(),
-                phone: userData?.phone,
-            };
-
-            // Store admin session in localStorage
+            // Store admin session in localStorage (for layout checks)
+            const adminUser: AdminUser = data.user;
             if (typeof window !== "undefined") {
                 localStorage.setItem("care_admin_session", JSON.stringify(adminUser));
             }
